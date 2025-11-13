@@ -29,4 +29,7 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+  build: {
+    sourcemap: true, // Enable source maps for debugging
+  },
 }));
