@@ -1,6 +1,14 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
+// Prevents additional console window on Windows in release
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use bytevidence_lib::commands;
+
 fn main() {
-    bytevidence_lib::run()
+    tauri::Builder::default()
+        .invoke_handler(tauri::generate_handler![
+            commands::load_data,
+            commands::save_data,
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }

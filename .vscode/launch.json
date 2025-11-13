@@ -2,14 +2,23 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run FullStack (Tauri + Vue)",
-      "type": "node",
+      "name": "Tauri Dev with LLDB Debugger",
+      "type": "lldb",
       "request": "launch",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["tauri", "dev"],
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
+      "cargo": {
+        "args": [
+          "build",
+          "--manifest-path=${workspaceFolder}/src-tauri/Cargo.toml"
+        ]
+      },
+      "program": "${workspaceFolder}/src-tauri/target/debug/bytevidence.exe",
+      "cwd": "${workspaceFolder}/src-tauri",
+      "sourceLanguages": ["rust"],
+      "env": {
+        "RUST_BACKTRACE": "1"
+      },
+      "preLaunchTask": "Start Vite for Tauri",
+      "postDebugTask": "Stop Vite"
     }
   ]
 }
