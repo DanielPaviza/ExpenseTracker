@@ -1,42 +1,46 @@
 export class Spending {
   // Required properties
-  Id: string
-  Category: string
-  Type: string
-  Name: string
-  IsPaid: boolean
-  Payer: string
-  Quantity: number
-  UnitPrice: number
+  id: string
+  category: string
+  type: string
+  name: string
+  isPaid: boolean
+  payer: string
+  quantity: number
+  unitPrice: number
 
   // Optional properties
-  Dimensions?: string | null
-  Url?: string | null
-  Document?: string | null
-  Store?: string | null
-  StoreCode?: string | null
-  Description?: string | null
-  SubCategory?: string | null
-  CreatedAt: Date
-  EditedAt: Date | null
+  dimensions?: string | null
+  url?: string | null
+  document?: string | null
+  store?: string | null
+  storeCode?: string | null
+  description?: string | null
+  subCategory?: string | null
+  createdAt: Date
+  editedAt: Date | null
+
+  get totalPrice(): number {
+    return this.unitPrice * this.quantity;
+  }
 
   constructor(data?: Partial<Spending>) {
-    this.Id = data?.Id ?? crypto.randomUUID()
-    this.Category = data?.Category ?? ''
-    this.Type = data?.Type ?? ''
-    this.Name = data?.Name ?? ''
-    this.IsPaid = data?.IsPaid ?? false
-    this.Payer = data?.Payer ?? ''
-    this.Quantity = data?.Quantity ?? 1
-    this.UnitPrice = data?.UnitPrice ?? 0
-    this.Dimensions = data?.Dimensions ?? null
-    this.Url = data?.Url ?? null
-    this.Document = data?.Document ?? null
-    this.Store = data?.Store ?? null
-    this.StoreCode = data?.StoreCode ?? null
-    this.Description = data?.Description ?? null
-    this.SubCategory = data?.SubCategory ?? null
-    this.CreatedAt = data?.CreatedAt == null ? new Date() : new Date(data?.CreatedAt)
-    this.EditedAt = data?.EditedAt == null ? null : new Date(data?.EditedAt)
+    this.id = data?.id ?? crypto.randomUUID()
+    this.category = data?.category ?? ''
+    this.type = data?.type ?? ''
+    this.name = data?.name ?? ''
+    this.isPaid = data?.isPaid ?? false
+    this.payer = data?.payer ?? ''
+    this.quantity = data?.quantity ?? 1
+    this.unitPrice = data?.unitPrice ?? 0
+    this.dimensions = data?.dimensions ?? null
+    this.url = data?.url ?? null
+    this.document = data?.document ?? null
+    this.store = data?.store ?? null
+    this.storeCode = data?.storeCode ?? null
+    this.description = data?.description ?? null
+    this.subCategory = data?.subCategory ?? null
+    this.createdAt = data?.createdAt == null ? new Date() : new Date(data?.createdAt)
+    this.editedAt = data?.editedAt == null ? null : new Date(data?.editedAt)
   }
 }

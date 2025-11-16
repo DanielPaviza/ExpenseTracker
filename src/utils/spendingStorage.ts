@@ -29,7 +29,8 @@ export function parseSpendings(jsonData: string): Spending[] {
       return []
     }
 
-    return parsed.map((item: any) => new Spending(item))
+    const parsedSpendings = parsed.map((item: any) => new Spending(item))
+    return parsedSpendings
   } catch (error) {
     console.error('Failed to parse spendings:', error)
     return []
