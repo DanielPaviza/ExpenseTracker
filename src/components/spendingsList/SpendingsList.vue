@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import type { Spending } from '@models/Spending'
-import SpendingsCategoryTable from './SpendingsCategoryTable.vue';
+import SpendingsCategoryTable from '@components/spendingsList/SpendingsCategoryTable.vue';
 
-const { spendings } = defineProps<{
-  spendings: Spending[]
-}>()
 </script>
 <template>
-  <SpendingsCategoryTable category="Test" :spendings="spendings" />
+  <!-- <SpendingsCategoryTable category="Test" /> -->
 </template>
