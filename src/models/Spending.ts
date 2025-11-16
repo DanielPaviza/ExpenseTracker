@@ -2,9 +2,10 @@ export class Spending {
   // Required properties
   Id: string
   Category: string
+  Type: string
   Name: string
   IsPaid: boolean
-  PaidBy: string
+  Payer: string
   Quantity: number
   UnitPrice: number
 
@@ -17,14 +18,15 @@ export class Spending {
   Description?: string | null
   SubCategory?: string | null
   CreatedAt: Date
-  EditedAt: Date
+  EditedAt: Date | null
 
   constructor(data?: Partial<Spending>) {
     this.Id = data?.Id ?? crypto.randomUUID()
     this.Category = data?.Category ?? ''
+    this.Type = data?.Type ?? ''
     this.Name = data?.Name ?? ''
     this.IsPaid = data?.IsPaid ?? false
-    this.PaidBy = data?.PaidBy ?? ''
+    this.Payer = data?.Payer ?? ''
     this.Quantity = data?.Quantity ?? 1
     this.UnitPrice = data?.UnitPrice ?? 0
     this.Dimensions = data?.Dimensions ?? null
@@ -35,6 +37,6 @@ export class Spending {
     this.Description = data?.Description ?? null
     this.SubCategory = data?.SubCategory ?? null
     this.CreatedAt = data?.CreatedAt == null ? new Date() : new Date(data?.CreatedAt)
-    this.EditedAt = data?.EditedAt == null ? new Date() : new Date(data?.EditedAt)
+    this.EditedAt = data?.EditedAt == null ? null : new Date(data?.EditedAt)
   }
 }
