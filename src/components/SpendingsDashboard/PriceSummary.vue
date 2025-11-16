@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Spending } from '@models/Spending'
 import { useSpendingsStore } from '@stores/spendingsStore'
+import { formatNumber } from '@utils/formatUtils';
 
 const store = useSpendingsStore()
 
@@ -17,17 +18,19 @@ const totalPrice = () =>
     : 0
 </script>
 <template>
-  <section class="mb-8">
-    <div class="bg-white dark:bg-black rounded-lg shadow p-6 flex flex-col gap-4 items-center">
-      <div class="text-2xl font-bold mb-8">
-        Celková cena: <span class="text-blue-700">{{ totalPrice() }} Kč</span>
+  <div class="bg-grayLight dark:bg-black rounded-lg shadow p-6 py-4 flex flex-col gap-4 items-center w-fit">
+    <div class="text-xl font-bold text-blueLight">
+      Celkové výdaje
+    </div>
+    <div class="flex flex-col gap-1 text-lg whitespace-nowrap ">
+      <div v-for="payer in store.payers ? store.payers : []" :key="payer" class="flex">
+        <div class="font-bold min-w-[30px] w-full">{{ payer }}:</div>
+        <div class="font-semibold text-blueLight">{{ formatNumber(priceByPayer(payer)) }} Kč</div>
       </div>
-      <div class="flex flex-wrap gap-4 justify-center">
-        <div v-for="payer in store.payers ? store.payers : []" :key="payer"
-          class="bg-blue-50 dark:bg-blue-900/30 rounded px-4 py-2">
-          <span class="font-semibold">{{ payer }}:</span> {{ priceByPayer(payer) }} Kč
-        </div>
+      <div class="mt-2 pt-2 border-t-2 border-primaryLight flex font-bold">
+        Celkem:
+        <div class="text-blueDark ms-3">{{ formatNumber(totalPrice()) }} Kč</div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
