@@ -9,6 +9,17 @@
       "args": [],
       "preLaunchTask": "Run Tauri Dev",
       "console": "integratedTerminal"
+    },
+    {
+      "name": "Run pnpm dev",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--version"
+      ],
+      "preLaunchTask": "Run Vite Dev",
+      "console": "integratedTerminal"
     }
   ],
   "compounds": []
