@@ -1,23 +1,20 @@
 <script setup lang="ts">
- import { ref } from "vue";
- import { invoke } from "@tauri-apps/api/core";
- import { Spending } from "./models/Spending";
- import SpendingsDashboard from "./components/SpendingsDashboard.vue";
+import { onMounted } from 'vue'
+import SpendingsDashboard from '@components/SpendingsDashboard/Dashboard.vue'
+import { useSpendingsStore } from '@stores/spendingsStore'
+import SpendingsList from '@components/spendingsList/SpendingsList.vue'
 
- const spendings = ref<Spending[]>([]);
- void load_data();
+const spendingsStore = useSpendingsStore()
 
-async function save_data(spendings: Spending[]) {
-  const payload = JSON.stringify(spendings);
-  await invoke("save_data", { jsonData: payload } );
-}
-  
-async function load_data() {
-
-}
+onMounted(async () => {
+  await spendingsStore.load()
+})
 </script>
 
 <template>
-    <SpendingsDashboard :spendings="spendings" />
-    <button @click="save_data(spendings)">Save</button>
+  <header class="mb-8 text-center">
+    <h1 class="text-4xl font-extrabold tracking-tight text-blue-700">Evidence nákupů</h1>
+  </header>
+  <SpendingsDashboard :spendings="spendingsStore.spendings" />
+  <SpendingsList :spendings="spendingsStore.spendings" />
 </template>

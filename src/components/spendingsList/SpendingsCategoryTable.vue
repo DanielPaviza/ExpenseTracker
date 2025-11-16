@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { Spending } from '../models/Spending';
+import type { Spending } from '../../models/Spending'
 
-const { category, spendings } = defineProps<{ 
-    category: string, 
-    spendings: Spending[] 
-}>();
+const { category, spendings } = defineProps<{
+  category: string
+  spendings: Spending[]
+}>()
 </script>
 <template>
   <section class="mb-8">
