@@ -21,7 +21,7 @@ export class Spending {
   editedAt: Date | null
 
   get totalPrice(): number {
-    return this.unitPrice * this.quantity;
+    return this.unitPrice * this.quantity
   }
 
   constructor(data?: Partial<Spending>) {
