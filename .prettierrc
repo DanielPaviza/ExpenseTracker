@@ -12,5 +12,11 @@
     "proseWrap": "preserve",
     "htmlWhitespaceSensitivity": "css",
     "vueIndentScriptAndStyle": false,
-    "embeddedLanguageFormatting": "auto"
+    "embeddedLanguageFormatting": "auto",
+    "vueAttributesOrder": "max-3-per-line",
+    "vueAttributesPerLine": {
+        "maxAttributes": 3,
+        "singleline": "preserve",
+        "multiline": "always"
+    }
 }
