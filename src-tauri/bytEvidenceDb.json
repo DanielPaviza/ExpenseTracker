@@ -359,5 +359,24 @@
         "subCategory": null,
         "createdAt": "2025-11-16T00:00:00.000Z",
         "editedAt": null
+    },
+    {
+        "id": "e4v7h1v0-6b1c-4d8e-9f2a-1c3b4d5e6f7a",
+        "category": "TEST",
+        "type": "TEST",
+        "name": "Testovací neúčtovaná položka",
+        "isPaid": false,
+        "payer": "D",
+        "quantity": 1,
+        "unitPrice": 50000,
+        "dimensions": "",
+        "url": "",
+        "document": null,
+        "store": "",
+        "storeCode": "",
+        "description": null,
+        "subCategory": null,
+        "createdAt": "2025-11-16T00:00:00.000Z",
+        "editedAt": null
     }
 ]

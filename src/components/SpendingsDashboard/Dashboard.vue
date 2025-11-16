@@ -3,7 +3,7 @@ import PriceSummary from '@components/SpendingsDashboard/PriceSummary.vue'
 import UnpaidSummary from '@components/SpendingsDashboard/UnpaidSummary.vue'
 </script>
 <template>
-  <div class="flex flex-wrap gap-6">
+  <div class="flex flex-wrap justify-between">
     <PriceSummary />
     <UnpaidSummary />
   </div>
