@@ -14,30 +14,26 @@ import { Bar, Doughnut } from 'vue-chartjs'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 
-const { type, labels, datasets } = defineProps({
-  type: {
-    type: String as () => 'Bar' | 'Doughnut',
-    required: true,
-  },
-  labels: {
-    type: Array as () => string[],
-    required: true,
-  },
-  datasets: {
-    type: Array as () => { label: string; data: number[]; backgroundColor: string[] }[],
-    required: true,
-  },
+const { type, labels, datasets = [] } = defineProps({
+  type: String as () => 'Bar' | 'Doughnut',
+  labels: Array as () => string[],
+  datasets: Array as () => { 
+    label: string; 
+    data: number[];
+    backgroundColor : string[] 
+  }[],
 })
 </script>
 
 <template>
   <component
     :is="type === 'Bar' ? Bar : Doughnut"
-    width="250px"
-    height="250px"
+    width="auto"
     :style="{
-      width: 'auto',
-      height: 'auto',
+      width: '100%'!,
+      maxWidth: '300px',
+      height: '100%',
+      maxHeight: '200px',
     }"
     :data="{
       labels: labels,
