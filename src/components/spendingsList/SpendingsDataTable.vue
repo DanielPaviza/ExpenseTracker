@@ -9,8 +9,13 @@
     scrollFadeOnLeave,
   } from '@utils/animations'
   import { formatNumberToCzk } from '@utils/formatUtils'
-  import { ArrowDownOutline, ArrowUpOutline, ListOutline } from '@vicons/ionicons5'
-  import { NIcon, NSelect } from 'naive-ui'
+  import {
+    ArrowDownOutline,
+    ArrowUpOutline,
+    CloseCircleOutline,
+    ListOutline,
+  } from '@vicons/ionicons5'
+  import { NButton, NIcon, NSelect } from 'naive-ui'
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   // For triggering SortIndicator's toggleSort from th click
@@ -49,16 +54,39 @@
     return columns.value.filter((col) => !col.isHidden)
   })
 
+  const totalCountSpendings = computed(() => data.length)
+
   // Sorting state
   const sortState = ref<{ key: string | null; direction: 'asc' | 'desc' | null }>({
     key: null,
     direction: null,
   })
 
-  // Filtering logic placeholder (add your filter conditions here)
+  // Filtering state - one filter per column
+  const columnFilters = ref<Record<string, string>>({})
+
+  // Filtering logic - applies all active filters
   const filteredData = computed(() => {
-    // Example: return data.value.filter(row => ...)
-    return data
+    let result = data
+
+    // Apply each column filter
+    for (const [columnKey, filterValue] of Object.entries(columnFilters.value)) {
+      if (!filterValue || filterValue.trim() === '') continue
+
+      const filterLower = filterValue.toLowerCase().trim()
+      const column = columns.value.find((c) => c.key === columnKey)
+      if (!column) continue
+
+      result = result.filter((row) => {
+        // Use the column's filterVal function to get the filterable value
+        const cellValue = column.filterVal(row)
+
+        // Case-insensitive substring matching
+        return cellValue.toLowerCase().includes(filterLower)
+      })
+    }
+
+    return result
   })
 
   const sortedData = computed(() => {
@@ -98,7 +126,7 @@
   }
 
   const totalPrice = computed(() => {
-    return data.reduce((sum, spending) => {
+    return sortedData.value.reduce((sum, spending) => {
       return sum + spending.totalPrice
     }, 0)
   })
@@ -118,6 +146,20 @@
     const value = row[column.key as keyof Spending]
     return value != null ? String(value) : '-'
   }
+
+  const hasActiveFiltersOrSorting = computed(() => {
+    return (
+      sortState.value.key !== null ||
+      Object.values(columnFilters.value).some((val) => val.trim() !== '')
+    )
+  })
+
+  const clearAllFiltersAndSorting = () => {
+    // Clear all filters
+    columnFilters.value = {}
+    // Clear sorting
+    sortState.value = { key: null, direction: null }
+  }
 </script>
 
 <template>
@@ -129,7 +171,7 @@
     @leave="scrollFadeOnLeave"
   >
     <div v-if="!isCollapsed" key="expanded" class="overflow-x-auto">
-      <div class="flex justify-between items-end">
+      <div class="flex justify-between items-center">
         <div
           class="flex items-end w-full hover:text-blue cursor-pointer collapseRow hover:bg-blue-100 rounded py-2"
           @click="isCollapsed = !isCollapsed"
@@ -147,15 +189,30 @@
             Zabalit tabulku
           </div>
         </div>
-        <div v-if="showHideColumnsSelector" class="flex max-w-[30%] min-w-[200px] items-center">
-          <n-select
-            class="min-w-[200px]"
-            :value="hiddenColumnKeys"
-            @update:value="updateColumnsVisibility"
-            multiple
-            :options="columnHeaders"
-          />
-          <div class="text-green text-[16px] ms-3 font-semibold text-nowrap">Skryté sloupce</div>
+        <div class="flex items-center">
+          <n-button
+            @click.stop="clearAllFiltersAndSorting"
+            size="tiny"
+            color="#3b82f6"
+            :disabled="!hasActiveFiltersOrSorting"
+          >
+            <template #icon>
+              <n-icon>
+                <CloseCircleOutline />
+              </n-icon>
+            </template>
+            Vymazat filtry a řazení
+          </n-button>
+          <div v-if="showHideColumnsSelector" class="flex max-w-[30%] min-w-[200px] items-center">
+            <n-select
+              class="min-w-[200px]"
+              :value="hiddenColumnKeys"
+              @update:value="updateColumnsVisibility"
+              multiple
+              :options="columnHeaders"
+            />
+            <div class="text-green text-[16px] ms-3 font-semibold text-nowrap">Skryté sloupce</div>
+          </div>
         </div>
       </div>
       <table class="border-collapse w-full">
@@ -181,10 +238,11 @@
             </th>
           </tr>
           <tr class="bg-blue-50">
-            <th v-for="_c in filteredColumns" class="">
+            <th v-for="column in filteredColumns" :key="`filter-${String(column.key)}`" class="">
               <input
                 type="text"
-                class="border border-blue-300 my-2 w-[96%] p-1 ps-2 bg-white text-md font-normal rounded"
+                v-model="columnFilters[String(column.key)]"
+                class="border border-blue-300 my-2 w-[96%] p-1 ps-2 bg-white text-md font-normal rounded focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 placeholder="Filtrovat"
               />
             </th>
@@ -212,8 +270,8 @@
           </tr>
         </tbody>
         <tfoot class="border-blue border-t">
-          <tr class="bg-white font-bold text-lg">
-            <td class="px-4 py-2 text-blue">Celkem:</td>
+          <tr class="bg-blue-100 font-bold text-lg">
+            <td class="px-4 py-2 text-blue">Celkem ({{ totalCountSpendings }}):</td>
             <td v-for="_v in filteredColumns.length - 2"></td>
             <td class="text-blue">
               {{ formatNumberToCzk(totalPrice) }}
