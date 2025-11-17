@@ -1,28 +1,33 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  ArcElement,
-} from 'chart.js'
-import { Bar, Doughnut } from 'vue-chartjs'
+  import {
+    ArcElement,
+    BarElement,
+    CategoryScale,
+    Chart as ChartJS,
+    Legend,
+    LinearScale,
+    Title,
+    Tooltip,
+  } from 'chart.js'
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
+  import { defineProps } from 'vue'
+  import { Bar, Doughnut } from 'vue-chartjs'
 
-const { type, labels, datasets = [] } = defineProps({
-  type: String as () => 'Bar' | 'Doughnut',
-  labels: Array as () => string[],
-  datasets: Array as () => { 
-    label: string; 
-    data: number[];
-    backgroundColor : string[] 
-  }[],
-})
+  ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
+
+  const {
+    type,
+    labels,
+    datasets = [],
+  } = defineProps({
+    type: String as () => 'Bar' | 'Doughnut',
+    labels: Array as () => string[],
+    datasets: Array as () => {
+      label: string
+      data: number[]
+      backgroundColor: string[]
+    }[],
+  })
 </script>
 
 <template>

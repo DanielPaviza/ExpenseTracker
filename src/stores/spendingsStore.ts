@@ -1,7 +1,8 @@
-import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
 import { Spending } from '@models/Spending'
 import { loadSpendings, saveSpendings } from '@utils/spendingStorage'
+import { defineStore } from 'pinia'
+
+import { computed, ref } from 'vue'
 
 export const useSpendingsStore = defineStore('spendings', () => {
   const spendings = ref<Spending[]>([])
