@@ -25,7 +25,10 @@
     return Math.round((priceUnpaid.value / total) * 100)
   })
 
-  const chartLabels = computed(() => ['Účtováno', 'Neúčtováno'])
+  const chartLabels = computed(() => [
+    `Účtováno (${100 - priceUnpaidPercent.value}%)`,
+    `Neúčtováno (${priceUnpaidPercent.value}%)`,
+  ])
   const chartDatasets = computed(() => [
     {
       label: 'Ušetřené výdaje',
