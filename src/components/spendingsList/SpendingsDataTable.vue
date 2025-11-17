@@ -20,6 +20,7 @@
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   // For triggering SortIndicator's toggleSort from th click
   import type { ComponentPublicInstance } from 'vue'
+  import { useRouter } from 'vue-router'
 
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
@@ -34,6 +35,8 @@
   onBeforeUpdate(() => {
     sortIndicatorRefs.value = []
   })
+
+  const router = useRouter()
 
   const {
     data,
@@ -160,6 +163,10 @@
     // Clear sorting
     sortState.value = { key: null, direction: null }
   }
+
+  function handleRowClick(row: Spending) {
+    router.push(`/edit/${row.id}`)
+  }
 </script>
 
 <template>
@@ -184,17 +191,17 @@
           </n-icon>
           <h2 class="text-blue text-2xl me-4 ms-2 font-bold text-left">{{ title }}</h2>
           <div
-            class="flex text-[15px] font-bold items-center gap-1 cursor-pointer text-black opacity-80 border-primaryDark border-b hover:text-blue hover:border-blue"
+            class="flex text-[15px] font-bold items-center gap-1 cursor-pointer text-black opacity-60 border-primaryDark border-b hover:text-blue hover:border-blue"
           >
             Zabalit tabulku
           </div>
         </div>
         <div class="flex items-center">
           <n-button
+            v-if="hasActiveFiltersOrSorting"
             @click.stop="clearAllFiltersAndSorting"
             size="tiny"
             color="#3b82f6"
-            :disabled="!hasActiveFiltersOrSorting"
           >
             <template #icon>
               <n-icon>
@@ -253,6 +260,7 @@
             v-for="(row, index) in sortedData"
             :key="row.id"
             class="bg-white hover:bg-blue-50 cursor-pointer"
+            @click="handleRowClick(row)"
           >
             <td
               v-for="column in filteredColumns"
