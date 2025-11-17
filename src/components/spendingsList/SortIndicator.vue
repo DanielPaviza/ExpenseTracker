@@ -49,10 +49,7 @@
     tabindex="0"
   >
     <svg
-      :class="[
-        'w-6 h-6 ',
-        direction === 'asc' || direction === 'desc' ? 'text-white' : 'text-blue-500',
-      ]"
+      :class="['w-6 h-6 ', direction === 'asc' || direction === 'desc' ? 'text-white' : '']"
       fill="none"
       viewBox="0 0 16 16"
     >

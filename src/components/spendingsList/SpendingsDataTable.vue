@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import SortIndicator from '@components/spendingsList/SortIndicator.vue'
+  import { type SpendingColumn, SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
   import type { Spending } from '@models/Spending'
   import {
     scrollFadeOnBeforeEnter,
@@ -7,15 +9,12 @@
     scrollFadeOnLeave,
   } from '@utils/animations'
   import { formatNumberToCzk } from '@utils/formatUtils'
-  import { ListOutline } from '@vicons/ionicons5'
+  import { ArrowDownOutline, ArrowUpOutline, ListOutline } from '@vicons/ionicons5'
   import { NIcon, NSelect } from 'naive-ui'
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   // For triggering SortIndicator's toggleSort from th click
   import type { ComponentPublicInstance } from 'vue'
-
-  import SortIndicator from './SortIndicator.vue'
-  import { type SpendingColumn, SpendingsColumns } from './SpendingsColumns'
 
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
@@ -130,14 +129,20 @@
     @leave="scrollFadeOnLeave"
   >
     <div v-if="!isCollapsed" key="expanded" class="overflow-x-auto">
-      <div class="mb-4 flex justify-between items-end">
+      <div class="flex justify-between items-end">
         <div
-          class="flex items-end justify-between w-full hover:text-blue cursor-pointer collapseRow"
+          class="flex items-end w-full hover:text-blue cursor-pointer collapseRow hover:bg-blue-100 rounded py-2"
           @click="isCollapsed = !isCollapsed"
         >
-          <h2 class="text-green text-2xl font-bold text-left">{{ title }}</h2>
+          <n-icon size="32" class="collapseArrow" color="#3b82f6">
+            <ArrowUpOutline />
+          </n-icon>
+          <n-icon size="32" class="listIcon" color="#3b82f6">
+            <ListOutline />
+          </n-icon>
+          <h2 class="text-blue text-2xl me-4 ms-2 font-bold text-left">{{ title }}</h2>
           <div
-            class="flex text-[16px] font-bold items-center gap-1 cursor-pointer text-green border-primaryDark border-b hover:text-blue hover:border-blue"
+            class="flex text-[15px] font-bold items-center gap-1 cursor-pointer text-black opacity-80 border-primaryDark border-b hover:text-blue hover:border-blue"
           >
             Zabalit tabulku
           </div>
@@ -153,13 +158,14 @@
           <div class="text-green text-[16px] ms-3 font-semibold text-nowrap">Skryté sloupce</div>
         </div>
       </div>
-      <table class="w-full border-collapse border border-blue-300 rounded">
+      <table class="border-collapse w-full">
         <thead class="">
           <tr class="bg-blue-300 text-[15px]">
             <th
               v-for="(column, colIdx) in filteredColumns"
               :key="String(column.key)"
-              class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap cursor-pointer hover:bg-blue-500"
+              class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap cursor-pointer hover:bg-blue-500 hover:text-white"
+              :class="{ 'bg-blue-400': sortState.key === column.key }"
               @click="column.sortFn && sortIndicatorRefs[colIdx]?.toggleSort()"
             >
               <span class="flex justify-between items-center">
@@ -174,11 +180,11 @@
               </span>
             </th>
           </tr>
-          <tr class="bg-gray-50 border-b border-blue-300">
+          <tr class="bg-blue-50">
             <th v-for="_c in filteredColumns" class="">
               <input
                 type="text"
-                class="border border-blue-300 my-2 w-[90%] p-1 ps-2 bg-white text-md font-normal"
+                class="border border-blue-300 my-2 w-[96%] p-1 ps-2 bg-white text-md font-normal rounded"
                 placeholder="Filtrovat"
               />
             </th>
@@ -219,12 +225,15 @@
     <div
       v-else
       key="collapsed"
-      class="bg-blue-200 text-green cursor-pointer w-full p-2 flex items-center justify-between rounded hover:bg-blue-300"
+      class="collapsedRow bg-blue-300 opacity-80 shadow text-white cursor-pointer w-full p-3 flex items-center justify-between rounded hover:bg-blue-500"
       @click="isCollapsed = !isCollapsed"
     >
       <div class="flex items-center gap-4">
-        <n-icon size="40">
+        <n-icon class="listIcon" size="32">
           <ListOutline />
+        </n-icon>
+        <n-icon class="unCollapseIcon" size="32">
+          <ArrowDownOutline />
         </n-icon>
         <h2 class="text-xl font-bold text-left">{{ title }}</h2>
       </div>
@@ -236,6 +245,40 @@
 </template>
 
 <style scoped>
+  .collapseArrow {
+    display: none;
+    transition: transform 0.3s ease;
+  }
+  .collapseRow:hover .collapseArrow {
+    /* transform: rotate(180deg); */
+    display: flex;
+  }
+  .collapseRow:hover .listIcon {
+    display: none;
+  }
+  table {
+    box-shadow:
+      0 4px 6px -1px rgba(59, 130, 246, 0.1),
+      0 2px 4px -1px rgba(59, 130, 246, 0.06);
+  }
+  thead tr:first-child th .sortIndicator {
+    color: #3b82f6;
+  }
+  thead tr:first-child th:hover .sortIndicator {
+    color: white;
+  }
+  thead tr:first-child th:first-child {
+    border-radius: 6px 0 0 0;
+  }
+  thead tr:first-child th:last-child {
+    border-radius: 0 6px 0 0;
+  }
+  tfoot tr:last-child td:first-child {
+    border-radius: 0 0 0 6px;
+  }
+  tfoot tr:last-child td:last-child {
+    border-radius: 0 0 8px 0;
+  }
   .scroll-fade-table-enter-active,
   .scroll-fade-table-leave-active {
     overflow: hidden;
@@ -246,5 +289,14 @@
   .collapseRow:hover h2,
   .collapseRow:hover div {
     color: #3b82f6 !important;
+  }
+  .collapsedRow:hover .listIcon {
+    display: none;
+  }
+  .collapsedRow:hover .unCollapseIcon {
+    display: inline;
+  }
+  .unCollapseIcon {
+    display: none;
   }
 </style>
