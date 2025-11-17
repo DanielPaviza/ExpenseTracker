@@ -8,6 +8,7 @@ export interface SpendingColumn {
   key: keyof Spending | string
   isHidden?: boolean
   sortFn?: (a: Spending, b: Spending) => number
+  filterVal: (row: Spending) => string
   render?: (row: Spending, rowIndex: number) => VNode | string | number
 }
 
@@ -17,6 +18,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'category',
     isHidden: false,
     sortFn: (a, b) => a.category.localeCompare(b.category),
+    filterVal: (row) => row.category,
     render: (row) => row.category,
   },
   {
@@ -24,6 +26,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'type',
     isHidden: false,
     sortFn: (a, b) => a.type.localeCompare(b.type),
+    filterVal: (row) => row.type,
     render: (row) => row.type,
   },
   {
@@ -31,6 +34,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'name',
     isHidden: false,
     sortFn: (a, b) => a.name.localeCompare(b.name),
+    filterVal: (row) => row.name,
     render: (row) => row.name,
   },
   {
@@ -38,6 +42,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'store',
     isHidden: false,
     sortFn: (a, b) => (a.store || '').localeCompare(b.store || ''),
+    filterVal: (row) => row.store || '',
     render: (row) => row.store || '-',
   },
   {
@@ -45,6 +50,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'isPaid',
     isHidden: false,
     sortFn: (a, b) => Number(a.isPaid) - Number(b.isPaid),
+    filterVal: (row) => (row.isPaid ? 'Ano' : 'Ne'),
     render: (row) => (row.isPaid ? 'Ano' : 'Ne'),
   },
   {
@@ -52,6 +58,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'payer',
     isHidden: false,
     sortFn: (a, b) => (a.payer || '').localeCompare(b.payer || ''),
+    filterVal: (row) => row.payer || '',
     render: (row) => row.payer,
   },
   {
@@ -59,6 +66,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'createdAt',
     isHidden: false,
     sortFn: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    filterVal: (row) => formatDateShort(new Date(row.createdAt)),
     render: (row) =>
       h(
         'div',
@@ -71,6 +79,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'totalPrice',
     isHidden: false,
     sortFn: (a, b) => a.totalPrice - b.totalPrice,
+    filterVal: (row) => String(row.totalPrice),
     render: (row) =>
       h(
         'div',
