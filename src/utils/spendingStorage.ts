@@ -1,5 +1,6 @@
-import { invoke } from '@tauri-apps/api/core'
 import { Spending } from '@models/Spending'
+
+import { invoke } from '@tauri-apps/api/core'
 
 /**
  * Fetches spending data from a local JSON file.

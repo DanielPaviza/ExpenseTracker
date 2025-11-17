@@ -3,8 +3,8 @@
  * @param num - The number to format.
  * @returns The formatted number as a string.
  */
-export function formatNumber(num: number): string {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+export function formatNumberToCzk(num: number): string {
+  return `${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} Kč`
 }
 
 /**
@@ -60,3 +60,18 @@ export function generateColorPalette(preselected: string[], colorsCount: number)
   return result.slice(0, colorsCount)
 }
 
+export const formatDateShort = (date: Date): string => {
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = String(date.getFullYear()).slice(-2)
+  return `${day}.${month}.${year}`
+}
+
+export const formatDate = (date: Date): string => {
+  const day = String(date.getDate()).padStart(2, '0')
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const year = date.getFullYear()
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  return `${day}.${month}.${year} ${hours}:${minutes}`
+}

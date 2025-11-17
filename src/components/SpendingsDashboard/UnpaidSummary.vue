@@ -1,37 +1,38 @@
 <script setup lang="ts">
-import { Spending } from '@models/Spending'
-import { useSpendingsStore } from '@stores/spendingsStore'
-import { formatNumber } from '@utils/formatUtils'
-import { computed } from 'vue'
-import SummaryCard from '@components/SpendingsDashboard/SummaryCard.vue'
+  import SummaryCard from '@components/SpendingsDashboard/SummaryCard.vue'
+  import { Spending } from '@models/Spending'
+  import { useSpendingsStore } from '@stores/spendingsStore'
+  import { formatNumberToCzk } from '@utils/formatUtils'
 
-const { spendings, totalPrice } = useSpendingsStore()
+  import { computed } from 'vue'
 
-const priceUnpaid = computed(() =>
-  spendings.reduce((acc: number, spending: Spending) => {
-    if (!spending.isPaid) {
-      return acc + spending.totalPrice
-    }
-    return acc
-  }, 0),
-)
+  const { spendings, totalPrice } = useSpendingsStore()
 
-const priceTotalWithUnpaid = computed(() => totalPrice + priceUnpaid.value)
+  const priceUnpaid = computed(() =>
+    spendings.reduce((acc: number, spending: Spending) => {
+      if (!spending.isPaid) {
+        return acc + spending.totalPrice
+      }
+      return acc
+    }, 0),
+  )
 
-const priceUnpaidPercent = computed(() => {
-  const total = priceTotalWithUnpaid.value
-  if (!total || total === 0) return 0
-  return Math.round((priceUnpaid.value / total) * 100)
-})
+  const priceTotalWithUnpaid = computed(() => totalPrice + priceUnpaid.value)
 
-const chartLabels = computed(() => ['Účtováno', 'Neúčtováno'])
-const chartDatasets = computed(() => [
-  {
-    label: 'Ušetřené výdaje',
-    data: [totalPrice, priceUnpaid.value],
-    backgroundColor: ['#06402b', '#336c8d'],
-  },
-])
+  const priceUnpaidPercent = computed(() => {
+    const total = priceTotalWithUnpaid.value
+    if (!total || total === 0) return 0
+    return Math.round((priceUnpaid.value / total) * 100)
+  })
+
+  const chartLabels = computed(() => ['Účtováno', 'Neúčtováno'])
+  const chartDatasets = computed(() => [
+    {
+      label: 'Ušetřené výdaje',
+      data: [totalPrice, priceUnpaid.value],
+      backgroundColor: ['#06402b', '#336c8d'],
+    },
+  ])
 </script>
 
 <template>
@@ -42,18 +43,18 @@ const chartDatasets = computed(() => [
     :chart-datasets="chartDatasets"
   >
     <div class="flex">
-      <div class="font-bold min-w-[30px] w-full text-blueLight">Celkem + nenaúčtováno:</div>
-      <div class="font-semibold ms-5">{{ formatNumber(priceTotalWithUnpaid) }} Kč</div>
+      <div class="font-bold min-w-[30px] w-full text-blue">Celkem + nenaúčtováno:</div>
+      <div class="font-semibold ms-5">{{ formatNumberToCzk(priceTotalWithUnpaid) }}</div>
     </div>
     <div class="flex">
-      <div class="font-bold min-w-[30px] w-full text-blueLight">Celkem:</div>
-      <div class="font-semibold ms-5">{{ formatNumber(totalPrice) }} Kč</div>
+      <div class="font-bold min-w-[30px] w-full text-blue">Celkem:</div>
+      <div class="font-semibold ms-5">{{ formatNumberToCzk(totalPrice) }}</div>
     </div>
-    <hr class="my-2 text-blueLight" />
+    <hr class="my-2 text-blue" />
     <div class="flex items-center gap-2">
-      <div class="font-bold min-w-[30px] w-full text-blueLight">Ušetřeno:</div>
-      <div class="font-semibold">{{ formatNumber(priceUnpaid) }} Kč</div>
-      <div class="text-blueLight text-sm text-muted-foreground">({{ priceUnpaidPercent }}%)</div>
+      <div class="font-bold min-w-[30px] w-full text-blue">Ušetřeno:</div>
+      <div class="font-semibold">{{ formatNumberToCzk(priceUnpaid) }}</div>
+      <div class="text-blue text-sm text-muted-foreground">({{ priceUnpaidPercent }}%)</div>
     </div>
   </SummaryCard>
 </template>
