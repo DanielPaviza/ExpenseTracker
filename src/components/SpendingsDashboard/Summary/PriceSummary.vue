@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SummaryCard from '@components/SpendingsDashboard/SummaryCard.vue'
+  import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'

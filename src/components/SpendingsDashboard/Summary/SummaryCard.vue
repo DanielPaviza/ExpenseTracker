@@ -2,8 +2,6 @@
   import ChartComponent from '@components/ChartComponent.vue'
   import { NCard } from 'naive-ui'
 
-  import { defineProps } from 'vue'
-
   const {
     title,
     chartType = 'None',
@@ -22,8 +20,8 @@
 </script>
 
 <template>
-  <div class="flex xl:w-[49%] w-full mt-4 xl:mt-0">
-    <n-card class="shadow-lg">
+  <div class="flex h-full">
+    <n-card class="shadow-lg w-full">
       <div class="text-2xl font-bold text-blue">
         {{ title }}
       </div>
