@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@views/Home.vue'
-import SpendingForm from '@views/NewSpending.vue'
+import SpendingForm from '@views/SpendingForm.vue'
 
 const router = createRouter({
     history: createWebHistory(),
