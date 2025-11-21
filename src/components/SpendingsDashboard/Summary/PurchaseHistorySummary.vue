@@ -86,12 +86,5 @@
         </div>
       </div>
     </div>
-
-    <template #footer>
-      <div class="flex font-bold w-full justify-between">
-        <div class="text-blue">Celkem ({{ recentSpendings.length }}):</div>
-        <div class="ms-5">{{ formatNumberToCzk(recentTotal) }}</div>
-      </div>
-    </template>
   </SummaryCard>
 </template>
