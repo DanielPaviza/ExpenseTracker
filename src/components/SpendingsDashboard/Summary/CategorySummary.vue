@@ -50,13 +50,39 @@
   const chartLabels = computed(() =>
     sortedCategories.value.map((cat) => `${cat.name} (${cat.percent}%)`),
   )
-  const chartDatasets = computed(() => [
-    {
-      label: 'Výdaje dle kategorií',
-      data: sortedCategories.value.map((cat) => cat.price),
-      backgroundColor: generateColorPalette(['#3b82f6', '#60a5fa'], sortedCategories.value.length),
-    },
-  ])
+  const chartDatasets = computed(() => {
+    const getData = () => {
+      switch (sortBy.value) {
+        case 'count-desc':
+          return sortedCategories.value.map((cat) => cat.count)
+        case 'price-desc':
+        case 'price-asc':
+        case 'alphabetical':
+        default:
+          return sortedCategories.value.map((cat) => cat.price)
+      }
+    }
+
+    const getLabel = () => {
+      switch (sortBy.value) {
+        case 'count-desc':
+          return 'Počet nákupů dle kategorií'
+        case 'price-desc':
+        case 'price-asc':
+        case 'alphabetical':
+        default:
+          return 'Výdaje dle kategorií'
+      }
+    }
+
+    return [
+      {
+        label: getLabel(),
+        data: getData(),
+        backgroundColor: generateColorPalette(sortedCategories.value.length),
+      },
+    ]
+  })
 </script>
 
 <template>
@@ -94,26 +120,17 @@
     <div
       v-for="category in sortedCategories"
       :key="category.name"
-      class="flex items-center gap-2 text-base"
+      class="flex items-center justify-between gap-5 text-base"
     >
       <div class="font-bold min-w-[100px] text-blue truncate" :title="category.name">
         {{ category.name }}:
       </div>
-      <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(category.price) }}</div>
-      <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
-        ({{ category.percent }}%, {{ category.count }}×)
+      <div class="flex gap-2 items-center">
+        <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(category.price) }}</div>
+        <div class="text-blue text-xs text-muted-foreground whitespace-nowrap flex justify-end">
+          ({{ category.percent }}%, {{ category.count }}×)
+        </div>
       </div>
     </div>
-
-    <template #footer>
-      <div class="flex font-bold w-full justify-between text-lg">
-        <div class="text-blue">Celkem:</div>
-        <div>{{ formatNumberToCzk(totalPrice) }}</div>
-      </div>
-      <div class="text-sm text-gray-600 mt-2">
-        Průměr na kategorii:
-        {{ formatNumberToCzk(categories.length > 0 ? totalPrice / categories.length : 0) }}
-      </div>
-    </template>
   </SummaryCard>
 </template>

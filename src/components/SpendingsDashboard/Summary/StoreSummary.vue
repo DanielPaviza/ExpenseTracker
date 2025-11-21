@@ -9,8 +9,11 @@
 
   const { spendings, stores, totalPrice } = useSpendingsStore()
 
+  const MAX_DISPLAYED_ITEMS = 8
+
   type SortType = 'price-desc' | 'visits-desc' | 'avg-desc'
   const sortBy = ref<SortType>('price-desc')
+  const showAll = ref(false)
 
   const storeStats = computed(() => {
     return stores.map((store) => {
@@ -38,21 +41,51 @@
     }
   })
 
+  const displayedStores = computed(() => {
+    return showAll.value ? sortedStores.value : sortedStores.value.slice(0, MAX_DISPLAYED_ITEMS)
+  })
+
   const chartLabels = computed(() => sortedStores.value.map((s) => `${s.name} (${s.percent}%)`))
-  const chartDatasets = computed(() => [
-    {
-      label: 'Výdaje dle obchodů',
-      data: sortedStores.value.map((s) => s.price),
-      backgroundColor: generateColorPalette(['#8b5cf6', '#a78bfa'], sortedStores.value.length),
-    },
-  ])
+  const chartDatasets = computed(() => {
+    const getData = () => {
+      switch (sortBy.value) {
+        case 'visits-desc':
+          return sortedStores.value.map((s) => s.visits)
+        case 'avg-desc':
+          return sortedStores.value.map((s) => s.avgPerVisit)
+        case 'price-desc':
+        default:
+          return sortedStores.value.map((s) => s.price)
+      }
+    }
+
+    const getLabel = () => {
+      switch (sortBy.value) {
+        case 'visits-desc':
+          return 'Návštěvy obchodů'
+        case 'avg-desc':
+          return 'Průměrná útrata na návštěvu'
+        case 'price-desc':
+        default:
+          return 'Výdaje dle obchodů'
+      }
+    }
+
+    return [
+      {
+        label: getLabel(),
+        data: getData(),
+        backgroundColor: generateColorPalette(sortedStores.value.length),
+      },
+    ]
+  })
 </script>
 
 <template>
   <SummaryCard
     title="Výdaje dle obchodů"
     :subtitle="`${stores.length} obchodů`"
-    chart-type="Bar"
+    chart-type="Doughnut"
     :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
@@ -80,7 +113,11 @@
       </n-button-group>
     </div>
 
-    <div v-for="store in sortedStores" :key="store.name" class="flex items-center gap-2 text-base">
+    <div
+      v-for="store in displayedStores"
+      :key="store.name"
+      class="flex items-center gap-5 text-base"
+    >
       <div class="font-bold min-w-[100px] text-blue truncate" :title="store.name">
         {{ store.name }}:
       </div>
@@ -90,11 +127,12 @@
       </div>
     </div>
 
-    <template #footer>
-      <div class="flex font-bold w-full justify-between text-lg">
-        <div class="text-blue">Celkem:</div>
-        <div>{{ formatNumberToCzk(totalPrice) }}</div>
-      </div>
-    </template>
+    <div
+      v-if="sortedStores.length > MAX_DISPLAYED_ITEMS"
+      @click="showAll = !showAll"
+      class="mt-1 text-blueLight text-xs cursor-pointer"
+    >
+      {{ showAll ? '▲ Zobrazit méně' : `▼ Zobrazit všechny (${sortedStores.length})` }}
+    </div>
   </SummaryCard>
 </template>

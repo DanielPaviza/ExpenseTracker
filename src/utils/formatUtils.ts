@@ -4,7 +4,7 @@
  * @returns The formatted number as a string.
  */
 export function formatNumberToCzk(num: number): string {
-  return `${num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} Kč`
+  return `${Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} Kč`
 }
 
 /**
@@ -16,19 +16,29 @@ export function formatNumberToCzk(num: number): string {
  * @param preselected - array of hex color strings (e.g. ['#ff0000'])
  * @param colorsCount - desired total number of colors in returned array
  */
-export function generateColorPalette(preselected: string[], colorsCount: number): string[] {
+export function generateColorPalette(colorsCount: number, preselected: string[] = []): string[] {
   const result: string[] = []
+  const defaultPreselectedColors = ['#06402b', '#3b82f6']
 
   // Push preselected valid hex colors first (up to colorsCount)
   for (let i = 0; i < preselected.length && result.length < colorsCount; i++) {
     const c = preselected[i]
     if (typeof c === 'string' && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c)) {
       // Normalize short hex (#fff) to full (#ffffff)
-      if (c.length === 4) {
-        result.push('#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3])
-      } else {
-        result.push(c.toLowerCase())
+      const normalized = c.length === 4
+        ? '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3]
+        : c.toLowerCase()
+
+      if (!result.includes(normalized)) {
+        result.push(normalized)
       }
+    }
+  }
+
+  // Add default preselected colors after user preselected colors
+  for (const color of defaultPreselectedColors) {
+    if (result.length < colorsCount && !result.includes(color)) {
+      result.push(color)
     }
   }
 

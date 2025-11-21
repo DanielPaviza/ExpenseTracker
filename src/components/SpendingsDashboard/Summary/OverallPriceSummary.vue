@@ -22,7 +22,7 @@
     {
       label: 'Výdaje dle plátců',
       data: payerStats.value.map((p) => p.price),
-      backgroundColor: generateColorPalette(['#06402b', '#687c71'], payers.length),
+      backgroundColor: generateColorPalette(payerStats.value.length),
     },
   ])
 </script>
@@ -36,17 +36,17 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div v-for="payer in payerStats" :key="payer.name" class="flex items-center gap-2">
+    <div v-for="payer in payerStats" :key="payer.name" class="flex items-center gap-2 mb-1">
       <div class="font-bold min-w-20 w-full text-blue truncate" :title="payer.name">
         {{ payer.name }}:
       </div>
       <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(payer.price) }}</div>
       <div class="text-blue text-sm text-muted-foreground">({{ payer.percent }}%)</div>
     </div>
-    <hr class="my-3 border-blue" />
-    <div class="font-bold flex justify-between">
-      <div class="text-blue">Celkem:</div>
-      <div>{{ formatNumberToCzk(totalPrice) }}</div>
+    <hr class="my-2 text-blue" />
+    <div class="text-lg flex justify-between">
+      <span class="font-bold text-blue">Celkem:</span>
+      <span class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</span>
     </div>
   </SummaryCard>
 </template>
