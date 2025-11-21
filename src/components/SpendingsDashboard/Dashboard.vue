@@ -5,7 +5,7 @@
   import AverageSummary from '@components/SpendingsDashboard/Summary/AverageSummary.vue'
   import CategorySummary from '@components/SpendingsDashboard/Summary/CategorySummary.vue'
   import ItemCountSummary from '@components/SpendingsDashboard/Summary/ItemCountSummary.vue'
-  import PriceSummary from '@components/SpendingsDashboard/Summary/PriceSummary.vue'
+  import OverallPriceSummary from '@components/SpendingsDashboard/Summary/OverallPriceSummary.vue'
   import PurchaseHistorySummary from '@components/SpendingsDashboard/Summary/PurchaseHistorySummary.vue'
   import RecentSummary from '@components/SpendingsDashboard/Summary/RecentSummary.vue'
   import StoreSummary from '@components/SpendingsDashboard/Summary/StoreSummary.vue'
@@ -18,7 +18,7 @@
   <Carousel class="w-full h-full">
     <CarouselSlide>
       <CarouselItem width="49">
-        <PriceSummary />
+        <OverallPriceSummary />
       </CarouselItem>
       <CarouselItem width="49">
         <UnpaidSummary />

@@ -7,7 +7,7 @@
 
   const { spendings, totalPrice } = useSpendingsStore()
 
-  const unpaidSpendings = computed(() => spendings.filter((s) => !s.isPaid))
+  const unpaidSpendings = computed(() => spendings.filter((s) => !s.isToBePaid))
 
   const priceUnpaid = computed(() =>
     unpaidSpendings.value.reduce((sum, s) => sum + s.totalPrice, 0),

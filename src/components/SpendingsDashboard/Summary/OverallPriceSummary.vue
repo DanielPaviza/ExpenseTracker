@@ -31,7 +31,7 @@
   <SummaryCard
     title="Celkové výdaje"
     :subtitle="`Celkem ${formatNumberToCzk(totalPrice)}`"
-    chart-type="Bar"
+    chart-type="Doughnut"
     :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
@@ -43,8 +43,10 @@
       <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(payer.price) }}</div>
       <div class="text-blue text-sm text-muted-foreground">({{ payer.percent }}%)</div>
     </div>
-    <div class="mt-4 border-t border-blue">
-      {{ `Celkem ${formatNumberToCzk(totalPrice)}` }}
+    <hr class="my-3 border-blue" />
+    <div class="font-bold flex justify-between">
+      <div class="text-blue">Celkem:</div>
+      <div>{{ formatNumberToCzk(totalPrice) }}</div>
     </div>
   </SummaryCard>
 </template>

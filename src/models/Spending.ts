@@ -4,7 +4,8 @@ export class Spending {
   category: string
   type: string
   name: string
-  isPaid: boolean
+  isToBePaid: boolean
+  isFree: boolean
   payer: string
   quantity: number
   unitPrice: number
@@ -29,7 +30,8 @@ export class Spending {
     this.category = data?.category ?? ''
     this.type = data?.type ?? ''
     this.name = data?.name ?? ''
-    this.isPaid = data?.isPaid ?? false
+    this.isToBePaid = data?.isToBePaid ?? false
+    this.isFree = data?.isFree ?? false
     this.payer = data?.payer ?? ''
     this.quantity = data?.quantity ?? 1
     this.unitPrice = data?.unitPrice ?? 0
