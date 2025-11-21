@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
-  import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
 
@@ -16,47 +15,51 @@
     return Array.from(set)
   })
 
-  const priceByType = (type: string) =>
-    spendings
-      .filter((s: Spending) => s.type === type)
-      .reduce((sum: number, s: Spending) => sum + s.totalPrice, 0)
+  const typeStats = computed(() => {
+    return types.value.map((type) => {
+      const typeSpendings = spendings.filter((s) => s.type === type)
+      const price = typeSpendings.reduce((sum, s) => sum + s.totalPrice, 0)
+      const count = typeSpendings.length
+      const percent = totalPrice > 0 ? Math.round((price / totalPrice) * 100) : 0
+      return { name: type, price, count, percent }
+    })
+  })
 
-  const countByType = (type: string) => spendings.filter((s: Spending) => s.type === type).length
+  const sortedTypes = computed(() => {
+    return [...typeStats.value].sort((a, b) => b.price - a.price)
+  })
 
-  const chartLabels = computed(() =>
-    types.value.map((type) => `${type} (${pricePercentByType(type)}%)`),
-  )
+  const chartLabels = computed(() => sortedTypes.value.map((t) => `${t.name} (${t.percent}%)`))
   const chartDatasets = computed(() => [
     {
       label: 'Výdaje dle typu',
-      data: types.value.map((type) => priceByType(type)),
-      backgroundColor: generateColorPalette(['#f59e0b', '#fbbf24'], types.value.length),
+      data: sortedTypes.value.map((t) => t.price),
+      backgroundColor: generateColorPalette(['#f59e0b', '#fbbf24'], sortedTypes.value.length),
     },
   ])
-
-  const pricePercentByType = (type: string) => {
-    const price = priceByType(type)
-    if (!totalPrice || totalPrice === 0) return 0
-    return Math.round((price / totalPrice) * 100)
-  }
 </script>
 
 <template>
   <SummaryCard
     title="Výdaje dle typu"
+    :subtitle="`${sortedTypes.length} typů`"
     chart-type="Bar"
+    :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div v-for="type in types" :key="type" class="flex items-center gap-2">
-      <div class="font-bold min-w-[30px] w-full text-blue">{{ type }}:</div>
-      <div class="ms-5 font-semibold">{{ formatNumberToCzk(priceByType(type)) }}</div>
-      <div class="text-blue text-sm text-muted-foreground">({{ countByType(type) }}ks)</div>
+    <div v-for="type in sortedTypes" :key="type.name" class="flex items-center gap-2">
+      <div class="font-bold min-w-[100px] w-full text-blue truncate" :title="type.name">
+        {{ type.name }}:
+      </div>
+      <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(type.price) }}</div>
+      <div class="text-blue text-sm text-muted-foreground">({{ type.count }}×)</div>
     </div>
-    <hr class="my-2 text-blue" />
-    <div class="flex font-bold w-full justify-between">
-      <div class="text-blue">Celkem:</div>
-      <div class="ms-5">{{ formatNumberToCzk(totalPrice) }}</div>
-    </div>
+    <template #footer>
+      <div class="flex font-bold w-full justify-between">
+        <div class="text-blue">Celkem:</div>
+        <div class="ms-5">{{ formatNumberToCzk(totalPrice) }}</div>
+      </div>
+    </template>
   </SummaryCard>
 </template>

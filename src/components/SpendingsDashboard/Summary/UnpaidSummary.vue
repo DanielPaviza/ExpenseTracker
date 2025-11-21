@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
-  import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
 
@@ -8,13 +7,10 @@
 
   const { spendings, totalPrice } = useSpendingsStore()
 
+  const unpaidSpendings = computed(() => spendings.filter((s) => !s.isPaid))
+
   const priceUnpaid = computed(() =>
-    spendings.reduce((acc: number, spending: Spending) => {
-      if (!spending.isPaid) {
-        return acc + spending.totalPrice
-      }
-      return acc
-    }, 0),
+    unpaidSpendings.value.reduce((sum, s) => sum + s.totalPrice, 0),
   )
 
   const priceTotalWithUnpaid = computed(() => totalPrice + priceUnpaid.value)
@@ -26,38 +22,56 @@
   })
 
   const chartLabels = computed(() => [
-    `Účtováno (${100 - priceUnpaidPercent.value}%)`,
-    `Neúčtováno (${priceUnpaidPercent.value}%)`,
+    `Zaplaceno (${100 - priceUnpaidPercent.value}%)`,
+    `Nezaplaceno (${priceUnpaidPercent.value}%)`,
   ])
   const chartDatasets = computed(() => [
     {
       label: 'Ušetřené výdaje',
       data: [totalPrice, priceUnpaid.value],
-      backgroundColor: ['#06402b', '#336c8d'],
+      backgroundColor: ['#06402b', '#e53e3e'],
     },
   ])
 </script>
 
 <template>
   <SummaryCard
-    title="Ušetřené výdaje"
+    title="Nezaplacené výdaje"
+    :subtitle="`${unpaidSpendings.length} položek`"
     chart-type="Doughnut"
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div class="flex">
-      <div class="font-bold min-w-[30px] w-full text-blue">Celkem + nenaúčtováno:</div>
-      <div class="font-semibold ms-5">{{ formatNumberToCzk(priceTotalWithUnpaid) }}</div>
+    <div class="flex justify-between">
+      <div class="font-bold text-blue me-3">Celkem zaplaceno:</div>
+      <div class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</div>
     </div>
-    <div class="flex">
-      <div class="font-bold min-w-[30px] w-full text-blue">Celkem:</div>
-      <div class="font-semibold ms-5">{{ formatNumberToCzk(totalPrice) }}</div>
+    <div class="flex justify-between">
+      <div class="font-bold text-blue">Zbývá zaplatit:</div>
+      <div class="font-semibold text-red-600">{{ formatNumberToCzk(priceUnpaid) }}</div>
     </div>
-    <hr class="my-2 text-blue" />
-    <div class="flex items-center gap-2">
-      <div class="font-bold min-w-[30px] w-full text-blue">Ušetřeno:</div>
-      <div class="font-semibold">{{ formatNumberToCzk(priceUnpaid) }}</div>
-      <div class="text-blue text-sm text-muted-foreground">({{ priceUnpaidPercent }}%)</div>
+    <div class="flex justify-between text-sm text-gray-500">
+      <div>(Celkem s nezaplacenými)</div>
+      <div>{{ formatNumberToCzk(priceTotalWithUnpaid) }}</div>
+    </div>
+    <div class="border-t border-blue mt-4">
+      <div class="text-blue mb-2 mt-4">Nezaplacené položky:</div>
+      <div class="overflow-y-auto max-h-40 pr-2 text-sm">
+        <div
+          v-for="spending in unpaidSpendings"
+          :key="spending.id"
+          class="flex justify-between items-center"
+        >
+          <span class="truncate" :title="spending.name">{{ spending.name }}</span>
+          <span class="font-semibold whitespace-nowrap">{{
+            formatNumberToCzk(spending.totalPrice)
+          }}</span>
+          <span v-if="spending.store">-> {{ spending.store }}</span>
+        </div>
+        <div v-if="unpaidSpendings.length === 0" class="text-gray-500">
+          Všechny výdaje jsou zaplaceny.
+        </div>
+      </div>
     </div>
   </SummaryCard>
 </template>
