@@ -51,6 +51,14 @@ export const SpendingsColumns: SpendingColumn[] = [
     isHidden: false,
     sortFn: (a, b) => Number(a.isToBePaid) - Number(b.isToBePaid),
     filterVal: (row) => (row.isToBePaid ? 'Ano' : 'Ne'),
+    render: (row) => (row.isToBePaid ? 'Ne' : 'Ano'),
+  },
+  {
+    title: 'Šmelo',
+    key: 'isFree',
+    isHidden: false,
+    sortFn: (a, b) => Number(a.isToBePaid) - Number(b.isToBePaid),
+    filterVal: (row) => (row.isToBePaid ? 'Ano' : 'Ne'),
     render: (row) => (row.isToBePaid ? 'Ano' : 'Ne'),
   },
   {

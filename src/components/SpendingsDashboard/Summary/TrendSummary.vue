@@ -3,10 +3,12 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { NButton, NButtonGroup } from 'naive-ui'
+  import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
 
-  const { spendings } = useSpendingsStore()
+  const store = useSpendingsStore()
+  const { spendings } = storeToRefs(store)
 
   type Grouping = 'day' | 'week' | 'month'
   const groupBy = ref<Grouping>('month')
@@ -14,25 +16,27 @@
   const spendingTrends = computed(() => {
     const groups: { [key: string]: { total: number; count: number } } = {}
 
-    spendings.forEach((s) => {
-      const date = new Date(s.createdAt)
-      let key = ''
-      if (groupBy.value === 'day') {
-        key = date.toISOString().split('T')[0]
-      } else if (groupBy.value === 'week') {
-        const weekStart = new Date(date.setDate(date.getDate() - date.getDay()))
-        key = weekStart.toISOString().split('T')[0]
-      } else {
-        // month
-        key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
-      }
+    spendings.value
+      .filter((s) => !s.isFree && !s.isToBePaid)
+      .forEach((s) => {
+        const date = new Date(s.createdAt)
+        let key = ''
+        if (groupBy.value === 'day') {
+          key = date.toISOString().split('T')[0]
+        } else if (groupBy.value === 'week') {
+          const weekStart = new Date(date.setDate(date.getDate() - date.getDay()))
+          key = weekStart.toISOString().split('T')[0]
+        } else {
+          // month
+          key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+        }
 
-      if (!groups[key]) {
-        groups[key] = { total: 0, count: 0 }
-      }
-      groups[key].total += s.totalPrice
-      groups[key].count++
-    })
+        if (!groups[key]) {
+          groups[key] = { total: 0, count: 0 }
+        }
+        groups[key].total += s.totalPrice
+        groups[key].count++
+      })
 
     return Object.entries(groups)
       .map(([key, value]) => ({

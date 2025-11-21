@@ -3,17 +3,19 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
   import { NButton, NButtonGroup } from 'naive-ui'
+  import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
 
-  const { spendings, totalPrice } = useSpendingsStore()
+  const store = useSpendingsStore()
+  const { spendings, totalPrice } = storeToRefs(store)
 
   type SortType = 'price-desc' | 'count-desc' | 'alphabetical'
   const sortBy = ref<SortType>('price-desc')
 
   const subCategories = computed(() => {
     const set = new Set<string>()
-    for (const s of spendings) {
+    for (const s of spendings.value) {
       if (s.subCategory) set.add(s.subCategory)
     }
     return Array.from(set)
@@ -21,10 +23,12 @@
 
   const subCategoryStats = computed(() => {
     return subCategories.value.map((sub) => {
-      const subCategorySpendings = spendings.filter((s) => s.subCategory === sub)
-      const price = subCategorySpendings.reduce((sum, s) => sum + s.totalPrice, 0)
+      const subCategorySpendings = spendings.value.filter((s) => s.subCategory === sub)
+      const price = subCategorySpendings
+        .filter((s) => !s.isFree && !s.isToBePaid)
+        .reduce((sum, s) => sum + s.totalPrice, 0)
       const count = subCategorySpendings.length
-      const percent = totalPrice > 0 ? Math.round((price / totalPrice) * 100) : 0
+      const percent = totalPrice.value > 0 ? Math.round((price / totalPrice.value) * 100) : 0
       return { name: sub, price, count, percent }
     })
   })

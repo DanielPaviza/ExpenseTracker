@@ -38,12 +38,12 @@
     return null
   })
 
-  // Form data
-  const formData = ref({
+  const defaultFormData = {
     category: '',
     type: '',
     name: '',
-    isToBePaid: true,
+    isToBePaid: false,
+    isFree: false,
     payer: '',
     quantity: 1,
     unitPrice: 0,
@@ -54,7 +54,10 @@
     storeCode: '',
     description: '',
     subCategory: '',
-  })
+  }
+
+  // Form data
+  const formData = ref(defaultFormData)
 
   // Watch for changes to the current spending to populate form
   watch(
@@ -66,6 +69,7 @@
           type: newSpending.type,
           name: newSpending.name,
           isToBePaid: newSpending.isToBePaid,
+          isFree: newSpending.isFree,
           payer: newSpending.payer,
           quantity: newSpending.quantity,
           unitPrice: newSpending.unitPrice,
@@ -151,22 +155,7 @@
   })
 
   function resetForm() {
-    formData.value = {
-      category: '',
-      type: '',
-      name: '',
-      isToBePaid: true,
-      payer: '',
-      quantity: 1,
-      unitPrice: 0,
-      dimensions: '',
-      url: '',
-      document: '',
-      store: '',
-      storeCode: '',
-      description: '',
-      subCategory: '',
-    }
+    formData.value = defaultFormData
   }
 
   function closeDrawer() {
@@ -182,6 +171,7 @@
         type: formData.value.type,
         name: formData.value.name,
         isToBePaid: formData.value.isToBePaid,
+        isFree: formData.value.isFree,
         payer: formData.value.payer,
         quantity: formData.value.quantity,
         unitPrice: formData.value.unitPrice,
@@ -222,7 +212,7 @@
 </script>
 
 <template>
-  <n-drawer :show="show" @update:show="closeDrawer" :width="600" placement="right">
+  <n-drawer :show="show" @update:show="closeDrawer" :width="800" placement="right">
     <n-drawer-content :title="drawerTitle" closable>
       <template #header>
         <div class="text-2xl font-bold text-blue">{{ drawerTitle }}</div>
@@ -299,9 +289,21 @@
           </div>
         </div>
 
-        <n-form-item label="Zaplaceno">
-          <n-checkbox v-model:checked="formData.isToBePaid">Ano</n-checkbox>
-        </n-form-item>
+        <div class="flex justify-center">
+          <div class="flex gap-20">
+            <n-form-item label="Prozatím nezaplaceno">
+              <n-checkbox v-model:checked="formData.isToBePaid">{{
+                formData.isToBePaid ? 'Ano' : 'Ne'
+              }}</n-checkbox>
+            </n-form-item>
+
+            <n-form-item label="Šmelo">
+              <n-checkbox v-model:checked="formData.isFree">{{
+                formData.isFree ? 'Ano' : 'Ne'
+              }}</n-checkbox>
+            </n-form-item>
+          </div>
+        </div>
 
         <!-- Optional fields -->
 
@@ -352,3 +354,10 @@
     </n-drawer-content>
   </n-drawer>
 </template>
+<style scoped>
+  :deep(.n-base-close.n-base-close--absolute.n-drawer-header__close) {
+    color: #c04141;
+    font-size: larger;
+    padding: 10px;
+  }
+</style>

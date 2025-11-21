@@ -90,12 +90,19 @@ export const useSpendingsStore = defineStore('spendings', () => {
   })
 
   const totalPrice = computed(() => {
-    return spendings.value.reduce((sum, spending) => sum + spending.totalPrice, 0)
+    return spendings.value.filter((s) => !s.isFree && !s.isToBePaid).reduce((sum, spending) => sum + spending.totalPrice, 0)
+  })
+
+  const totalUnpaid = computed(() => {
+    return spendings.value
+      .filter((s) => !s.isFree && s.isToBePaid)
+      .reduce((sum, spending) => sum + spending.totalPrice, 0)
   })
 
   return {
     spendings,
     totalPrice,
+    totalUnpaid,
     pendingChanges,
     isLoading,
     load,

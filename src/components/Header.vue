@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import MarginContainer from '@components/MarginContainer.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
+  import { formatNumberToCzk } from '@utils/formatUtils'
   import { AddOutline, SaveOutline, WarningOutline } from '@vicons/ionicons5'
   import { NButton, NIcon } from 'naive-ui'
 
@@ -34,24 +35,28 @@
             <div class="font-bold">Přidat nový nákup</div>
           </n-button>
         </div>
-
-        <!-- Pending changes indicator -->
-        <div
-          v-if="pendingChanges"
-          class="flex items-center gap-3 bg-orange-50 border border-orange-300 rounded-lg px-4 py-2"
-        >
-          <n-icon size="24" color="#f97316">
-            <WarningOutline />
-          </n-icon>
-          <span class="text-orange-700 font-semibold">Neuložené změny</span>
-          <n-button type="warning" @click="handleSave" :loading="store.isLoading">
-            <template #icon>
-              <n-icon>
-                <SaveOutline />
-              </n-icon>
-            </template>
-            Uložit
-          </n-button>
+        <div class="flex items-center">
+          <div class="text-blue flex items-center font-semibold">
+            Celkové výdaje: {{ formatNumberToCzk(store.totalPrice) }}
+          </div>
+          <!-- Pending changes indicator -->
+          <div
+            v-if="pendingChanges"
+            class="flex items-center gap-3 bg-orange-50 border border-orange-300 rounded-lg px-4 py-2 ms-5"
+          >
+            <n-icon size="24" color="#f97316">
+              <WarningOutline />
+            </n-icon>
+            <span class="text-orange-700 font-semibold">Neuložené změny</span>
+            <n-button type="warning" @click="handleSave" :loading="store.isLoading">
+              <template #icon>
+                <n-icon>
+                  <SaveOutline />
+                </n-icon>
+              </template>
+              Uložit
+            </n-button>
+          </div>
         </div>
       </div>
     </MarginContainer>

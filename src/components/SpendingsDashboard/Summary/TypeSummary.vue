@@ -3,10 +3,12 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
   import { NButton, NButtonGroup } from 'naive-ui'
+  import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
 
-  const { spendings, totalPrice } = useSpendingsStore()
+  const store = useSpendingsStore()
+  const { spendings, totalPrice } = storeToRefs(store)
 
   const MAX_DISPLAYED_ITEMS = 8
 
@@ -16,7 +18,7 @@
 
   const types = computed(() => {
     const set = new Set<string>()
-    for (const s of spendings) {
+    for (const s of spendings.value) {
       if (s.type) set.add(s.type)
     }
     return Array.from(set)
@@ -24,10 +26,12 @@
 
   const typeStats = computed(() => {
     return types.value.map((type) => {
-      const typeSpendings = spendings.filter((s) => s.type === type)
-      const price = typeSpendings.reduce((sum, s) => sum + s.totalPrice, 0)
+      const typeSpendings = spendings.value.filter((s) => s.type === type)
+      const price = typeSpendings
+        .filter((s) => !s.isFree && !s.isToBePaid)
+        .reduce((sum, s) => sum + s.totalPrice, 0)
       const count = typeSpendings.length
-      const percent = totalPrice > 0 ? Math.round((price / totalPrice) * 100) : 0
+      const percent = totalPrice.value > 0 ? Math.round((price / totalPrice.value) * 100) : 0
       return { name: type, price, count, percent }
     })
   })
