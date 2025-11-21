@@ -7,17 +7,19 @@
 </script>
 
 <template>
-  <div class="w-full">
-    <n-carousel
-      v-model:current-index="currentSlide"
-      :show-dots="true"
-      :show-arrow="true"
-      draggable
-      :slides-per-view="1"
-      :space-between="20"
-    >
-      <slot />
-    </n-carousel>
+  <div class="h-screen">
+    <div class="w-full">
+      <n-carousel
+        v-model:current-index="currentSlide"
+        :show-dots="true"
+        :show-arrow="true"
+        draggable
+        :slides-per-view="1"
+        :space-between="20"
+      >
+        <slot />
+      </n-carousel>
+    </div>
   </div>
 </template>
 

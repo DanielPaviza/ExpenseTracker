@@ -37,7 +37,7 @@
 
 <template>
   <SummaryCard
-    :title="`Poslední nákupy`"
+    :title="`Historie nákupů`"
     :subtitle="showAll ? 'Všechny nákupy' : `Posledních ${lastSpendingCount} nákupů`"
     :show-footer="true"
     :compact-mode="true"
@@ -77,7 +77,7 @@
         :key="spending.id"
         class="flex items-center gap-2 text-sm mb-1"
       >
-        <div class="font-semibold text-blue text-xs w-[65px] flex-shrink-0">
+        <div class="font-semibold text-blue text-xs w-[65px] shrink-0">
           {{ formatDateShort(spending.createdAt) }}
         </div>
         <div class="font-bold w-full truncate" :title="spending.name">{{ spending.name }}</div>
