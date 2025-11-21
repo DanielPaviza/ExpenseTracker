@@ -47,11 +47,11 @@ export const SpendingsColumns: SpendingColumn[] = [
   },
   {
     title: 'Zaplaceno',
-    key: 'isPaid',
+    key: 'isToBePaid',
     isHidden: false,
-    sortFn: (a, b) => Number(a.isPaid) - Number(b.isPaid),
-    filterVal: (row) => (row.isPaid ? 'Ano' : 'Ne'),
-    render: (row) => (row.isPaid ? 'Ano' : 'Ne'),
+    sortFn: (a, b) => Number(a.isToBePaid) - Number(b.isToBePaid),
+    filterVal: (row) => (row.isToBePaid ? 'Ano' : 'Ne'),
+    render: (row) => (row.isToBePaid ? 'Ano' : 'Ne'),
   },
   {
     title: 'Plátce',

@@ -43,7 +43,7 @@
     category: '',
     type: '',
     name: '',
-    isPaid: true,
+    isToBePaid: true,
     payer: '',
     quantity: 1,
     unitPrice: 0,
@@ -65,7 +65,7 @@
           category: newSpending.category,
           type: newSpending.type,
           name: newSpending.name,
-          isPaid: newSpending.isPaid,
+          isToBePaid: newSpending.isToBePaid,
           payer: newSpending.payer,
           quantity: newSpending.quantity,
           unitPrice: newSpending.unitPrice,
@@ -155,7 +155,7 @@
       category: '',
       type: '',
       name: '',
-      isPaid: true,
+      isToBePaid: true,
       payer: '',
       quantity: 1,
       unitPrice: 0,
@@ -181,7 +181,7 @@
         category: formData.value.category,
         type: formData.value.type,
         name: formData.value.name,
-        isPaid: formData.value.isPaid,
+        isToBePaid: formData.value.isToBePaid,
         payer: formData.value.payer,
         quantity: formData.value.quantity,
         unitPrice: formData.value.unitPrice,
@@ -300,7 +300,7 @@
         </div>
 
         <n-form-item label="Zaplaceno">
-          <n-checkbox v-model:checked="formData.isPaid">Ano</n-checkbox>
+          <n-checkbox v-model:checked="formData.isToBePaid">Ano</n-checkbox>
         </n-form-item>
 
         <!-- Optional fields -->

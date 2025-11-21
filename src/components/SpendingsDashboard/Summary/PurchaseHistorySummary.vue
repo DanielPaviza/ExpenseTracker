@@ -37,7 +37,7 @@
 
 <template>
   <SummaryCard
-    :title="`Poslední nákupy`"
+    :title="`Historie nákupů`"
     :subtitle="showAll ? 'Všechny nákupy' : `Posledních ${lastSpendingCount} nákupů`"
     :show-footer="true"
     :compact-mode="true"
