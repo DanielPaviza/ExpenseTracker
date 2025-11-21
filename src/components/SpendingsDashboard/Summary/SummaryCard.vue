@@ -3,6 +3,7 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { NButton, NButtonGroup, NCard } from 'naive-ui'
+  import { storeToRefs } from 'pinia'
 
   import { ref } from 'vue'
 
@@ -34,7 +35,7 @@
   })
 
   const spendingsStore = useSpendingsStore()
-  const { totalPrice } = spendingsStore
+  const { totalPrice } = storeToRefs(spendingsStore)
 
   const selectedChartType = ref<'Doughnut' | 'Bar' | 'Line'>(
     chartType !== 'None' ? (chartType as 'Doughnut' | 'Bar' | 'Line') : 'Doughnut',

@@ -2,13 +2,16 @@
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
+  import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
 
-  const { spendings, totalPrice } = useSpendingsStore()
+  const store = useSpendingsStore()
+  const { spendings, totalPrice } = storeToRefs(store)
 
   const dateStats = computed(() => {
-    if (spendings.length === 0) {
+    const paidSpendings = spendings.value.filter((s) => !s.isFree && !s.isToBePaid)
+    if (paidSpendings.length === 0) {
       return {
         firstDate: null,
         lastDate: null,
@@ -18,7 +21,7 @@
       }
     }
 
-    const sortedByDate = [...spendings].sort(
+    const sortedByDate = [...paidSpendings].sort(
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     )
     const firstDate = new Date(sortedByDate[0].createdAt)
@@ -36,17 +39,17 @@
 
   const averagePerDay = computed(() => {
     const { totalDays } = dateStats.value
-    return totalDays > 0 ? totalPrice / totalDays : 0
+    return totalDays > 0 ? totalPrice.value / totalDays : 0
   })
 
   const averagePerWeek = computed(() => {
     const { totalWeeks } = dateStats.value
-    return totalWeeks > 0 ? totalPrice / totalWeeks : 0
+    return totalWeeks > 0 ? totalPrice.value / totalWeeks : 0
   })
 
   const averagePerMonth = computed(() => {
     const { totalMonths } = dateStats.value
-    return totalMonths > 0 ? totalPrice / totalMonths : 0
+    return totalMonths > 0 ? totalPrice.value / totalMonths : 0
   })
 
   const chartLabels = computed(() => ['Denní', 'Týdenní', 'Měsíční'])

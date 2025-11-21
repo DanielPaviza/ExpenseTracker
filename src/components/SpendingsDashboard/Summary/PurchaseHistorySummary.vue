@@ -4,18 +4,20 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatDateShort, formatNumberToCzk } from '@utils/formatUtils'
   import { NButton, NButtonGroup, NInputNumber } from 'naive-ui'
+  import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
 
-  const { spendings } = useSpendingsStore()
+  const store = useSpendingsStore()
+  const { spendings } = storeToRefs(store)
 
-  const lastSpendingCount = ref(10)
+  const lastSpendingCount = ref(8)
   const showAll = ref(false)
   type SortType = 'date-desc' | 'price-desc'
   const sortBy = ref<SortType>('date-desc')
 
   const sortedSpendings = computed(() => {
-    const sorted = [...spendings]
+    const sorted = [...spendings.value].filter((s: Spending) => !s.isFree && !s.isToBePaid)
     if (sortBy.value === 'price-desc') {
       return sorted.sort((a, b) => b.totalPrice - a.totalPrice)
     }
@@ -29,10 +31,6 @@
     }
     return sortedSpendings.value.slice(0, lastSpendingCount.value)
   })
-
-  const recentTotal = computed(() =>
-    recentSpendings.value.reduce((sum: number, s: Spending) => sum + s.totalPrice, 0),
-  )
 </script>
 
 <template>

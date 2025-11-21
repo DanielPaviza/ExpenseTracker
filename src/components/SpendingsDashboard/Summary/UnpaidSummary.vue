@@ -2,18 +2,20 @@
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
+  import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
 
-  const { spendings, totalPrice } = useSpendingsStore()
+  const store = useSpendingsStore()
+  const { spendings, totalPrice } = storeToRefs(store)
 
-  const unpaidSpendings = computed(() => spendings.filter((s) => !s.isToBePaid))
+  const unpaidSpendings = computed(() => spendings.value.filter((s) => s.isToBePaid && !s.isFree))
 
   const priceUnpaid = computed(() =>
     unpaidSpendings.value.reduce((sum, s) => sum + s.totalPrice, 0),
   )
 
-  const priceTotalWithUnpaid = computed(() => totalPrice + priceUnpaid.value)
+  const priceTotalWithUnpaid = computed(() => totalPrice.value + priceUnpaid.value)
 
   const priceUnpaidPercent = computed(() => {
     const total = priceTotalWithUnpaid.value
@@ -28,7 +30,7 @@
   const chartDatasets = computed(() => [
     {
       label: 'Ušetřené výdaje',
-      data: [totalPrice, priceUnpaid.value],
+      data: [totalPrice.value, priceUnpaid.value],
       backgroundColor: ['#06402b', '#e53e3e'],
     },
   ])
@@ -42,34 +44,36 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div class="flex justify-between">
-      <div class="font-bold text-blue me-3">Celkem zaplaceno:</div>
-      <div class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</div>
-    </div>
-    <div class="flex justify-between">
-      <div class="font-bold text-blue">Zbývá zaplatit:</div>
-      <div class="font-semibold text-red-600">{{ formatNumberToCzk(priceUnpaid) }}</div>
-    </div>
-    <div class="flex justify-between text-sm text-gray-500">
-      <div>(Celkem s nezaplacenými)</div>
-      <div>{{ formatNumberToCzk(priceTotalWithUnpaid) }}</div>
-    </div>
-    <div class="border-t border-blue mt-4">
-      <div class="text-blue mb-2 mt-4">Nezaplacené položky:</div>
-      <div class="overflow-y-auto max-h-40 pr-2 text-sm">
-        <div
-          v-for="spending in unpaidSpendings"
-          :key="spending.id"
-          class="flex justify-between items-center"
-        >
-          <span class="truncate" :title="spending.name">{{ spending.name }}</span>
-          <span class="font-semibold whitespace-nowrap">{{
-            formatNumberToCzk(spending.totalPrice)
-          }}</span>
-          <span v-if="spending.store">-> {{ spending.store }}</span>
-        </div>
-        <div v-if="unpaidSpendings.length === 0" class="text-gray-500">
-          Všechny výdaje jsou zaplaceny.
+    <div class="max-w-[90%]">
+      <div class="flex justify-between">
+        <div class="font-bold text-blue me-3">Celkem zaplaceno:</div>
+        <div class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</div>
+      </div>
+      <div class="flex justify-between">
+        <div class="font-bold text-blue">Zbývá zaplatit:</div>
+        <div class="font-semibold text-red-600">{{ formatNumberToCzk(priceUnpaid) }}</div>
+      </div>
+      <div class="flex justify-between text-sm text-gray-500">
+        <div>(Celkem s nezaplacenými)</div>
+        <div>{{ formatNumberToCzk(priceTotalWithUnpaid) }}</div>
+      </div>
+      <div class="border-t border-blue mt-4">
+        <div class="text-blue mb-2 mt-4">Nezaplacené položky:</div>
+        <div class="overflow-y-auto max-h-40 pr-2 text-sm">
+          <div
+            v-for="spending in unpaidSpendings.filter((s) => !s.isFree)"
+            :key="spending.id"
+            class="flex space-y-1 items-center gap-4"
+          >
+            <span class="truncate font-semibold" :title="spending.name">{{ spending.name }}</span>
+            <span class="font-semibold whitespace-nowrap">{{
+              formatNumberToCzk(spending.totalPrice)
+            }}</span>
+            <span v-if="spending.store">-> {{ spending.store }}</span>
+          </div>
+          <div v-if="unpaidSpendings.length === 0" class="text-gray-500">
+            Všechny výdaje jsou zaplaceny.
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,4 @@
 export class Spending {
-  // Required properties
   id: string
   category: string
   type: string
@@ -9,8 +8,6 @@ export class Spending {
   payer: string
   quantity: number
   unitPrice: number
-
-  // Optional properties
   dimensions?: string | null
   url?: string | null
   document?: string | null

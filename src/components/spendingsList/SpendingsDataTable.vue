@@ -129,9 +129,11 @@
   }
 
   const totalPrice = computed(() => {
-    return sortedData.value.reduce((sum, spending) => {
-      return sum + spending.totalPrice
-    }, 0)
+    return sortedData.value
+      .filter((spending) => !spending.isFree && !spending.isToBePaid)
+      .reduce((sum, spending) => {
+        return sum + spending.totalPrice
+      }, 0)
   })
 
   const getCellContent = (

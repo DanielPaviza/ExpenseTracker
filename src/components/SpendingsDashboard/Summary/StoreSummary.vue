@@ -4,10 +4,12 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
   import { NButton, NButtonGroup } from 'naive-ui'
+  import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
 
-  const { spendings, stores, totalPrice } = useSpendingsStore()
+  const store = useSpendingsStore()
+  const { spendings, stores, totalPrice } = storeToRefs(store)
 
   const MAX_DISPLAYED_ITEMS = 8
 
@@ -16,14 +18,16 @@
   const showAll = ref(false)
 
   const storeStats = computed(() => {
-    return stores.map((store) => {
-      const storeSpendings = spendings.filter((s: Spending) => s.store === store)
-      const price = storeSpendings.reduce((sum: number, s: Spending) => sum + s.totalPrice, 0)
+    return stores.value.map((storeName) => {
+      const storeSpendings = spendings.value.filter((s: Spending) => s.store === storeName)
+      const price = storeSpendings
+        .filter((s: Spending) => !s.isFree && !s.isToBePaid)
+        .reduce((sum: number, s: Spending) => sum + s.totalPrice, 0)
       const visits = storeSpendings.length
       const itemCount = storeSpendings.reduce((sum: number, s: Spending) => sum + s.quantity, 0)
       const avgPerVisit = visits > 0 ? price / visits : 0
-      const percent = totalPrice > 0 ? Math.round((price / totalPrice) * 100) : 0
-      return { name: store, price, visits, itemCount, avgPerVisit, percent }
+      const percent = totalPrice.value > 0 ? Math.round((price / totalPrice.value) * 100) : 0
+      return { name: storeName, price, visits, itemCount, avgPerVisit, percent }
     })
   })
 
