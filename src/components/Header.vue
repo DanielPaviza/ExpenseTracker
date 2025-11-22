@@ -28,12 +28,14 @@
       <div class="flex items-center justify-between">
         <div class="flex items-center">
           <h1 class="text-4xl font-extrabold tracking-tight text-blue me-5">Evidence nákupů</h1>
-          <n-button type="primary" color="#3b82f6" size="large" @click="openNewSpendingForm">
-            <n-icon size="32">
-              <AddOutline />
-            </n-icon>
-            <div class="font-bold">Přidat nový nákup</div>
-          </n-button>
+          <div class="mt-2">
+            <n-button type="primary" color="#3b82f6" @click="openNewSpendingForm">
+              <n-icon size="32">
+                <AddOutline />
+              </n-icon>
+              <div class="font-bold">Přidat nový nákup</div>
+            </n-button>
+          </div>
         </div>
         <div class="flex items-center">
           <div class="text-blue flex items-center font-semibold">
