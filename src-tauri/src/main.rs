@@ -5,6 +5,7 @@ use bytevidence_lib::commands;
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             commands::load_data,
             commands::save_data,

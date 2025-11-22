@@ -2,12 +2,14 @@
   import Tooltip from '@components/Tooltip.vue'
   import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { SaveOutline, TrashOutline } from '@vicons/ionicons5'
+  import { formatDate } from '@utils/formatUtils'
+  import { OpenOutline, SaveOutline, TrashOutline } from '@vicons/ionicons5'
   import {
     type FormInst,
     type FormRules,
     NButton,
     NCheckbox,
+    NDatePicker,
     NDrawer,
     NDrawerContent,
     NForm,
@@ -59,6 +61,7 @@
     storeCode: '',
     description: '',
     subCategory: '',
+    createdAt: new Date(),
   }
 
   // Form data
@@ -85,6 +88,7 @@
           storeCode: newSpending.storeCode ?? '',
           description: newSpending.description ?? '',
           subCategory: newSpending.subCategory ?? '',
+          createdAt: newSpending.createdAt,
         }
       } else if (!isEditMode.value) {
         resetForm()
@@ -163,8 +167,19 @@
     return formData.value.quantity * formData.value.unitPrice
   })
 
+  // Convert Date to timestamp for date picker
+  const createdAtTimestamp = computed({
+    get: () => formData.value.createdAt.getTime(),
+    set: (value: number) => {
+      formData.value.createdAt = new Date(value)
+    },
+  })
+
   function resetForm() {
-    formData.value = defaultFormData
+    formData.value = {
+      ...defaultFormData,
+      createdAt: new Date(),
+    }
   }
 
   function closeDrawer() {
@@ -205,7 +220,10 @@
         message.success('Nákup byl úspěšně upraven')
       } else {
         // Create new
-        const newSpending = new Spending(spendingData)
+        const newSpending = new Spending({
+          ...spendingData,
+          createdAt: formData.value.createdAt,
+        })
         store.addSpending(newSpending)
         message.success('Nákup byl úspěšně vytvořen')
       }
@@ -254,6 +272,18 @@
         label-placement="top"
         require-mark-placement="right-hanging"
       >
+        <!-- Timestamps for edit mode -->
+        <div v-if="!!currentSpending?.createdAt" class="flex gap-8 text-sm mb-4">
+          <div class="flex-1">
+            <span class="font-semibold text-gray-700">Vytvořeno:</span>
+            <span class="ml-2 text-gray-600">{{ formatDate(currentSpending!.createdAt) }}</span>
+          </div>
+          <div v-if="!!currentSpending?.editedAt" class="flex-1">
+            <span class="font-semibold text-gray-700">Upraveno:</span>
+            <span class="ml-2 text-gray-600">{{ formatDate(currentSpending.editedAt) }}</span>
+          </div>
+        </div>
+
         <!-- Required fields -->
         <n-form-item label="Kategorie" path="category">
           <n-select
@@ -272,6 +302,7 @@
             placeholder="Vyberte podkategorii"
             filterable
             tag
+            clearable
           />
         </n-form-item>
 
@@ -281,6 +312,16 @@
 
         <n-form-item label="Název" path="name">
           <n-input v-model:value="formData.name" placeholder="Název položky" />
+        </n-form-item>
+
+        <n-form-item v-if="!isEditMode" label="Datum vytvoření" path="createdAt">
+          <n-date-picker
+            v-model:value="createdAtTimestamp"
+            type="datetime"
+            placeholder="Vyberte datum a čas"
+            class="w-full"
+            format="dd.MM.yyyy HH:mm"
+          />
         </n-form-item>
 
         <n-form-item label="Plátce" path="payer">
@@ -314,6 +355,8 @@
               v-model:value="formData.unitPrice"
               :min="0"
               :step="100"
+              :placeholder="String(formData.unitPrice)"
+              :show-button="false"
               class="w-full"
             />
           </n-form-item>
@@ -364,7 +407,20 @@
         </n-form-item>
 
         <n-form-item label="URL" path="url">
-          <n-input v-model:value="formData.url" placeholder="https://..." clearable />
+          <div class="flex gap-2 w-full">
+            <div class="w-full">
+              <n-input v-model:value="formData.url" placeholder="https://..." clearable />
+            </div>
+            <a v-if="formData.url" :href="formData.url" target="_blank">
+              <n-button color="#3b82f6" title="Otevřít odkaz">
+                <template #icon>
+                  <n-icon>
+                    <OpenOutline />
+                  </n-icon>
+                </template>
+              </n-button>
+            </a>
+          </div>
         </n-form-item>
 
         <n-form-item label="Technický list" path="document">
@@ -417,5 +473,11 @@
     color: #c04141;
     font-size: larger;
     padding: 10px;
+  }
+  :deep(.n-base-clear__clear) {
+    color: #c62828 !important;
+  }
+  :deep(.n-base-clear__clear:hover) {
+    color: red !important;
   }
 </style>

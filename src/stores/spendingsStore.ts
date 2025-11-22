@@ -20,7 +20,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     try {
       const loadedData = await loadSpendings()
       spendings.value = loadedData
-      originalSpendings.value = JSON.parse(JSON.stringify(loadedData))
+      originalSpendings.value = [...loadedData]
     } catch (error) {
       console.error('Failed to load spendings:', error)
       throw error
@@ -33,7 +33,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     isLoading.value = true
     try {
       await saveSpendings(spendings.value)
-      originalSpendings.value = JSON.parse(JSON.stringify(spendings.value))
+      originalSpendings.value = [...spendings.value]
     } catch (error) {
       console.error('Failed to save spendings:', error)
       throw error
@@ -61,7 +61,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
   }
 
   function discardChanges() {
-    spendings.value = JSON.parse(JSON.stringify(originalSpendings.value))
+    spendings.value = [...originalSpendings.value]
   }
 
   // Computed: distinct categories

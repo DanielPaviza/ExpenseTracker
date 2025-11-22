@@ -3,7 +3,7 @@
   import type { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
-  import { ChevronForwardOutline, TrashOutline } from '@vicons/ionicons5'
+  import { ChevronForwardOutline, CloseOutline } from '@vicons/ionicons5'
   import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
 
   import { type VNode, computed, ref } from 'vue'
@@ -87,7 +87,7 @@
           <span class="font-semibold text-blue-700">{{ subCategory }}</span>
           <span class="text-sm text-gray-600">({{ items.length }} položek)</span>
         </div>
-        <div class="font-bold text-blue-700">
+        <div class="font-bold text-black me-[7.6%]">
           {{ formatNumberToCzk(totalPrice) }}
         </div>
       </div>
@@ -98,7 +98,7 @@
     <tr
       v-for="(row, index) in items"
       :key="row.id"
-      class="bg-gray-50 hover:bg-blue-50 cursor-pointer subCategory-item"
+      class="bg-gray-50 hover:bg-blue-50 cursor-pointer subCategory-item border-2 border-e-0 border-t-0 border-b-0 border-blue-300"
       @click="handleRowClick(row, $event)"
     >
       <td
@@ -107,20 +107,21 @@
         class="border-b border-blue-100 px-4 py-2"
         :class="{ 'border-blue-200': index === items.length - 1 }"
       >
-        <template v-if="column.key === 'actions'">
-          <n-button
-            class="delete-button"
-            size="small"
-            color="#ef4444"
-            @click="handleDelete(row, $event)"
-          >
-            <template #icon>
-              <n-icon>
-                <TrashOutline />
-              </n-icon>
-            </template>
-            Smazat
-          </n-button>
+        <template v-if="column.key === 'deleteAction'">
+          <div class="opacity-75 hover:opacity-100">
+            <n-button
+              class="delete-button"
+              size="tiny"
+              color="#ef4444"
+              @click="handleDelete(row, $event)"
+            >
+              <template #icon>
+                <n-icon>
+                  <CloseOutline />
+                </n-icon>
+              </template>
+            </n-button>
+          </div>
         </template>
         <template v-else-if="typeof getCellContent(column, row, index) === 'object'">
           <component :is="getCellContent(column, row, index)" />
