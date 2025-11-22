@@ -10,7 +10,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
   const isLoading = ref(false)
 
   const pendingChanges = computed(() => {
-    return JSON.stringify(spendings.value) !== JSON.stringify(originalSpendings.value)
+    const current = JSON.stringify(spendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
+    const original = JSON.stringify(originalSpendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
+    return current !== original
   })
 
   async function load() {
@@ -19,6 +21,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
       const loadedData = await loadSpendings()
       spendings.value = loadedData
       originalSpendings.value = JSON.parse(JSON.stringify(loadedData))
+    } catch (error) {
+      console.error('Failed to load spendings:', error)
+      throw error
     } finally {
       isLoading.value = false
     }
@@ -29,6 +34,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
     try {
       await saveSpendings(spendings.value)
       originalSpendings.value = JSON.parse(JSON.stringify(spendings.value))
+    } catch (error) {
+      console.error('Failed to save spendings:', error)
+      throw error
     } finally {
       isLoading.value = false
     }

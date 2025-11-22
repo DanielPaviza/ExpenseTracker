@@ -2,14 +2,16 @@
   import MarginContainer from '@components/MarginContainer.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
-  import { AddOutline, SaveOutline, WarningOutline } from '@vicons/ionicons5'
-  import { NButton, NIcon } from 'naive-ui'
+  import { AddOutline, CloseOutline, SaveOutline, WarningOutline } from '@vicons/ionicons5'
+  import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
 
   import { computed } from 'vue'
   import { useRouter } from 'vue-router'
 
   const store = useSpendingsStore()
   const router = useRouter()
+  const dialog = useDialog()
+  const message = useMessage()
   const pendingChanges = computed(() => store.pendingChanges)
 
   function openNewSpendingForm() {
@@ -17,7 +19,26 @@
   }
 
   async function handleSave() {
-    await store.save()
+    try {
+      await store.save()
+      message.success('Změny byly úspěšně uloženy')
+    } catch (error) {
+      message.error('Chyba při ukládání změn')
+      console.error('Save error:', error)
+    }
+  }
+
+  function handleDiscard() {
+    dialog.warning({
+      title: 'Zahodit změny',
+      content: 'Opravdu chcete zahodit všechny neuložené změny? Tato akce je nevratná.',
+      positiveText: 'Zahodit',
+      negativeText: 'Zrušit',
+      onPositiveClick: () => {
+        store.discardChanges()
+        message.info('Změny byly zahozeny')
+      },
+    })
   }
 </script>
 <template>
@@ -57,6 +78,14 @@
                 </n-icon>
               </template>
               Uložit
+            </n-button>
+            <n-button type="error" @click="handleDiscard" :disabled="store.isLoading">
+              <template #icon>
+                <n-icon>
+                  <CloseOutline />
+                </n-icon>
+              </template>
+              Zahodit
             </n-button>
           </div>
         </div>
