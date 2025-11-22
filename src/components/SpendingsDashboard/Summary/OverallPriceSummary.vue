@@ -4,10 +4,13 @@
   import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
   import { storeToRefs } from 'pinia'
 
-  import { computed } from 'vue'
+  import { computed, ref } from 'vue'
 
   const store = useSpendingsStore()
   const { spendings, payers, totalPrice } = storeToRefs(store)
+
+  const MAX_DISPLAYED_ITEMS = 5
+  const showAll = ref(false)
 
   const payerStats = computed(() => {
     return payers.value.map((payer) => {
@@ -21,6 +24,10 @@
       const percent = totalPrice.value > 0 ? Math.round((price / totalPrice.value) * 100) : 0
       return { name: payer, price, unpaid, percent }
     })
+  })
+
+  const displayedPayers = computed(() => {
+    return showAll.value ? payerStats.value : payerStats.value.slice(0, MAX_DISPLAYED_ITEMS)
   })
 
   const chartLabels = computed(() => payerStats.value.map((p) => `${p.name} (${p.percent}%)`))
@@ -42,7 +49,7 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div v-for="payer in payerStats" :key="payer.name" class="flex items-start gap-2 mb-1">
+    <div v-for="payer in displayedPayers" :key="payer.name" class="flex items-start gap-2 mb-1">
       <div class="font-bold min-w-20 w-full text-blue truncate" :title="payer.name">
         {{ payer.name }}:
       </div>
@@ -59,6 +66,15 @@
         </div>
       </div>
     </div>
+
+    <div
+      v-if="payerStats.length > MAX_DISPLAYED_ITEMS"
+      @click="showAll = !showAll"
+      class="mt-1 text-blueLight text-xs cursor-pointer"
+    >
+      {{ showAll ? '▲ Zobrazit méně' : `▼ Zobrazit všechny (${payerStats.length})` }}
+    </div>
+
     <hr class="my-2 text-blue" />
     <div class="text-lg flex justify-between">
       <span class="font-bold text-blue">Celkem:</span>
