@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Header from '@components/Header.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { NConfigProvider } from 'naive-ui'
+  import { NConfigProvider, NDialogProvider, NMessageProvider } from 'naive-ui'
 
   import { onMounted } from 'vue'
 
@@ -14,7 +14,11 @@
 
 <template>
   <NConfigProvider>
-    <Header />
-    <router-view />
+    <NDialogProvider>
+      <NMessageProvider>
+        <Header />
+        <router-view />
+      </NMessageProvider>
+    </NDialogProvider>
   </NConfigProvider>
 </template>

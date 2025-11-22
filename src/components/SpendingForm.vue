@@ -2,7 +2,7 @@
   import Tooltip from '@components/Tooltip.vue'
   import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { SaveOutline } from '@vicons/ionicons5'
+  import { SaveOutline, TrashOutline } from '@vicons/ionicons5'
   import {
     type FormInst,
     type FormRules,
@@ -16,6 +16,8 @@
     NInput,
     NInputNumber,
     NSelect,
+    useDialog,
+    useMessage,
   } from 'naive-ui'
 
   import { computed, onUnmounted, ref, watch } from 'vue'
@@ -25,6 +27,8 @@
   const formRef = ref<FormInst | null>(null)
   const route = useRoute()
   const router = useRouter()
+  const dialog = useDialog()
+  const message = useMessage()
 
   const show = computed(() => route.path === '/new' || route.path.startsWith('/edit/'))
   const isEditMode = computed(() => route.path.startsWith('/edit/'))
@@ -117,8 +121,8 @@
       },
       {
         type: 'number',
-        min: 1,
-        message: 'Množství musí být alespoň 1',
+        min: 0,
+        message: 'Množství musí být alespoň 0',
         trigger: ['blur', 'change'],
       },
     ],
@@ -145,6 +149,10 @@
 
   const payerOptions = computed(() => {
     return store.payers.map((payer) => ({ label: payer, value: payer }))
+  })
+
+  const subCategoryOptions = computed(() => {
+    return store.subCategories.map((subCategory) => ({ label: subCategory, value: subCategory }))
   })
 
   const storeOptions = computed(() => {
@@ -194,10 +202,12 @@
           editedAt: new Date(),
         })
         store.updateSpending(currentSpending.value.id, updatedSpending)
+        message.success('Nákup byl úspěšně upraven')
       } else {
         // Create new
         const newSpending = new Spending(spendingData)
         store.addSpending(newSpending)
+        message.success('Nákup byl úspěšně vytvořen')
       }
 
       closeDrawer()
@@ -205,6 +215,25 @@
     } catch (error) {
       console.error('Validation failed:', error)
     }
+  }
+
+  function handleDelete() {
+    if (!currentSpending.value) return
+
+    dialog.warning({
+      title: 'Smazat nákup',
+      content: `Opravdu chcete smazat "${currentSpending.value.name}"?`,
+      positiveText: 'Smazat',
+      negativeText: 'Zrušit',
+      onPositiveClick: () => {
+        if (currentSpending.value) {
+          store.removeSpending(currentSpending.value.id)
+          message.success(`Nákup byl úspěšně smazán`)
+          closeDrawer()
+          resetForm()
+        }
+      },
+    })
   }
 
   onUnmounted(() => {
@@ -237,7 +266,13 @@
         </n-form-item>
 
         <n-form-item label="Podkategorie" path="subCategory">
-          <n-input v-model:value="formData.subCategory" placeholder="Podkategorie" clearable />
+          <n-select
+            v-model:value="formData.subCategory"
+            :options="subCategoryOptions"
+            placeholder="Vyberte podkategorii"
+            filterable
+            tag
+          />
         </n-form-item>
 
         <n-form-item label="Typ" path="type">
@@ -271,14 +306,14 @@
 
         <div class="flex gap-4">
           <n-form-item label="Množství" path="quantity" class="flex-1">
-            <n-input-number v-model:value="formData.quantity" :min="1" :step="1" class="w-full" />
+            <n-input-number v-model:value="formData.quantity" :min="0" :step="1" class="w-full" />
           </n-form-item>
 
           <n-form-item label="Jednotková cena (Kč)" path="unitPrice" class="flex-1">
             <n-input-number
               v-model:value="formData.unitPrice"
               :min="0"
-              :step="0.01"
+              :step="100"
               class="w-full"
             />
           </n-form-item>
@@ -353,7 +388,17 @@
 
       <template #footer>
         <div class="flex justify-between w-full gap-3">
-          <n-button @click="closeDrawer" color="#60a5fa">Zrušit</n-button>
+          <div class="flex gap-3">
+            <n-button @click="closeDrawer" color="#60a5fa">Zrušit</n-button>
+            <n-button v-if="isEditMode" @click="handleDelete" color="#ef4444">
+              <template #icon>
+                <n-icon>
+                  <TrashOutline />
+                </n-icon>
+              </template>
+              Smazat
+            </n-button>
+          </div>
           <n-button color="#3b82f6" @click="handleSave">
             <template #icon>
               <n-icon>
