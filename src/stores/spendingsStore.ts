@@ -67,6 +67,16 @@ export const useSpendingsStore = defineStore('spendings', () => {
     return Array.from(set)
   })
 
+  const subCategories = computed(() => {
+    if (spendings.value.length === 0) return []
+
+    const set = new Set<string>()
+    for (const s of spendings.value) {
+      if (s.subCategory) set.add(s.subCategory)
+    }
+    return Array.from(set)
+  })
+
   // Computed: distinct payers
   const payers = computed(() => {
     if (spendings.value.length === 0) return []
@@ -112,6 +122,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     updateSpending,
     discardChanges,
     categories,
+    subCategories,
     payers,
     stores,
   }

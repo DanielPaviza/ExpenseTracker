@@ -2,7 +2,9 @@
   import Tooltip from '@components/Tooltip.vue'
   import SortIndicator from '@components/spendingsList/SortIndicator.vue'
   import { type SpendingColumn, SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
+  import SubCategoryGroup from '@components/spendingsList/SubCategoryGroup.vue'
   import type { Spending } from '@models/Spending'
+  import { useSpendingsStore } from '@stores/spendingsStore'
   import {
     scrollFadeOnBeforeEnter,
     scrollFadeOnBeforeLeave,
@@ -14,9 +16,10 @@
     ArrowDownOutline,
     ArrowUpOutline,
     CloseCircleOutline,
+    CloseOutline,
     ListOutline,
   } from '@vicons/ionicons5'
-  import { NButton, NIcon, NInput, NSelect } from 'naive-ui'
+  import { NButton, NIcon, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   // For triggering SortIndicator's toggleSort from th click
@@ -38,6 +41,9 @@
   })
 
   const router = useRouter()
+  const store = useSpendingsStore()
+  const dialog = useDialog()
+  const message = useMessage()
 
   const {
     data,
@@ -100,6 +106,51 @@
     const sorted = [...filteredData.value].sort(col.sortFn)
     if (sortState.value.direction === 'desc') sorted.reverse()
     return sorted
+  })
+
+  // Group data by subCategory
+  interface GroupedData {
+    type: 'group' | 'item'
+    subCategory?: string
+    items?: Spending[]
+    item?: Spending
+  }
+
+  const groupedData = computed<GroupedData[]>(() => {
+    const result: GroupedData[] = []
+    const subCategoryMap = new Map<string, Spending[]>()
+    const itemsWithoutSubCategory: Spending[] = []
+
+    // Group items by subCategory
+    for (const item of sortedData.value) {
+      if (item.subCategory && item.subCategory.trim() !== '') {
+        const subCat = item.subCategory
+        if (!subCategoryMap.has(subCat)) {
+          subCategoryMap.set(subCat, [])
+        }
+        subCategoryMap.get(subCat)!.push(item)
+      } else {
+        itemsWithoutSubCategory.push(item)
+      }
+    }
+
+    // Add items without subCategory first
+    for (const item of itemsWithoutSubCategory) {
+      result.push({ type: 'item', item })
+    }
+
+    // Add grouped items (only group if more than 1 item)
+    for (const [subCategory, items] of subCategoryMap.entries()) {
+      if (items.length === 1) {
+        // Single item - render as regular row
+        result.push({ type: 'item', item: items[0] })
+      } else {
+        // Multiple items - render as collapsible group
+        result.push({ type: 'group', subCategory, items })
+      }
+    }
+
+    return result
   })
 
   function updateSort(key: string, direction: 'asc' | 'desc' | null) {
@@ -189,8 +240,27 @@
     return options
   })
 
-  function handleRowClick(row: Spending) {
+  function handleRowClick(row: Spending, event?: MouseEvent) {
+    // Don't navigate if clicking on the delete button
+    if (event && (event.target as HTMLElement).closest('.delete-button')) {
+      return
+    }
     router.push(`/edit/${row.id}`)
+  }
+
+  function handleDelete(row: Spending, event: Event) {
+    event.stopPropagation()
+
+    dialog.warning({
+      title: 'Smazat nákup',
+      content: `Opravdu chcete smazat "${row.name}"?`,
+      positiveText: 'Smazat',
+      negativeText: 'Zrušit',
+      onPositiveClick: () => {
+        store.removeSpending(row.id)
+        message.success('Nákup byl úspěšně smazán')
+      },
+    })
   }
 </script>
 
@@ -271,57 +341,88 @@
               </span>
             </th>
           </tr>
-          <tr class="bg-blue-50">
+          <tr class="bg-white">
             <th v-for="column in filteredColumns" :key="`filter-${String(column.key)}`" class="">
-              <n-select
-                v-if="column.selectFilterEnabled"
-                :value="columnFilters[String(column.key)] || null"
-                @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
-                :options="columnFilterOptions[String(column.key)] || []"
-                placeholder="Filtrovat"
-                filterable
-                tag
-                clearable
-              />
-              <n-input
-                v-else
-                :value="columnFilters[String(column.key)] || ''"
-                @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
-                placeholder="Filtrovat"
-                clearable
-              />
+              <template v-if="column.filterEnabled">
+                <n-select
+                  v-if="column.selectFilterEnabled"
+                  :value="columnFilters[String(column.key)] || null"
+                  @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
+                  :options="columnFilterOptions[String(column.key)] || []"
+                  placeholder="Filtrovat"
+                  filterable
+                  tag
+                  clearable
+                />
+                <n-input
+                  v-else
+                  :value="columnFilters[String(column.key)] || ''"
+                  @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
+                  placeholder="Filtrovat"
+                  clearable
+                />
+              </template>
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(row, index) in sortedData"
-            :key="row.id"
-            class="bg-white hover:bg-blue-50 cursor-pointer"
-            @click="handleRowClick(row)"
-          >
-            <td
-              v-for="column in filteredColumns"
-              :key="`${row.id}-${String(column.key)}`"
-              class="border-b border-blue-200 px-4 py-2"
-              :class="{ 'border-blue': index === sortedData.length - 1 }"
+          <template v-for="(group, groupIndex) in groupedData" :key="`group-${groupIndex}`">
+            <!-- Regular item without subCategory -->
+            <tr
+              v-if="group.type === 'item' && group.item"
+              :key="group.item.id"
+              class="bg-white hover:bg-blue-50 cursor-pointer"
+              @click="handleRowClick(group.item, $event)"
             >
-              <template v-if="typeof getCellContent(column, row, index) === 'object'">
-                <component :is="getCellContent(column, row, index)" />
-              </template>
-              <template v-else>
-                {{ getCellContent(column, row, index) }}
-              </template>
-            </td>
-          </tr>
+              <td
+                v-for="column in filteredColumns"
+                :key="`${group.item.id}-${String(column.key)}`"
+                class="border-b border-blue-200 px-4 py-2"
+              >
+                <template v-if="column.key === 'deleteAction'">
+                  <div class="opacity-75 hover:opacity-100">
+                    <n-button
+                      class="delete-button"
+                      size="tiny"
+                      color="#ef4444"
+                      @click="handleDelete(group.item, $event)"
+                    >
+                      <template #icon>
+                        <n-icon>
+                          <CloseOutline />
+                        </n-icon>
+                      </template>
+                    </n-button>
+                  </div>
+                </template>
+                <template
+                  v-else-if="typeof getCellContent(column, group.item, groupIndex) === 'object'"
+                >
+                  <component :is="getCellContent(column, group.item, groupIndex)" />
+                </template>
+                <template v-else>
+                  {{ getCellContent(column, group.item, groupIndex) }}
+                </template>
+              </td>
+            </tr>
+
+            <!-- SubCategory group -->
+            <SubCategoryGroup
+              v-else-if="group.type === 'group' && group.subCategory && group.items"
+              :subCategory="group.subCategory"
+              :items="group.items"
+              :columns="filteredColumns"
+            />
+          </template>
         </tbody>
         <tfoot class="border-blue border-t">
           <tr class="bg-blue-100 font-bold text-lg">
             <td class="px-4 py-2 text-blue">Celkem ({{ totalCountSpendings }}):</td>
-            <td v-for="_v in filteredColumns.length - 2"></td>
+            <td v-for="_v in filteredColumns.length - 3"></td>
             <td class="text-blue">
               {{ formatNumberToCzk(totalPrice) }}
             </td>
+            <td></td>
           </tr>
         </tfoot>
       </table>

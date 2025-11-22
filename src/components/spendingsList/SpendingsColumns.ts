@@ -7,6 +7,7 @@ export interface SpendingColumn {
   title: string
   key: keyof Spending | string
   isHidden?: boolean
+  filterEnabled?: boolean
   selectFilterEnabled?: boolean
   tooltip?: string | null
   sortFn?: (a: Spending, b: Spending) => number
@@ -19,6 +20,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Kategorie',
     key: 'category',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: true,
     tooltip: null,
     sortFn: (a, b) => a.category.localeCompare(b.category),
@@ -29,6 +31,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Typ',
     key: 'type',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: true,
     tooltip: null,
     sortFn: (a, b) => a.type.localeCompare(b.type),
@@ -39,6 +42,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Název',
     key: 'name',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: true,
     tooltip: null,
     sortFn: (a, b) => a.name.localeCompare(b.name),
@@ -49,6 +53,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Obchod',
     key: 'store',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: true,
     tooltip: null,
     sortFn: (a, b) => (a.store || '').localeCompare(b.store || ''),
@@ -59,6 +64,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Zaplaceno',
     key: 'isToBePaid',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: true,
     tooltip: 'Položka ještě nebyla zaplacena a čeká na úhradu',
     sortFn: (a, b) => Number(a.isToBePaid) - Number(b.isToBePaid),
@@ -69,6 +75,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Ušetřeno',
     key: 'isFree',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: true,
     tooltip: 'Položka byla získána zdarma',
     sortFn: (a, b) => Number(a.isToBePaid) - Number(b.isToBePaid),
@@ -79,6 +86,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Plátce',
     key: 'payer',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: true,
     tooltip: null,
     sortFn: (a, b) => (a.payer || '').localeCompare(b.payer || ''),
@@ -89,6 +97,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Vytvořeno',
     key: 'createdAt',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: false,
     tooltip: null,
     sortFn: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
@@ -104,6 +113,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     title: 'Cena',
     key: 'totalPrice',
     isHidden: false,
+    filterEnabled: true,
     selectFilterEnabled: false,
     tooltip: null,
     sortFn: (a, b) => a.totalPrice - b.totalPrice,
@@ -114,5 +124,15 @@ export const SpendingsColumns: SpendingColumn[] = [
         { style: { 'font-weight': 'bolder' } },
         formatNumberToCzk(row.totalPrice),
       ),
+  },
+  {
+    title: '',
+    key: 'deleteAction',
+    isHidden: false,
+    filterEnabled: false,
+    selectFilterEnabled: false,
+    tooltip: null,
+    filterVal: () => '',
+    render: () => '',
   },
 ]
