@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Tooltip from '@components/Tooltip.vue'
   import SortIndicator from '@components/spendingsList/SortIndicator.vue'
   import { type SpendingColumn, SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
   import type { Spending } from '@models/Spending'
@@ -15,7 +16,7 @@
     CloseCircleOutline,
     ListOutline,
   } from '@vicons/ionicons5'
-  import { NButton, NIcon, NSelect } from 'naive-ui'
+  import { NButton, NIcon, NInput, NSelect } from 'naive-ui'
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   // For triggering SortIndicator's toggleSort from th click
@@ -166,6 +167,28 @@
     sortState.value = { key: null, direction: null }
   }
 
+  // Generate filter options for each column based on unique values in the data
+  const columnFilterOptions = computed(() => {
+    const options: Record<string, Array<{ label: string; value: string }>> = {}
+
+    for (const column of columns.value) {
+      const uniqueValues = new Set<string>()
+
+      for (const row of data) {
+        const value = column.filterVal(row)
+        if (value && value.trim() !== '') {
+          uniqueValues.add(value)
+        }
+      }
+
+      options[String(column.key)] = Array.from(uniqueValues)
+        .sort((a, b) => a.localeCompare(b))
+        .map((value) => ({ label: value, value }))
+    }
+
+    return options
+  })
+
   function handleRowClick(row: Spending) {
     router.push(`/edit/${row.id}`)
   }
@@ -181,10 +204,7 @@
   >
     <div v-if="!isCollapsed" key="expanded" class="overflow-x-auto">
       <div class="flex justify-between items-center">
-        <div
-          class="flex items-end w-full hover:text-blue cursor-pointer collapseRow hover:bg-blue-100 rounded py-2"
-          @click="isCollapsed = !isCollapsed"
-        >
+        <div class="flex items-end w-full py-2">
           <n-icon size="32" class="collapseArrow" color="#3b82f6">
             <ArrowUpOutline />
           </n-icon>
@@ -194,6 +214,7 @@
           <h2 class="text-blue text-2xl me-4 ms-2 font-bold text-left">{{ title }}</h2>
           <div
             class="flex text-[15px] font-bold items-center gap-1 cursor-pointer text-black opacity-60 border-primaryDark border-b hover:text-blue hover:border-blue"
+            @click="isCollapsed = !isCollapsed"
           >
             Zabalit tabulku
           </div>
@@ -235,7 +256,11 @@
               @click="column.sortFn && sortIndicatorRefs[colIdx]?.toggleSort()"
             >
               <span class="flex justify-between items-center">
-                {{ column.title }}
+                <div class="flex items-center gap-2">
+                  <span class="text-white">{{ column.title }}</span>
+                  <Tooltip v-if="!!column.tooltip" :text="column.tooltip" color="white" />
+                </div>
+
                 <SortIndicator
                   v-if="column.sortFn"
                   :ref="(el) => setSortIndicatorRef(colIdx, el)"
@@ -248,11 +273,22 @@
           </tr>
           <tr class="bg-blue-50">
             <th v-for="column in filteredColumns" :key="`filter-${String(column.key)}`" class="">
-              <input
-                type="text"
-                v-model="columnFilters[String(column.key)]"
-                class="border border-blue-300 my-2 w-[96%] p-1 ps-2 bg-white text-md font-normal rounded focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              <n-select
+                v-if="column.selectFilterEnabled"
+                :value="columnFilters[String(column.key)] || null"
+                @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
+                :options="columnFilterOptions[String(column.key)] || []"
                 placeholder="Filtrovat"
+                filterable
+                tag
+                clearable
+              />
+              <n-input
+                v-else
+                :value="columnFilters[String(column.key)] || ''"
+                @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
+                placeholder="Filtrovat"
+                clearable
               />
             </th>
           </tr>

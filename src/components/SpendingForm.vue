@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Tooltip from '@components/Tooltip.vue'
   import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { SaveOutline } from '@vicons/ionicons5'
@@ -292,12 +293,24 @@
         <div class="flex justify-center">
           <div class="flex gap-20">
             <n-form-item label="Prozatím nezaplaceno">
+              <template #label>
+                <div class="flex items-center gap-1">
+                  Prozatím nezaplaceno
+                  <Tooltip text="Položka ještě nebyla zaplacena a čeká na úhradu" />
+                </div>
+              </template>
               <n-checkbox v-model:checked="formData.isToBePaid">{{
                 formData.isToBePaid ? 'Ano' : 'Ne'
               }}</n-checkbox>
             </n-form-item>
 
-            <n-form-item label="Šmelo">
+            <n-form-item label="Ušetřeno">
+              <template #label>
+                <div class="flex items-center gap-1">
+                  Ušetřeno
+                  <Tooltip text="Položka byla získána zdarma" />
+                </div>
+              </template>
               <n-checkbox v-model:checked="formData.isFree">{{
                 formData.isFree ? 'Ano' : 'Ne'
               }}</n-checkbox>
