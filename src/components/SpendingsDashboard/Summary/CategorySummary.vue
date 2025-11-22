@@ -11,8 +11,11 @@
   const store = useSpendingsStore()
   const { spendings, categories, totalPrice } = storeToRefs(store)
 
+  const MAX_DISPLAYED_ITEMS = 8
+
   type SortType = 'alphabetical' | 'price-desc' | 'price-asc' | 'count-desc'
   const sortBy = ref<SortType>('price-desc')
+  const showAll = ref(false)
 
   const categoryStats = computed(() => {
     return categories.value.map((cat) => {
@@ -49,6 +52,12 @@
       default:
         return sorted
     }
+  })
+
+  const displayedCategories = computed(() => {
+    return showAll.value
+      ? sortedCategories.value
+      : sortedCategories.value.slice(0, MAX_DISPLAYED_ITEMS)
   })
 
   const chartLabels = computed(() =>
@@ -122,7 +131,7 @@
     </div>
 
     <div
-      v-for="category in sortedCategories"
+      v-for="category in displayedCategories"
       :key="category.name"
       class="flex items-center justify-between gap-5 text-base"
     >
@@ -135,6 +144,14 @@
           ({{ category.percent }}%, {{ category.count }}×)
         </div>
       </div>
+    </div>
+
+    <div
+      v-if="sortedCategories.length > MAX_DISPLAYED_ITEMS"
+      @click="showAll = !showAll"
+      class="mt-1 text-blueLight text-xs cursor-pointer"
+    >
+      {{ showAll ? '▲ Zobrazit méně' : `▼ Zobrazit všechny (${sortedCategories.length})` }}
     </div>
   </SummaryCard>
 </template>
