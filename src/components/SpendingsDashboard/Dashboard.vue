@@ -6,19 +6,16 @@
   import CategorySummary from '@components/SpendingsDashboard/Summary/CategorySummary.vue'
   import FreeSummary from '@components/SpendingsDashboard/Summary/FreeSummary.vue'
   import OverallPriceSummary from '@components/SpendingsDashboard/Summary/OverallPriceSummary.vue'
-  import RecentSummary from '@components/SpendingsDashboard/Summary/RecentSummary.vue'
   import StatisticsSummary from '@components/SpendingsDashboard/Summary/StatisticsSummary.vue'
   import StoreSummary from '@components/SpendingsDashboard/Summary/StoreSummary.vue'
   import SubCategorySummary from '@components/SpendingsDashboard/Summary/SubCategorySummary.vue'
-  import TypeSummary from '@components/SpendingsDashboard/Summary/TypeSummary.vue'
   import UnpaidSummary from '@components/SpendingsDashboard/Summary/UnpaidSummary.vue'
 
   const slides = [
     { id: 0, label: 'Přehled a kategorie' },
     { id: 1, label: 'Podkategorie a obchody' },
-    { id: 2, label: 'Typy a statistiky' },
+    { id: 2, label: 'Statistiky' },
     { id: 3, label: 'Platby' },
-    { id: 4, label: 'Historie' },
   ]
 </script>
 <template>
@@ -44,10 +41,10 @@
 
       <CarouselSlide>
         <CarouselItem pc-width="49">
-          <TypeSummary />
+          <StatisticsSummary />
         </CarouselItem>
         <CarouselItem pc-width="49">
-          <StatisticsSummary />
+          <AverageSummary />
         </CarouselItem>
       </CarouselSlide>
 
@@ -57,15 +54,6 @@
         </CarouselItem>
         <CarouselItem pc-width="49">
           <UnpaidSummary />
-        </CarouselItem>
-      </CarouselSlide>
-
-      <CarouselSlide>
-        <CarouselItem pc-width="49">
-          <RecentSummary />
-        </CarouselItem>
-        <CarouselItem pc-width="49">
-          <AverageSummary />
         </CarouselItem>
       </CarouselSlide>
     </Carousel>

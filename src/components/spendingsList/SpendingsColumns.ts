@@ -32,7 +32,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'type',
     isHidden: false,
     filterEnabled: true,
-    selectFilterEnabled: true,
+    selectFilterEnabled: false,
     tooltip: null,
     sortFn: (a, b) => a.type.localeCompare(b.type),
     filterVal: (row) => row.type,
@@ -43,11 +43,27 @@ export const SpendingsColumns: SpendingColumn[] = [
     key: 'name',
     isHidden: false,
     filterEnabled: true,
-    selectFilterEnabled: true,
+    selectFilterEnabled: false,
     tooltip: null,
     sortFn: (a, b) => a.name.localeCompare(b.name),
     filterVal: (row) => row.name,
-    render: (row) => row.name,
+    render: (row) =>
+      row.url ?
+        h(
+          'a',
+          {
+            class: 'spending-link',
+            style: { color: '#3b82f6', 'text-decoration': 'underline' },
+            target: "_blank",
+            rel: "noopener noreferrer",
+            color: "#3b82f6",
+            title: "Otevřít odkaz",
+            href: row.url,
+
+          },
+          row.name,
+        )
+        : row.name,
   },
   {
     title: 'Obchod',

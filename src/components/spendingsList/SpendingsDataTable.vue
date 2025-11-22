@@ -241,8 +241,8 @@
   })
 
   function handleRowClick(row: Spending, event?: MouseEvent) {
-    // Don't navigate if clicking on the delete button
-    if (event && (event.target as HTMLElement).closest('.delete-button')) {
+    // Don't navigate if clicking on the delete button or a link
+    if (event && (event.target as HTMLElement).closest('.delete-button, .spending-link')) {
       return
     }
     router.push(`/edit/${row.id}`)
