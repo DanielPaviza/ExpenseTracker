@@ -9,6 +9,11 @@ export const useSpendingsStore = defineStore('spendings', () => {
   const originalSpendings = ref<Spending[]>([])
   const isLoading = ref(false)
 
+  // Track changes
+  const newSpendingIds = ref<Set<string>>(new Set())
+  const editedSpendingIds = ref<Set<string>>(new Set())
+  const deletedSpendings = ref<Spending[]>([])
+
   // Pending changes logic kept for future use
   // const pendingChanges = computed(() => {
   //   const current = JSON.stringify(spendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
@@ -22,6 +27,10 @@ export const useSpendingsStore = defineStore('spendings', () => {
       const loadedData = await loadSpendings()
       spendings.value = loadedData
       originalSpendings.value = [...loadedData]
+      // Clear tracking on fresh load
+      newSpendingIds.value.clear()
+      editedSpendingIds.value.clear()
+      deletedSpendings.value = []
     } catch (error) {
       console.error('Failed to load spendings:', error)
       throw error
@@ -35,6 +44,10 @@ export const useSpendingsStore = defineStore('spendings', () => {
     try {
       await saveSpendings(spendings.value)
       originalSpendings.value = [...spendings.value]
+      // Clear tracking after save
+      newSpendingIds.value.clear()
+      editedSpendingIds.value.clear()
+      deletedSpendings.value = []
     } catch (error) {
       console.error('Failed to save spendings:', error)
       throw error
@@ -45,13 +58,29 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   async function addSpending(spending: Spending) {
     spendings.value.push(spending)
+    newSpendingIds.value.add(spending.id)
     await save()
   }
 
   async function removeSpending(id: string) {
     const index = spendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
+      const spending = spendings.value[index]
+      deletedSpendings.value.push(spending)
       spendings.value.splice(index, 1)
+      // Remove from new/edited tracking if present
+      newSpendingIds.value.delete(id)
+      editedSpendingIds.value.delete(id)
+      await save()
+    }
+  }
+
+  async function restoreSpending(id: string) {
+    const index = deletedSpendings.value.findIndex((s) => s.id === id)
+    if (index !== -1) {
+      const spending = deletedSpendings.value[index]
+      spendings.value.push(spending)
+      deletedSpendings.value.splice(index, 1)
       await save()
     }
   }
@@ -60,6 +89,10 @@ export const useSpendingsStore = defineStore('spendings', () => {
     const index = spendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       spendings.value[index] = updatedSpending
+      // Track as edited only if not already new
+      if (!newSpendingIds.value.has(id)) {
+        editedSpendingIds.value.add(id)
+      }
       await save()
     }
   }
@@ -132,10 +165,14 @@ export const useSpendingsStore = defineStore('spendings', () => {
     addSpending,
     removeSpending,
     updateSpending,
+    restoreSpending,
     discardChanges,
     categories,
     subCategories,
     payers,
     stores,
+    newSpendingIds,
+    editedSpendingIds,
+    deletedSpendings,
   }
 })
