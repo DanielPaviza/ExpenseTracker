@@ -59,8 +59,8 @@
       content: `Opravdu chcete smazat "${row.name}"?`,
       positiveText: 'Smazat',
       negativeText: 'Zrušit',
-      onPositiveClick: () => {
-        store.removeSpending(row.id)
+      onPositiveClick: async () => {
+        await store.removeSpending(row.id)
         message.success('Nákup byl úspěšně smazán')
       },
     })

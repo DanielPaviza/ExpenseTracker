@@ -216,7 +216,7 @@
           createdAt: currentSpending.value.createdAt,
           editedAt: new Date(),
         })
-        store.updateSpending(currentSpending.value.id, updatedSpending)
+        await store.updateSpending(currentSpending.value.id, updatedSpending)
         message.success('Nákup byl úspěšně upraven')
       } else {
         // Create new
@@ -224,7 +224,7 @@
           ...spendingData,
           createdAt: formData.value.createdAt,
         })
-        store.addSpending(newSpending)
+        await store.addSpending(newSpending)
         message.success('Nákup byl úspěšně vytvořen')
       }
 
@@ -243,9 +243,9 @@
       content: `Opravdu chcete smazat "${currentSpending.value.name}"?`,
       positiveText: 'Smazat',
       negativeText: 'Zrušit',
-      onPositiveClick: () => {
+      onPositiveClick: async () => {
         if (currentSpending.value) {
-          store.removeSpending(currentSpending.value.id)
+          await store.removeSpending(currentSpending.value.id)
           message.success(`Nákup byl úspěšně smazán`)
           closeDrawer()
           resetForm()

@@ -2,44 +2,45 @@
   import MarginContainer from '@components/MarginContainer.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
-  import { AddOutline, CloseOutline, SaveOutline, WarningOutline } from '@vicons/ionicons5'
-  import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
+  import { AddOutline } from '@vicons/ionicons5'
+  import { NButton, NIcon } from 'naive-ui'
 
-  import { computed } from 'vue'
   import { useRouter } from 'vue-router'
 
   const store = useSpendingsStore()
   const router = useRouter()
-  const dialog = useDialog()
-  const message = useMessage()
-  const pendingChanges = computed(() => store.pendingChanges)
 
   function openNewSpendingForm() {
     router.push('/new')
   }
 
-  async function handleSave() {
-    try {
-      await store.save()
-      message.success('Změny byly úspěšně uloženy')
-    } catch (error) {
-      message.error('Chyba při ukládání změn')
-      console.error('Save error:', error)
-    }
-  }
-
-  function handleDiscard() {
-    dialog.warning({
-      title: 'Zahodit změny',
-      content: 'Opravdu chcete zahodit všechny neuložené změny? Tato akce je nevratná.',
-      positiveText: 'Zahodit',
-      negativeText: 'Zrušit',
-      onPositiveClick: () => {
-        store.discardChanges()
-        message.info('Změny byly zahozeny')
-      },
-    })
-  }
+  // Pending changes logic kept for future use
+  // const pendingChanges = computed(() => store.pendingChanges)
+  // const dialog = useDialog()
+  // const message = useMessage()
+  //
+  // async function handleSave() {
+  //   try {
+  //     await store.save()
+  //     message.success('Změny byly úspěšně uloženy')
+  //   } catch (error) {
+  //     message.error('Chyba při ukládání změn')
+  //     console.error('Save error:', error)
+  //   }
+  // }
+  //
+  // function handleDiscard() {
+  //   dialog.warning({
+  //     title: 'Zahodit změny',
+  //     content: 'Opravdu chcete zahodit všechny neuložené změny? Tato akce je nevratná.',
+  //     positiveText: 'Zahodit',
+  //     negativeText: 'Zrušit',
+  //     onPositiveClick: () => {
+  //       store.discardChanges()
+  //       message.info('Změny byly zahozeny')
+  //     },
+  //   })
+  // }
 </script>
 <template>
   <header
@@ -61,32 +62,6 @@
         <div class="flex items-center">
           <div class="text-blue flex items-center font-semibold">
             Celkové výdaje: {{ formatNumberToCzk(store.totalPrice) }}
-          </div>
-          <!-- Pending changes indicator -->
-          <div
-            v-if="pendingChanges"
-            class="flex items-center gap-3 bg-orange-50 border border-orange-300 rounded-lg px-4 py-2 ms-5"
-          >
-            <n-icon size="24" color="#f97316">
-              <WarningOutline />
-            </n-icon>
-            <span class="text-orange-700 font-semibold">Neuložené změny</span>
-            <n-button type="warning" @click="handleSave" :loading="store.isLoading">
-              <template #icon>
-                <n-icon>
-                  <SaveOutline />
-                </n-icon>
-              </template>
-              Uložit
-            </n-button>
-            <n-button type="error" @click="handleDiscard" :disabled="store.isLoading">
-              <template #icon>
-                <n-icon>
-                  <CloseOutline />
-                </n-icon>
-              </template>
-              Zahodit
-            </n-button>
           </div>
         </div>
       </div>

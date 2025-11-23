@@ -9,11 +9,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
   const originalSpendings = ref<Spending[]>([])
   const isLoading = ref(false)
 
-  const pendingChanges = computed(() => {
-    const current = JSON.stringify(spendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
-    const original = JSON.stringify(originalSpendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
-    return current !== original
-  })
+  // Pending changes logic kept for future use
+  // const pendingChanges = computed(() => {
+  //   const current = JSON.stringify(spendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
+  //   const original = JSON.stringify(originalSpendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
+  //   return current !== original
+  // })
 
   async function load() {
     isLoading.value = true
@@ -42,21 +43,24 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  function addSpending(spending: Spending) {
+  async function addSpending(spending: Spending) {
     spendings.value.push(spending)
+    await save()
   }
 
-  function removeSpending(id: string) {
+  async function removeSpending(id: string) {
     const index = spendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       spendings.value.splice(index, 1)
+      await save()
     }
   }
 
-  function updateSpending(id: string, updatedSpending: Spending) {
+  async function updateSpending(id: string, updatedSpending: Spending) {
     const index = spendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       spendings.value[index] = updatedSpending
+      await save()
     }
   }
 
@@ -121,7 +125,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     spendings,
     totalPrice,
     totalUnpaid,
-    pendingChanges,
+    // pendingChanges, // Kept for future use
     isLoading,
     load,
     save,
