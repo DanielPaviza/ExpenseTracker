@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Tooltip from '@components/Tooltip.vue'
   import SortIndicator from '@components/spendingsList/SortIndicator.vue'
+  import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
   import { type SpendingColumn, SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
   import SubCategoryGroup from '@components/spendingsList/SubCategoryGroup.vue'
   import type { Spending } from '@models/Spending'
@@ -262,6 +263,12 @@
       },
     })
   }
+
+  function getSpendingStatus(id: string): 'new' | 'edited' | null {
+    if (store.newSpendingIds.has(id)) return 'new'
+    if (store.editedSpendingIds.has(id)) return 'edited'
+    return null
+  }
 </script>
 
 <template>
@@ -372,6 +379,7 @@
               v-if="group.type === 'item' && group.item"
               :key="group.item.id"
               class="bg-white hover:bg-blue-50 cursor-pointer"
+              style="position: relative"
               @click="handleRowClick(group.item, $event)"
             >
               <td
@@ -403,6 +411,7 @@
                 <template v-else>
                   {{ getCellContent(column, group.item, groupIndex) }}
                 </template>
+                <SpendingStatusIndicator :status="getSpendingStatus(group.item.id)" />
               </td>
             </tr>
 

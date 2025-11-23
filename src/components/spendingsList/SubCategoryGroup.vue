@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
   import type { SpendingColumn } from '@components/spendingsList/SpendingsColumns'
   import type { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
@@ -70,6 +71,12 @@
     event.stopPropagation()
     isExpanded.value = !isExpanded.value
   }
+
+  function getSpendingStatus(id: string): 'new' | 'edited' | null {
+    if (store.newSpendingIds.has(id)) return 'new'
+    if (store.editedSpendingIds.has(id)) return 'edited'
+    return null
+  }
 </script>
 
 <template>
@@ -99,8 +106,10 @@
       v-for="(row, index) in items"
       :key="row.id"
       class="bg-gray-50 hover:bg-blue-50 cursor-pointer subCategory-item border-2 border-e-0 border-t-0 border-b-0 border-blue-300"
+      style="position: relative"
       @click="handleRowClick(row, $event)"
     >
+      <SpendingStatusIndicator :status="getSpendingStatus(row.id)" />
       <td
         v-for="column in columns"
         :key="`${row.id}-${String(column.key)}`"

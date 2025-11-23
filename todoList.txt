@@ -1,8 +1,6 @@
 BytEvidence todoList
 
-- uložit json hned, vyhodit ten uložit změny dialog
-- trackovat pridane, upravene a smazane zaznamy- zobrazit zelenou, oranzovou tecku vedle. 
-    Smazane printnout uplne dole s moznosti restoru
+
 
 ---- DONE ----
 - new spending form - jednotková cena default val pouze jako placeholder aby šlo kliknout a hned psát
@@ -13,3 +11,6 @@ BytEvidence todoList
 - v aplikaci (exe) nelze otevrit link
 - datatable typ, nazev no nselect - jen input, bez vyberu
 - caru vlevo u kazde row v subgroupe¨
+- uložit json hned, vyhodit ten uložit změny dialog
+- trackovat pridane, upravene a smazane zaznamy- zobrazit zelenou, oranzovou tecku vedle. 
+    Smazane printnout uplne dole s moznosti restoru

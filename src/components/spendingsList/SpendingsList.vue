@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import ButtonNavigation from '@components/ButtonNavigation.vue'
+  import DeletedSpendingsTable from '@components/spendingsList/DeletedSpendingsTable.vue'
   import SpendingsCategoryTable from '@components/spendingsList/SpendingsCategoryTable.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
 
@@ -86,5 +87,10 @@
       :category="store"
       :spendings="getSpendingsByStore(store)"
     />
+  </div>
+
+  <!-- Deleted Spendings Section -->
+  <div class="my-8">
+    <DeletedSpendingsTable />
   </div>
 </template>
