@@ -232,6 +232,7 @@
       resetForm()
     } catch (error) {
       console.error('Validation failed:', error)
+      message.error('Chyba při ukládání nákupu')
     }
   }
 

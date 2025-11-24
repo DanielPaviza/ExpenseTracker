@@ -44,10 +44,6 @@ export const useSpendingsStore = defineStore('spendings', () => {
     try {
       await saveSpendings(spendings.value)
       originalSpendings.value = [...spendings.value]
-      // Clear tracking after save
-      newSpendingIds.value.clear()
-      editedSpendingIds.value.clear()
-      deletedSpendings.value = []
     } catch (error) {
       console.error('Failed to save spendings:', error)
       throw error
@@ -83,6 +79,13 @@ export const useSpendingsStore = defineStore('spendings', () => {
       deletedSpendings.value.splice(index, 1)
       await save()
     }
+  }
+
+  async function restoreAllDeletedSpendings() {
+    spendings.value.push(...deletedSpendings.value)
+    console.log('Restoring all deleted spendings:', deletedSpendings.value)
+    deletedSpendings.value = []
+    await save()
   }
 
   async function updateSpending(id: string, updatedSpending: Spending) {
@@ -166,6 +169,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     removeSpending,
     updateSpending,
     restoreSpending,
+    restoreAllDeletedSpendings,
     discardChanges,
     categories,
     subCategories,

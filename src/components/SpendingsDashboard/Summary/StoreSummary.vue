@@ -125,9 +125,11 @@
       <div class="font-bold min-w-[100px] text-blue truncate" :title="store.name">
         {{ store.name }}:
       </div>
-      <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(store.price) }}</div>
-      <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
-        ({{ store.visits }}×, {{ formatNumberToCzk(store.avgPerVisit) }}/návštěva)
+      <div class="flex w-full justify-end items-center gap-2">
+        <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(store.price) }}</div>
+        <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
+          ({{ store.visits }}×, {{ formatNumberToCzk(store.avgPerVisit) }}/návštěva)
+        </div>
       </div>
     </div>
 

@@ -133,7 +133,7 @@
     <div
       v-for="category in displayedCategories"
       :key="category.name"
-      class="flex items-center justify-between gap-5 text-base"
+      class="flex items-center justify-between gap-14 text-base"
     >
       <div class="font-bold min-w-[100px] text-blue truncate" :title="category.name">
         {{ category.name }}:
