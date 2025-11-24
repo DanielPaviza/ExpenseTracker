@@ -12,7 +12,7 @@
   } from '@utils/animations'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { ArrowDownOutline, ArrowUpOutline, ListOutline, RefreshOutline } from '@vicons/ionicons5'
-  import { NButton, NIcon, useMessage } from 'naive-ui'
+  import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   import type { ComponentPublicInstance } from 'vue'
@@ -32,6 +32,7 @@
 
   const store = useSpendingsStore()
   const message = useMessage()
+  const dialog = useDialog()
 
   const isCollapsed = ref(false)
 
@@ -99,8 +100,29 @@
 
   async function handleRestore(row: Spending, event: Event) {
     event.stopPropagation()
-    await store.restoreSpending(row.id)
-    message.success(`"${row.name}" byl obnoven`)
+    try {
+      await store.restoreSpending(row.id)
+      message.success(`"${row.name}" byl obnoven`)
+    } catch (error) {
+      message.error(`Chyba při obnovování "${row.name}"`)
+    }
+  }
+
+  function handleRestoreAll() {
+    dialog.warning({
+      title: 'Obnovit všechny smazané výdaje',
+      content: `Opravdu chcete obnovit všechny smazané výdaje (${totalCountSpendings.value})?`,
+      positiveText: 'Obnovit',
+      negativeText: 'Zrušit',
+      onPositiveClick: async () => {
+        try {
+          await store.restoreAllDeletedSpendings()
+          message.success('Všechny smazané výdaje byly obnoveny')
+        } catch {
+          message.error('Chyba při obnovování všech smazaných výdajů')
+        }
+      },
+    })
   }
 </script>
 
@@ -128,6 +150,11 @@
             @click="isCollapsed = !isCollapsed"
           >
             Zabalit tabulku
+          </div>
+          <div class="ms-auto">
+            <n-button class="ms-auto" size="tiny" color="#10b981" @click="handleRestoreAll">
+              Obnovit vše
+            </n-button>
           </div>
         </div>
       </div>
@@ -202,7 +229,7 @@
         <tfoot class="border-red-500 border-t">
           <tr class="bg-red-100 font-bold text-lg">
             <td class="px-4 py-2 text-red-500">Celkem ({{ totalCountSpendings }}):</td>
-            <td v-for="_v in filteredColumns.length - 3"></td>
+            <td v-for="_v in filteredColumns.length - 2"></td>
             <td class="text-red-500">
               {{ formatNumberToCzk(totalPrice) }}
             </td>

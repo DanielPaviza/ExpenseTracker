@@ -71,17 +71,19 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div class="flex justify-between">
-      <div class="font-bold text-blue">Průměr denně:</div>
-      <div class="font-semibold">{{ formatNumberToCzk(averagePerDay) }}</div>
-    </div>
-    <div class="flex justify-between">
-      <div class="font-bold text-blue">Průměr týdně:</div>
-      <div class="font-semibold">{{ formatNumberToCzk(averagePerWeek) }}</div>
-    </div>
-    <div class="flex justify-between">
-      <div class="font-bold text-blue">Průměr měsíčně:</div>
-      <div class="font-semibold">{{ formatNumberToCzk(averagePerMonth) }}</div>
+    <div class="w-100 space-y-2">
+      <div class="flex justify-between">
+        <div class="font-bold text-blue">Průměr denně:</div>
+        <div class="font-semibold">{{ formatNumberToCzk(averagePerDay) }}</div>
+      </div>
+      <div class="flex justify-between">
+        <div class="font-bold text-blue">Průměr týdně:</div>
+        <div class="font-semibold">{{ formatNumberToCzk(averagePerWeek) }}</div>
+      </div>
+      <div class="flex justify-between">
+        <div class="font-bold text-blue">Průměr měsíčně:</div>
+        <div class="font-semibold">{{ formatNumberToCzk(averagePerMonth) }}</div>
+      </div>
     </div>
     <template #footer>
       <div class="text-sm text-gray-500">

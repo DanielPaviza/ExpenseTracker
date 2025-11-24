@@ -109,7 +109,6 @@
       style="position: relative"
       @click="handleRowClick(row, $event)"
     >
-      <SpendingStatusIndicator :status="getSpendingStatus(row.id)" />
       <td
         v-for="column in columns"
         :key="`${row.id}-${String(column.key)}`"
@@ -138,6 +137,7 @@
         <template v-else>
           {{ getCellContent(column, row, index) }}
         </template>
+        <SpendingStatusIndicator :status="getSpendingStatus(row.id)" />
       </td>
     </tr>
   </template>

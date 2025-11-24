@@ -11,7 +11,7 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "Run pnpm dev",
+      "name": "Vite dev FE only",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
