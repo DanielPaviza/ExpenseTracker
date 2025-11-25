@@ -7,6 +7,9 @@
   ],
   "permissions": [
     "core:default",
+    "dialog:allow-ask",
+    "core:window:allow-close",
+    "core:window:allow-destroy",
     {
       "identifier": "opener:allow-open-url",
       "allow": [
