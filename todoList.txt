@@ -1,7 +1,6 @@
 BytEvidence todoList
 
 ---- TODO ----
-dataTable - isSaved se stále zobrazuje jako "Ne", kalkulace jsou správný
 form new/edit spending - širší, klidně přes 80% vw - 2 sloupce, aby se nemuselo scrollovat
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     - nebo vytvořit flag něco jako isZahrnutVJinýPoložce :D
@@ -33,3 +32,4 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - uložit json hned, vyhodit ten uložit změny dialog
 - trackovat pridane, upravene a smazane zaznamy- zobrazit zelenou, oranzovou tecku vedle. 
     Smazane printnout uplne dole s moznosti restoru
+- dataTable - isSaved se stále zobrazuje jako "Ne", kalkulace jsou správný

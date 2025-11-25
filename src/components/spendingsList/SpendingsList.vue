@@ -51,10 +51,12 @@
   <h1 class="font-bold text-2xl text-blue">Zobrazení tabulky nákupů</h1>
   <ButtonNavigation v-model:selected-id="currentView" :buttons="viewButtons" />
 
+  <!-- All spendings view -->
   <div v-if="currentView === 0">
     <SpendingsCategoryTable category="Všechny výdaje" :spendings="spendingsStore.spendings" />
   </div>
 
+  <!-- Category view -->
   <div v-else-if="currentView === 1">
     <SpendingsCategoryTable
       v-for="category in spendingsStore.categories"
@@ -64,6 +66,7 @@
     />
   </div>
 
+  <!-- Subcategory view -->
   <div v-else-if="currentView === 2">
     <SpendingsCategoryTable
       v-for="subCategory in subCategories"
@@ -80,6 +83,7 @@
     />
   </div>
 
+  <!-- Store view -->
   <div v-else-if="currentView === 3">
     <SpendingsCategoryTable
       v-for="store in stores"
