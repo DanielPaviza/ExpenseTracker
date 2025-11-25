@@ -14,12 +14,11 @@ export const useSpendingsStore = defineStore('spendings', () => {
   const editedSpendingIds = ref<Set<string>>(new Set())
   const deletedSpendings = ref<Spending[]>([])
 
-  // Pending changes logic kept for future use
-  // const pendingChanges = computed(() => {
-  //   const current = JSON.stringify(spendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
-  //   const original = JSON.stringify(originalSpendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
-  //   return current !== original
-  // })
+  const pendingChanges = computed(() => {
+    const current = JSON.stringify(spendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
+    const original = JSON.stringify(originalSpendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
+    return current !== original
+  })
 
   async function load() {
     isLoading.value = true
@@ -55,7 +54,6 @@ export const useSpendingsStore = defineStore('spendings', () => {
   async function addSpending(spending: Spending) {
     spendings.value.push(spending)
     newSpendingIds.value.add(spending.id)
-    await save()
   }
 
   async function removeSpending(id: string) {
@@ -67,7 +65,6 @@ export const useSpendingsStore = defineStore('spendings', () => {
       // Remove from new/edited tracking if present
       newSpendingIds.value.delete(id)
       editedSpendingIds.value.delete(id)
-      await save()
     }
   }
 
@@ -77,7 +74,6 @@ export const useSpendingsStore = defineStore('spendings', () => {
       const spending = deletedSpendings.value[index]
       spendings.value.push(spending)
       deletedSpendings.value.splice(index, 1)
-      await save()
     }
   }
 
@@ -85,7 +81,6 @@ export const useSpendingsStore = defineStore('spendings', () => {
     spendings.value.push(...deletedSpendings.value)
     console.log('Restoring all deleted spendings:', deletedSpendings.value)
     deletedSpendings.value = []
-    await save()
   }
 
   async function updateSpending(id: string, updatedSpending: Spending) {
@@ -96,7 +91,6 @@ export const useSpendingsStore = defineStore('spendings', () => {
       if (!newSpendingIds.value.has(id)) {
         editedSpendingIds.value.add(id)
       }
-      await save()
     }
   }
 
@@ -161,7 +155,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     spendings,
     totalPrice,
     totalUnpaid,
-    // pendingChanges, // Kept for future use
+    pendingChanges,
     isLoading,
     load,
     save,
