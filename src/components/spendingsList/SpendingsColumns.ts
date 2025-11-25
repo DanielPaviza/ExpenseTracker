@@ -94,9 +94,9 @@ export const SpendingsColumns: SpendingColumn[] = [
     filterEnabled: true,
     selectFilterEnabled: true,
     tooltip: 'Položka byla získána zdarma',
-    sortFn: (a, b) => Number(a.isToBePaid) - Number(b.isToBePaid),
-    filterVal: (row) => (row.isToBePaid ? 'Ano' : 'Ne'),
-    render: (row) => (row.isToBePaid ? 'Ano' : 'Ne'),
+    sortFn: (a, b) => Number(a.isFree) - Number(b.isFree),
+    filterVal: (row) => (row.isFree ? 'Ano' : 'Ne'),
+    render: (row) => (row.isFree ? 'Ano' : 'Ne'),
   },
   {
     title: 'Plátce',
@@ -140,15 +140,5 @@ export const SpendingsColumns: SpendingColumn[] = [
         { style: { 'font-weight': 'bolder' } },
         formatNumberToCzk(row.totalPrice),
       ),
-  },
-  {
-    title: '',
-    key: 'deleteAction',
-    isHidden: false,
-    filterEnabled: false,
-    selectFilterEnabled: false,
-    tooltip: null,
-    filterVal: () => '',
-    render: () => '',
-  },
+  }
 ]

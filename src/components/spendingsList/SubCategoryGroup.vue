@@ -82,7 +82,7 @@
 <template>
   <tr class="subCategory-group-header bg-blue-50 hover:bg-blue-100 cursor-pointer">
     <td
-      :colspan="columns.length"
+      :colspan="columns.length + 1"
       class="border-b border-blue-200 px-4 py-2"
       @click="toggleExpanded"
     >
@@ -94,7 +94,7 @@
           <span class="font-semibold text-blue-700">{{ subCategory }}</span>
           <span class="text-sm text-gray-600">({{ items.length }} položek)</span>
         </div>
-        <div class="font-bold text-black me-[7.6%]">
+        <div class="font-bold text-black me-[6.9%]">
           {{ formatNumberToCzk(totalPrice) }}
         </div>
       </div>
@@ -115,29 +115,29 @@
         class="border-b border-blue-100 px-4 py-2"
         :class="{ 'border-blue-200': index === items.length - 1 }"
       >
-        <template v-if="column.key === 'deleteAction'">
-          <div class="opacity-75 hover:opacity-100">
-            <n-button
-              class="delete-button"
-              size="tiny"
-              color="#ef4444"
-              @click="handleDelete(row, $event)"
-            >
-              <template #icon>
-                <n-icon>
-                  <CloseOutline />
-                </n-icon>
-              </template>
-            </n-button>
-          </div>
-        </template>
-        <template v-else-if="typeof getCellContent(column, row, index) === 'object'">
+        <template v-if="typeof getCellContent(column, row, index) === 'object'">
           <component :is="getCellContent(column, row, index)" />
         </template>
         <template v-else>
           {{ getCellContent(column, row, index) }}
         </template>
         <SpendingStatusIndicator :status="getSpendingStatus(row.id)" />
+      </td>
+      <td class="px-2 border-b border-blue-200">
+        <div class="opacity-75 hover:opacity-100">
+          <n-button
+            class="delete-button"
+            size="tiny"
+            color="#ef4444"
+            @click="handleDelete(row, $event)"
+          >
+            <template #icon>
+              <n-icon>
+                <CloseOutline />
+              </n-icon>
+            </template>
+          </n-button>
+        </div>
       </td>
     </tr>
   </template>

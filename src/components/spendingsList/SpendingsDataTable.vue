@@ -50,7 +50,7 @@
     data,
     hideCategoryColumn = false,
     title = '',
-    showHideColumnsSelector = false,
+    showHideColumnsSelector = true,
   } = defineProps<{
     data: Spending[]
     hideCategoryColumn?: boolean
@@ -310,15 +310,17 @@
             </template>
             Vymazat filtry a řazení
           </n-button>
-          <div v-if="showHideColumnsSelector" class="flex max-w-[30%] min-w-[200px] items-center">
+          <div v-if="showHideColumnsSelector" class="flex items-center">
             <n-select
-              class="min-w-[200px]"
+              class="min-w-[100px] hideColumnsSelect"
               :value="hiddenColumnKeys"
               @update:value="updateColumnsVisibility"
+              placeholder="Skryté"
               multiple
+              :maxTagCount="0"
               :options="columnHeaders"
             />
-            <div class="text-green text-[16px] ms-3 font-semibold text-nowrap">Skryté sloupce</div>
+            <div class="text-[16px] ms-3 font-semibold text-nowrap text-blue">Skryté sloupce</div>
           </div>
         </div>
       </div>
@@ -347,6 +349,7 @@
                 />
               </span>
             </th>
+            <th></th>
           </tr>
           <tr class="bg-white">
             <th v-for="column in filteredColumns" :key="`filter-${String(column.key)}`" class="">
@@ -370,6 +373,7 @@
                 />
               </template>
             </th>
+            <th class="mx-2"></th>
           </tr>
         </thead>
         <tbody>
@@ -387,31 +391,29 @@
                 :key="`${group.item.id}-${String(column.key)}`"
                 class="border-b border-blue-200 px-4 py-2"
               >
-                <template v-if="column.key === 'deleteAction'">
-                  <div class="opacity-75 hover:opacity-100">
-                    <n-button
-                      class="delete-button"
-                      size="tiny"
-                      color="#ef4444"
-                      @click="handleDelete(group.item, $event)"
-                    >
-                      <template #icon>
-                        <n-icon>
-                          <CloseOutline />
-                        </n-icon>
-                      </template>
-                    </n-button>
-                  </div>
-                </template>
-                <template
-                  v-else-if="typeof getCellContent(column, group.item, groupIndex) === 'object'"
-                >
+                <template v-if="typeof getCellContent(column, group.item, groupIndex) === 'object'">
                   <component :is="getCellContent(column, group.item, groupIndex)" />
                 </template>
                 <template v-else>
                   {{ getCellContent(column, group.item, groupIndex) }}
                 </template>
                 <SpendingStatusIndicator :status="getSpendingStatus(group.item.id)" />
+              </td>
+              <td class="px-2 border-b border-blue-200">
+                <div class="opacity-75 hover:opacity-100">
+                  <n-button
+                    class="delete-button"
+                    size="tiny"
+                    color="#ef4444"
+                    @click="handleDelete(group.item, $event)"
+                  >
+                    <template #icon>
+                      <n-icon>
+                        <CloseOutline />
+                      </n-icon>
+                    </template>
+                  </n-button>
+                </div>
               </td>
             </tr>
 
@@ -427,7 +429,7 @@
         <tfoot class="border-blue border-t">
           <tr class="bg-blue-100 font-bold text-lg">
             <td class="px-4 py-2 text-blue">Celkem ({{ totalCountSpendings }}):</td>
-            <td v-for="_v in filteredColumns.length - 3"></td>
+            <td v-for="_v in filteredColumns.length - 2"></td>
             <td class="text-blue">
               {{ formatNumberToCzk(totalPrice) }}
             </td>
@@ -512,5 +514,8 @@
   }
   .unCollapseIcon {
     display: none;
+  }
+  :deep(.n-base-selection) {
+    border-color: #3b82f6;
   }
 </style>
