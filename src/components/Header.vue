@@ -8,6 +8,7 @@
   import { computed } from 'vue'
   import { useRouter } from 'vue-router'
 
+  const isDev = import.meta.env.DEV
   const store = useSpendingsStore()
   const router = useRouter()
 
@@ -58,6 +59,7 @@
               <div class="font-bold">Přidat nový nákup</div>
             </n-button>
           </div>
+          <h1 class="text-4xl text-red font-bold ms-10">{{ isDev ? 'TEST' : '' }}</h1>
         </div>
         <div class="flex items-center gap-4">
           <div v-if="pendingChanges" class="flex items-center animate-breathing">

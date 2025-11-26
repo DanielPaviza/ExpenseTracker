@@ -96,49 +96,68 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   function discardChanges() {
     spendings.value = [...originalSpendings.value]
+    deletedSpendings.value = []
+    newSpendingIds.value.clear()
+    editedSpendingIds.value.clear()
   }
 
   // Computed: distinct categories
   const categories = computed(() => {
     if (spendings.value.length === 0) return []
 
-    const set = new Set<string>()
+    const countMap = new Map<string, number>()
     for (const s of spendings.value) {
-      if (s.category) set.add(s.category)
+      if (s.category) {
+        countMap.set(s.category, (countMap.get(s.category) || 0) + 1)
+      }
     }
-    return Array.from(set)
+    return Array.from(countMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([category]) => category)
   })
 
   const subCategories = computed(() => {
     if (spendings.value.length === 0) return []
 
-    const set = new Set<string>()
+    const countMap = new Map<string, number>()
     for (const s of spendings.value) {
-      if (s.subCategory) set.add(s.subCategory)
+      if (s.subCategory) {
+        countMap.set(s.subCategory, (countMap.get(s.subCategory) || 0) + 1)
+      }
     }
-    return Array.from(set)
+    return Array.from(countMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([subCategory]) => subCategory)
   })
 
   // Computed: distinct payers
   const payers = computed(() => {
     if (spendings.value.length === 0) return []
 
-    const set = new Set<string>()
+    const countMap = new Map<string, number>()
     for (const s of spendings.value) {
-      if (s.payer) set.add(s.payer)
+      if (s.payer) {
+        countMap.set(s.payer, (countMap.get(s.payer) || 0) + 1)
+      }
     }
-    return Array.from(set)
+    return Array.from(countMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([payer]) => payer)
   })
 
   // Computed: distinct stores
   const stores = computed(() => {
     if (spendings.value.length === 0) return []
 
-    const set = new Set<string>()
+    const countMap = new Map<string, number>()
     for (const s of spendings.value) {
-      if (s.store) set.add(s.store)
+      if (s.store) {
+        countMap.set(s.store, (countMap.get(s.store) || 0) + 1)
+      }
     }
-    return Array.from(set)
+    return Array.from(countMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([store]) => store)
   })
 
   const totalPrice = computed(() => {
