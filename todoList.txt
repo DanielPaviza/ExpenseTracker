@@ -1,6 +1,8 @@
 BytEvidence todoList
 
 ---- TODO ----
+- order category and store list by count
+
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     - nebo vytvořit flag něco jako isZahrnutVJinýPoložce :D
 
