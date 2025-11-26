@@ -1,7 +1,6 @@
 BytEvidence todoList
 
 ---- TODO ----
-- order category and store list by count
 
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     - nebo vytvořit flag něco jako isZahrnutVJinýPoložce :D
@@ -35,3 +34,4 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     Smazane printnout uplne dole s moznosti restoru
 - dataTable - isSaved se stále zobrazuje jako "Ne", kalkulace jsou správný
 - form new/edit spending - širší, klidně přes 80% vw - 2 sloupce, aby se nemuselo scrollovat
+- order category and store list by count

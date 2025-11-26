@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "bytevidence",
+  "productName": "bytEvidence",
   "version": "0.1.0",
-  "identifier": "com.daniel.bytevidence",
+  "identifier": "com.daniel.bytEvidence",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "bytevidence",
+        "title": "bytEvidence",
         "width": 1920,
         "height": 1080,
         "maximized": true,
