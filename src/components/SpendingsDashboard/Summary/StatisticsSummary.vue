@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
-  import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
+
+  import { Spending } from '@/types/Spending'
 
   const store = useSpendingsStore()
   const { spendings, totalPrice } = storeToRefs(store)

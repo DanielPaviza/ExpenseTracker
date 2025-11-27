@@ -1,4 +1,4 @@
-import { Spending } from '@models/Spending'
+import { Spending } from '@/types/Spending'
 import { loadSpendings, saveSpendings } from '@utils/spendingStorage'
 import { defineStore } from 'pinia'
 

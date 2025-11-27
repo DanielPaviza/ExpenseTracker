@@ -1,4 +1,4 @@
-import { Spending } from '@models/Spending'
+import { Spending } from '@/types/Spending'
 
 import { invoke } from '@tauri-apps/api/core'
 

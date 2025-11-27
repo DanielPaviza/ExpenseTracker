@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
   import type { SpendingColumn } from '@components/spendingsList/SpendingsColumns'
-  import type { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { ChevronForwardOutline, CloseOutline } from '@vicons/ionicons5'
@@ -9,6 +8,8 @@
 
   import { type VNode, computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
+
+  import type { Spending } from '@/types/Spending'
 
   const props = defineProps<{
     subCategory: string

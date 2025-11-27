@@ -4,7 +4,6 @@
   import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
   import { type SpendingColumn, SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
   import SubCategoryGroup from '@components/spendingsList/SubCategoryGroup.vue'
-  import type { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import {
     scrollFadeOnBeforeEnter,
@@ -26,6 +25,8 @@
   // For triggering SortIndicator's toggleSort from th click
   import type { ComponentPublicInstance } from 'vue'
   import { useRouter } from 'vue-router'
+
+  import type { Spending } from '@/types/Spending'
 
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])

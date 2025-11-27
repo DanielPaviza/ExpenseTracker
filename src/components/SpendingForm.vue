@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import Tooltip from '@components/Tooltip.vue'
-  import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatDate } from '@utils/formatUtils'
   import { OpenOutline, SaveOutline, TrashOutline } from '@vicons/ionicons5'
@@ -24,6 +23,8 @@
 
   import { computed, onUnmounted, ref, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
+
+  import { Spending } from '@/types/Spending'
 
   const store = useSpendingsStore()
   const formRef = ref<FormInst | null>(null)

@@ -1,4 +1,4 @@
-import { Spending } from '@models/Spending'
+import { Spending } from '@/types/Spending'
 import { formatDateShort, formatNumberToCzk } from '@utils/formatUtils'
 
 import { type VNode, h } from 'vue'
