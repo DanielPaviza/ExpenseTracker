@@ -2,6 +2,7 @@ BytEvidence todoList
 
 ---- TODO ----
 
+
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     - nebo vytvořit flag něco jako isZahrnutVJinýPoložce :D
 
@@ -11,14 +12,12 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     - koupelna topeni + picoviny do sprch. koutu
     - saved ingriš kabely+lišty+zasuvky ~18k
     - projit bank vypis
+    - vyliti podlahy + pokladka
 
     - kari varna deska + pojisteni
-    - kari baterie kuchyn
-    - kari baterie koupelna + sprch. set
-    - kari postel + komoda
-    - kari džez, ventily a paska
+    - kari zásuvky
     
-    - mama ingriš
+    
 
 ---- DONE ----
 - new spending form - jednotková cena default val pouze jako placeholder aby šlo kliknout a hned psát
@@ -35,3 +34,4 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - dataTable - isSaved se stále zobrazuje jako "Ne", kalkulace jsou správný
 - form new/edit spending - širší, klidně přes 80% vw - 2 sloupce, aby se nemuselo scrollovat
 - order category and store list by count
+- clear editedItems, newItems, deletedItems nefunguje (discard changes)

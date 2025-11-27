@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
+  import { useItemsLimit } from '@composables/useItemsLimit'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
   import { NButton, NButtonGroup } from 'naive-ui'
@@ -12,7 +13,6 @@
 
   type SortType = 'price-desc' | 'count-desc' | 'alphabetical'
   const sortBy = ref<SortType>('price-desc')
-
   const subCategories = computed(() => {
     const set = new Set<string>()
     for (const s of spendings.value) {
@@ -46,6 +46,13 @@
         return sorted
     }
   })
+
+  const {
+    displayedItems: displayedSubCategories,
+    hasMore,
+    toggleText,
+    showAll,
+  } = useItemsLimit(sortedSubCategories)
 
   const chartLabels = computed(() =>
     sortedSubCategories.value.map((s) => `${s.name} (${s.percent}%)`),
@@ -117,7 +124,7 @@
     </div>
 
     <div
-      v-for="sub in sortedSubCategories"
+      v-for="sub in displayedSubCategories"
       :key="sub.name"
       class="flex items-center gap-2 text-base"
     >
@@ -126,6 +133,14 @@
       </div>
       <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(sub.price) }}</div>
       <div class="text-blue text-xs text-muted-foreground">({{ sub.count }}×)</div>
+    </div>
+
+    <div
+      v-if="hasMore"
+      @click="showAll = !showAll"
+      class="mt-1 text-blueLight text-xs cursor-pointer"
+    >
+      {{ toggleText }}
     </div>
   </SummaryCard>
 </template>

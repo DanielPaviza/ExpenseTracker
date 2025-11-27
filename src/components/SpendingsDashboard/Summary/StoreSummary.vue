@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
+  import { useItemsLimit } from '@composables/useItemsLimit'
   import { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
@@ -11,11 +12,8 @@
   const store = useSpendingsStore()
   const { spendings, stores, totalPrice } = storeToRefs(store)
 
-  const MAX_DISPLAYED_ITEMS = 8
-
   type SortType = 'price-desc' | 'visits-desc' | 'avg-desc'
   const sortBy = ref<SortType>('price-desc')
-  const showAll = ref(false)
 
   const storeStats = computed(() => {
     return stores.value.map((storeName) => {
@@ -45,9 +43,12 @@
     }
   })
 
-  const displayedStores = computed(() => {
-    return showAll.value ? sortedStores.value : sortedStores.value.slice(0, MAX_DISPLAYED_ITEMS)
-  })
+  const {
+    displayedItems: displayedStores,
+    hasMore,
+    toggleText,
+    showAll,
+  } = useItemsLimit(sortedStores)
 
   const chartLabels = computed(() => sortedStores.value.map((s) => `${s.name} (${s.percent}%)`))
   const chartDatasets = computed(() => {
@@ -134,11 +135,11 @@
     </div>
 
     <div
-      v-if="sortedStores.length > MAX_DISPLAYED_ITEMS"
+      v-if="hasMore"
       @click="showAll = !showAll"
       class="mt-1 text-blueLight text-xs cursor-pointer"
     >
-      {{ showAll ? '▲ Zobrazit méně' : `▼ Zobrazit všechny (${sortedStores.length})` }}
+      {{ toggleText }}
     </div>
   </SummaryCard>
 </template>
