@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
+  import { useItemsLimit } from '@composables/useItemsLimit'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { storeToRefs } from 'pinia'
@@ -10,6 +11,13 @@
   const { spendings, totalPrice } = storeToRefs(store)
 
   const unpaidSpendings = computed(() => spendings.value.filter((s) => s.isToBePaid && !s.isFree))
+
+  const {
+    displayedItems: displayedUnpaidSpendings,
+    hasMore,
+    toggleText,
+    showAll,
+  } = useItemsLimit(unpaidSpendings)
 
   const priceUnpaid = computed(() =>
     unpaidSpendings.value.reduce((sum, s) => sum + s.totalPrice, 0),
@@ -59,9 +67,9 @@
       </div>
       <div class="border-t border-blue mt-4">
         <div class="text-blue mb-2 mt-4">Nezaplacené položky:</div>
-        <div class="overflow-y-auto max-h-40 pr-2 text-sm">
+        <div class="pr-2 text-sm">
           <div
-            v-for="spending in unpaidSpendings.filter((s) => !s.isFree)"
+            v-for="spending in displayedUnpaidSpendings"
             :key="spending.id"
             class="flex space-y-1 items-center gap-4"
           >
@@ -74,6 +82,13 @@
           <div v-if="unpaidSpendings.length === 0" class="text-gray-500">
             Všechny výdaje jsou zaplaceny.
           </div>
+        </div>
+        <div
+          v-if="hasMore"
+          @click="showAll = !showAll"
+          class="mt-1 text-blueLight text-xs cursor-pointer"
+        >
+          {{ toggleText }}
         </div>
       </div>
     </div>

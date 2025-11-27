@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
+  import { useItemsLimit } from '@composables/useItemsLimit'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { storeToRefs } from 'pinia'
@@ -10,6 +11,13 @@
   const { spendings, totalPrice } = storeToRefs(store)
 
   const freeSpendings = computed(() => spendings.value.filter((s) => s.isFree))
+
+  const {
+    displayedItems: displayedFreeSpendings,
+    hasMore,
+    toggleText,
+    showAll,
+  } = useItemsLimit(freeSpendings)
 
   const priceFree = computed(() => freeSpendings.value.reduce((sum, s) => sum + s.totalPrice, 0))
 
@@ -57,9 +65,9 @@
       </div>
       <div class="border-t border-blue mt-4">
         <div class="text-blue mb-2 mt-4">Položky zdarma:</div>
-        <div class="overflow-y-auto max-h-40 pr-2 text-sm">
+        <div class="pr-2 text-sm">
           <div
-            v-for="spending in freeSpendings"
+            v-for="spending in displayedFreeSpendings"
             :key="spending.id"
             class="flex space-y-1 items-center gap-4"
           >
@@ -70,6 +78,13 @@
             <span v-if="spending.store">-> {{ spending.store }}</span>
           </div>
           <div v-if="freeSpendings.length === 0" class="text-gray-500">Žádné ušetřené výdaje.</div>
+        </div>
+        <div
+          v-if="hasMore"
+          @click="showAll = !showAll"
+          class="mt-1 text-blueLight text-xs cursor-pointer"
+        >
+          {{ toggleText }}
         </div>
       </div>
     </div>
