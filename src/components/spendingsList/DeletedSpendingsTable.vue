@@ -2,7 +2,6 @@
   import Tooltip from '@components/Tooltip.vue'
   import SortIndicator from '@components/spendingsList/SortIndicator.vue'
   import { type SpendingColumn, SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
-  import type { Spending } from '@models/Spending'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import {
     scrollFadeOnBeforeEnter,
@@ -16,6 +15,8 @@
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   import type { ComponentPublicInstance } from 'vue'
+
+  import type { Spending } from '@/types/Spending'
 
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])

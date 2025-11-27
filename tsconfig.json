@@ -39,7 +39,7 @@
         "src/utils/*"
       ],
       "@models/*": [
-        "src/models/*"
+        "src/types/*"
       ],
       "@stores/*": [
         "src/stores/*"
