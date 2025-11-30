@@ -8,12 +8,12 @@
   import OverallPriceSummary from '@components/SpendingsDashboard/Summary/OverallPriceSummary.vue'
   import StatisticsSummary from '@components/SpendingsDashboard/Summary/StatisticsSummary.vue'
   import StoreSummary from '@components/SpendingsDashboard/Summary/StoreSummary.vue'
-  import SubCategorySummary from '@components/SpendingsDashboard/Summary/SubCategorySummary.vue'
+  import TagSummary from '@components/SpendingsDashboard/Summary/TagSummary.vue'
   import UnpaidSummary from '@components/SpendingsDashboard/Summary/UnpaidSummary.vue'
 
   const slides = [
     { id: 0, label: 'Přehled a kategorie' },
-    { id: 1, label: 'Podkategorie a obchody' },
+    { id: 1, label: 'Obchody a tagy' },
     { id: 2, label: 'Statistiky' },
     { id: 3, label: 'Platby' },
   ]
@@ -32,10 +32,10 @@
 
       <CarouselSlide>
         <CarouselItem pc-width="49">
-          <SubCategorySummary />
+          <StoreSummary />
         </CarouselItem>
         <CarouselItem pc-width="49">
-          <StoreSummary />
+          <TagSummary />
         </CarouselItem>
       </CarouselSlide>
 

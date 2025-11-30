@@ -81,25 +81,26 @@
 </script>
 
 <template>
-  <tr class="subCategory-group-header bg-blue-50 hover:bg-blue-100 cursor-pointer">
-    <td
-      :colspan="columns.length + 1"
-      class="border-b border-blue-200 px-4 py-2"
-      @click="toggleExpanded"
-    >
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <n-icon :size="20" class="transition-transform" :class="{ 'rotate-90': isExpanded }">
-            <ChevronForwardOutline />
-          </n-icon>
-          <span class="font-semibold text-blue-700">{{ subCategory }}</span>
-          <span class="text-sm text-gray-600">({{ items.length }} položek)</span>
-        </div>
-        <div class="font-bold text-black me-[6.9%]">
-          {{ formatNumberToCzk(totalPrice) }}
-        </div>
+  <tr
+    class="subCategory-group-header bg-blue-50 hover:bg-blue-100 cursor-pointer border-b border-blue-200 px-4 py-2"
+    @click="toggleExpanded"
+  >
+    <td class="py-2">
+      <div class="flex items-center gap-2 ps-3">
+        <n-icon :size="20" class="transition-transform" :class="{ 'rotate-90': isExpanded }">
+          <ChevronForwardOutline />
+        </n-icon>
+        <span class="font-semibold text-blue-700">{{ subCategory }}</span>
+        <span class="text-sm text-gray-600">({{ items.length }} položek)</span>
       </div>
     </td>
+    <td v-for="_ in columns.length - 2"></td>
+    <td class="font-bold text-black ps-3">
+      <template v-if="!isExpanded">
+        {{ formatNumberToCzk(totalPrice) }}
+      </template>
+    </td>
+    <td></td>
   </tr>
 
   <template v-if="isExpanded">

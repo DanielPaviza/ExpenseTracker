@@ -2,7 +2,7 @@
   import Tooltip from '@components/Tooltip.vue'
   import SortIndicator from '@components/spendingsList/SortIndicator.vue'
   import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
-  import { type SpendingColumn, SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
+  import { type SpendingColumn } from '@components/spendingsList/SpendingsColumns'
   import SubCategoryGroup from '@components/spendingsList/SubCategoryGroup.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import {
@@ -22,7 +22,6 @@
   import { NButton, NIcon, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
-  // For triggering SortIndicator's toggleSort from th click
   import type { ComponentPublicInstance } from 'vue'
   import { useRouter } from 'vue-router'
 
@@ -51,20 +50,17 @@
     data,
     hideCategoryColumn = false,
     title = '',
-    showHideColumnsSelector = true,
+    columns,
+    isCollapsedDefault = false,
   } = defineProps<{
     data: Spending[]
     hideCategoryColumn?: boolean
     title?: string
-    showHideColumnsSelector?: boolean
+    columns: SpendingColumn[]
+    isCollapsedDefault?: boolean
   }>()
 
-  const isCollapsed = ref(false)
-
-  const columns = ref<SpendingColumn[]>(SpendingsColumns)
-  const filteredColumns = computed(() => {
-    return columns.value.filter((col) => !col.isHidden)
-  })
+  const isCollapsed = ref(isCollapsedDefault)
 
   const totalCountSpendings = computed(() => data.length)
 
@@ -86,7 +82,7 @@
       if (!filterValue || filterValue.trim() === '') continue
 
       const filterLower = filterValue.toLowerCase().trim()
-      const column = columns.value.find((c) => c.key === columnKey)
+      const column = columns.find((c) => c.key === columnKey)
       if (!column) continue
 
       result = result.filter((row) => {
@@ -103,7 +99,7 @@
 
   const sortedData = computed(() => {
     if (!sortState.value.key || !sortState.value.direction) return filteredData.value
-    const col = columns.value.find((c) => c.key === sortState.value.key && c.sortFn)
+    const col = columns.find((c) => c.key === sortState.value.key && c.sortFn)
     if (!col || !col.sortFn) return filteredData.value
     const sorted = [...filteredData.value].sort(col.sortFn)
     if (sortState.value.direction === 'desc') sorted.reverse()
@@ -159,35 +155,21 @@
     if (direction === null) sortState.value = { key: null, direction: null }
     else sortState.value = { key, direction }
   }
-  const hiddenColumnKeys = computed(() => {
-    return columns.value.filter((col) => col.isHidden).map((col) => col.key)
-  })
 
-  const columnHeaders = columns.value.map((col) => {
-    if (filteredColumns.value.length === 1 && !col.isHidden) {
-      return { label: col.title, value: col.key, disabled: true }
-    }
-    return { label: col.title, value: col.key }
-  })
-
-  const updateColumnsVisibility = (keys: string[]) => {
-    for (const column of columns.value) {
-      column.isHidden = keys.includes(column.key)
-    }
-  }
+  // Build initial hidden columns list from defaults
+  const initialHiddenColumns = columns.filter((col) => col.isHidden).map((col) => col.key as string)
 
   if (hideCategoryColumn) {
-    updateColumnsVisibility(['category'])
-  } else {
-    updateColumnsVisibility([])
+    // Add 'category' to the list if not already there
+    if (!initialHiddenColumns.includes('category')) {
+      initialHiddenColumns.push('category')
+    }
   }
 
   const totalPrice = computed(() => {
-    return sortedData.value
-      .filter((spending) => !spending.isFree && !spending.isToBePaid)
-      .reduce((sum, spending) => {
-        return sum + spending.totalPrice
-      }, 0)
+    return sortedData.value.reduce((sum, spending) => {
+      return sum + spending.totalPrice
+    }, 0)
   })
 
   const getCellContent = (
@@ -224,7 +206,7 @@
   const columnFilterOptions = computed(() => {
     const options: Record<string, Array<{ label: string; value: string }>> = {}
 
-    for (const column of columns.value) {
+    for (const column of columns) {
       const uniqueValues = new Set<string>()
 
       for (const row of data) {
@@ -298,30 +280,20 @@
           </div>
         </div>
         <div class="flex items-center">
-          <n-button
-            v-if="hasActiveFiltersOrSorting"
-            @click.stop="clearAllFiltersAndSorting"
-            size="tiny"
-            color="#3b82f6"
-          >
-            <template #icon>
-              <n-icon>
-                <CloseCircleOutline />
-              </n-icon>
-            </template>
-            Vymazat filtry a řazení
-          </n-button>
-          <div v-if="showHideColumnsSelector" class="flex items-center">
-            <n-select
-              class="min-w-[100px] hideColumnsSelect"
-              :value="hiddenColumnKeys"
-              @update:value="updateColumnsVisibility"
-              placeholder="Skryté"
-              multiple
-              :maxTagCount="0"
-              :options="columnHeaders"
-            />
-            <div class="text-[16px] ms-3 font-semibold text-nowrap text-blue">Skryté sloupce</div>
+          <div class="me-3 flex items-center">
+            <n-button
+              v-if="hasActiveFiltersOrSorting"
+              @click.stop="clearAllFiltersAndSorting"
+              size="tiny"
+              color="#3b82f6"
+            >
+              <template #icon>
+                <n-icon>
+                  <CloseCircleOutline />
+                </n-icon>
+              </template>
+              Vymazat filtry a řazení
+            </n-button>
           </div>
         </div>
       </div>
@@ -329,7 +301,7 @@
         <thead class="">
           <tr class="bg-blue-300 text-[15px]">
             <th
-              v-for="(column, colIdx) in filteredColumns"
+              v-for="(column, colIdx) in columns"
               :key="String(column.key)"
               class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap cursor-pointer hover:bg-blue-500 hover:text-white"
               :class="{ 'bg-blue-400': sortState.key === column.key }"
@@ -353,7 +325,7 @@
             <th></th>
           </tr>
           <tr class="bg-white">
-            <th v-for="column in filteredColumns" :key="`filter-${String(column.key)}`" class="">
+            <th v-for="column in columns" :key="`filter-${String(column.key)}`">
               <template v-if="column.filterEnabled">
                 <n-select
                   v-if="column.selectFilterEnabled"
@@ -388,7 +360,7 @@
               @click="handleRowClick(group.item, $event)"
             >
               <td
-                v-for="column in filteredColumns"
+                v-for="column in columns"
                 :key="`${group.item.id}-${String(column.key)}`"
                 class="border-b border-blue-200 px-4 py-2"
               >
@@ -423,15 +395,15 @@
               v-else-if="group.type === 'group' && group.subCategory && group.items"
               :subCategory="group.subCategory"
               :items="group.items"
-              :columns="filteredColumns"
+              :columns="columns"
             />
           </template>
         </tbody>
         <tfoot class="border-blue border-t">
           <tr class="bg-blue-100 font-bold text-lg">
             <td class="px-4 py-2 text-blue">Celkem ({{ totalCountSpendings }}):</td>
-            <td v-for="_v in filteredColumns.length - 2"></td>
-            <td class="text-blue">
+            <td v-for="_v in columns.length - 2"></td>
+            <td class="text-blue ps-3">
               {{ formatNumberToCzk(totalPrice) }}
             </td>
             <td></td>
@@ -442,7 +414,7 @@
     <div
       v-else
       key="collapsed"
-      class="collapsedRow bg-blue-300 opacity-80 shadow text-white cursor-pointer w-full p-3 flex items-center justify-between rounded hover:bg-blue-500"
+      class="collapsedRow bg-blue-300 shadow text-white cursor-pointer w-full p-3 flex items-center justify-between rounded hover:bg-blue-500"
       @click="isCollapsed = !isCollapsed"
     >
       <div class="flex items-center gap-4">
@@ -454,7 +426,7 @@
         </n-icon>
         <h2 class="text-xl font-bold text-left">{{ title }}</h2>
       </div>
-      <div class="text-xl font-bold">
+      <div class="text-xl font-bold text-white">
         {{ formatNumberToCzk(totalPrice) }}
       </div>
     </div>
@@ -516,7 +488,7 @@
   .unCollapseIcon {
     display: none;
   }
-  :deep(.n-base-selection) {
-    border-color: #3b82f6;
+  :deep(.hideColumnsSelect .n-base-selection) {
+    border: 1px solid rgba(59, 130, 246, 0.4);
   }
 </style>

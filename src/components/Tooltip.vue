@@ -15,7 +15,7 @@
   <n-tooltip trigger="hover">
     <template #trigger>
       <div
-        class="flex items-center justify-center border rounded-[50%] w-5 h-5 p-1"
+        class="flex items-center justify-center border rounded-[50%] w-6 h-6 p-1"
         :style="{ borderColor: color }"
       >
         <n-icon :color="color">

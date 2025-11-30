@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div class="flex justify-center mb-4">
+  <div class="flex justify-center">
     <button
       v-for="button in buttons"
       :key="button.id"

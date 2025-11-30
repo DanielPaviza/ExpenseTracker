@@ -112,7 +112,7 @@ export const SpendingsColumns: SpendingColumn[] = [
   {
     title: 'Vytvořeno',
     key: 'createdAt',
-    isHidden: false,
+    isHidden: true,
     filterEnabled: true,
     selectFilterEnabled: false,
     tooltip: null,
@@ -124,6 +124,39 @@ export const SpendingsColumns: SpendingColumn[] = [
         { style: { 'font-size': '14px', color: '#666' } },
         formatDateShort(new Date(row.createdAt)),
       ),
+  },
+  {
+    title: 'Tagy',
+    key: 'tags',
+    isHidden: false,
+    filterEnabled: true,
+    selectFilterEnabled: false,
+    tooltip: null,
+    sortFn: (a, b) => (a.tags?.join(',') || '').localeCompare(b.tags?.join(',') || ''),
+    filterVal: (row) => row.tags?.join(', ') || '',
+    render: (row) =>
+      row.tags && row.tags.length > 0 ?
+        h(
+          'div',
+          { style: { display: 'flex', gap: '4px', 'flex-wrap': 'wrap' } },
+          row.tags.map((tag: string) =>
+            h(
+              'span',
+              {
+                style: {
+                  padding: '2px 8px',
+                  'border-radius': '12px',
+                  'background-color': '#e0f2fe',
+                  color: '#0369a1',
+                  'font-size': '12px',
+                  'font-weight': '500',
+                },
+              },
+              tag,
+            ),
+          ),
+        )
+        : '-',
   },
   {
     title: 'Cena',

@@ -69,7 +69,7 @@
               <n-button type="error" @click="handleDiscard"> Zahodit změny </n-button>
             </div>
           </div>
-          <div class="text-blue flex items-center font-semibold">
+          <div class="text-blue flex items-center font-semibold text-lg">
             Celkové výdaje: {{ formatNumberToCzk(store.totalPrice) }}
           </div>
         </div>

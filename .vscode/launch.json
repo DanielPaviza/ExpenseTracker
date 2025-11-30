@@ -11,15 +11,25 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "Vite dev FE only",
-      "type": "node",
+      "name": "Debug Vite Frontend (Chrome)",
+      "type": "chrome",
       "request": "launch",
-      "runtimeExecutable": "node",
-      "runtimeArgs": [
-        "--version"
+      "url": "http://localhost:1420",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "pathMapping": {
+        "/": "${workspaceFolder}",
+        "/src": "${workspaceFolder}/src"
+      },
+      "skipFiles": [
+        "<node_internals>/**",
+        "**/node_modules/**",
+        "**/@vite/**",
+        "**/dist/**",
+        "**/.pnpm/**"
       ],
-      "preLaunchTask": "Run Vite Dev",
-      "console": "integratedTerminal"
+      "smartStep": true,
+      "preLaunchTask": "Run Vite Dev"
     }
   ],
   "compounds": []
