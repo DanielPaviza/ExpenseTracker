@@ -35,7 +35,11 @@
     {
       label: 'Výdaje dle plátců',
       data: payerStats.value.map((p) => p.price),
-      backgroundColor: generateColorPalette(payerStats.value.length),
+      backgroundColor: generateColorPalette(payerStats.value.length, [
+        '#06402b',
+        '#ff9eaf',
+        '#ff4551',
+      ]),
     },
   ])
 </script>

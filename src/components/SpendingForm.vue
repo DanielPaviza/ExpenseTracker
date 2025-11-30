@@ -62,6 +62,7 @@
     storeCode: '',
     description: '',
     subCategory: '',
+    tags: [] as string[],
     createdAt: new Date(),
   }
 
@@ -89,6 +90,7 @@
           storeCode: newSpending.storeCode ?? '',
           description: newSpending.description ?? '',
           subCategory: newSpending.subCategory ?? '',
+          tags: newSpending.tags ?? [],
           createdAt: newSpending.createdAt,
         }
       } else if (!isEditMode.value) {
@@ -164,6 +166,10 @@
     return store.stores.map((store) => ({ label: store, value: store }))
   })
 
+  const tagOptions = computed(() => {
+    return store.tags.map((tag) => ({ label: tag, value: tag }))
+  })
+
   const totalPrice = computed(() => {
     return formData.value.quantity * formData.value.unitPrice
   })
@@ -207,6 +213,7 @@
         storeCode: formData.value.storeCode || null,
         description: formData.value.description || null,
         subCategory: formData.value.subCategory || null,
+        tags: formData.value.tags || [],
       }
 
       if (isEditMode.value && currentSpending.value) {
@@ -395,12 +402,30 @@
               </div>
             </div>
 
-            <n-form-item label="Podkategorie" path="subCategory">
+            <n-form-item path="subCategory">
+              <template #label>
+                <div class="flex items-center gap-1">
+                  Skupina
+                  <Tooltip text="Vizuální seskupení položek v tabulkách" />
+                </div>
+              </template>
               <n-select
                 v-model:value="formData.subCategory"
                 :options="subCategoryOptions"
-                placeholder="Vyberte podkategorii"
+                placeholder="Vyberte skupinu"
                 filterable
+                tag
+                clearable
+              />
+            </n-form-item>
+
+            <n-form-item label="Tagy" path="tags">
+              <n-select
+                v-model:value="formData.tags"
+                :options="tagOptions"
+                placeholder="Vyberte tagy"
+                filterable
+                multiple
                 tag
                 clearable
               />

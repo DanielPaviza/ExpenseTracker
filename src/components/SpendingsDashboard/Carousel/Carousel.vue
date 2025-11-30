@@ -11,7 +11,7 @@
 
 <template>
   <div class="carouselContainer w-full">
-    <ButtonNavigation v-model:selected-id="currentSlide" :buttons="slides" />
+    <ButtonNavigation v-model:selected-id="currentSlide" :buttons="slides" class="mb-4" />
     <n-carousel
       v-model:current-index="currentSlide"
       :show-dots="true"

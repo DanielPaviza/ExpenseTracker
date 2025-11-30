@@ -170,6 +170,23 @@ export const useSpendingsStore = defineStore('spendings', () => {
       .reduce((sum, spending) => sum + spending.totalPrice, 0)
   })
 
+  // Computed: distinct tags
+  const tags = computed(() => {
+    if (spendings.value.length === 0) return []
+
+    const countMap = new Map<string, number>()
+    for (const s of spendings.value) {
+      if (s.tags && s.tags.length > 0) {
+        for (const tag of s.tags) {
+          countMap.set(tag, (countMap.get(tag) || 0) + 1)
+        }
+      }
+    }
+    return Array.from(countMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([tag]) => tag)
+  })
+
   return {
     spendings,
     totalPrice,
@@ -188,6 +205,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     subCategories,
     payers,
     stores,
+    tags,
     newSpendingIds,
     editedSpendingIds,
     deletedSpendings,

@@ -5,14 +5,18 @@
 
   import { Spending } from '@/types/Spending'
 
+  import { SpendingColumn } from './SpendingsColumns'
+
   const {
     category,
     spendings: unorderedSpendings,
-    hideCategoryColumn = false,
+    columns,
+    isCollapsedDefault = false,
   } = defineProps<{
     category: string
     spendings: Spending[]
-    hideCategoryColumn?: boolean
+    columns: SpendingColumn[]
+    isCollapsedDefault?: boolean
   }>()
 
   // Default order by category and createdAt
@@ -30,8 +34,9 @@
   <div class="overflow-x-auto my-8">
     <SpendingsDataTable
       :data="spendings"
-      :hideCategoryColumn="hideCategoryColumn"
+      :columns="columns"
       :title="category"
+      :isCollapsedDefault="isCollapsedDefault"
     />
   </div>
 </template>

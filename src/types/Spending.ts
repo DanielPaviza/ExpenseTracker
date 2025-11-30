@@ -15,6 +15,7 @@ export class Spending {
   storeCode?: string | null
   description?: string | null
   subCategory?: string | null
+  tags: string[]
   createdAt: Date
   editedAt: Date | null
 
@@ -39,6 +40,7 @@ export class Spending {
     this.storeCode = data?.storeCode ?? null
     this.description = data?.description ?? null
     this.subCategory = data?.subCategory ?? null
+    this.tags = data?.tags ?? []
     this.createdAt = data?.createdAt == null ? new Date() : new Date(data?.createdAt)
     this.editedAt = data?.editedAt == null ? null : new Date(data?.editedAt)
   }
