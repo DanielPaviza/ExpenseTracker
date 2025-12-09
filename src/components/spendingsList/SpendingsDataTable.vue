@@ -326,7 +326,7 @@
           </tr>
           <tr class="bg-white">
             <th v-for="column in columns" :key="`filter-${String(column.key)}`">
-              <template v-if="column.filterEnabled">
+              <div v-if="column.filterEnabled" class="px-2 py-1">
                 <n-select
                   v-if="column.selectFilterEnabled"
                   :value="columnFilters[String(column.key)] || null"
@@ -336,6 +336,7 @@
                   filterable
                   tag
                   clearable
+                  :class="{ 'border border-blue-300': columnFilters[String(column.key)] }"
                 />
                 <n-input
                   v-else
@@ -343,8 +344,9 @@
                   @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
                   placeholder="Filtrovat"
                   clearable
+                  :class="{ 'border border-blue-300': columnFilters[String(column.key)] }"
                 />
-              </template>
+              </div>
             </th>
             <th class="mx-2"></th>
           </tr>
