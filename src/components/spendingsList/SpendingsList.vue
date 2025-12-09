@@ -13,11 +13,7 @@
   const spendingsStore = useSpendingsStore()
 
   const stores = computed(() => {
-    const storeSet = new Set(
-      spendingsStore.spendings
-        .map((s: Spending) => s.store)
-        .filter((s): s is string => s != null && s !== ''),
-    )
+    const storeSet = new Set(spendingsStore.spendings.map((s: Spending) => s?.store || 'Neznámé'))
     return [...storeSet].sort()
   })
 
@@ -46,12 +42,11 @@
   const spendingsByStore = computed(() => {
     const map = new Map<string, Spending[]>()
     spendingsStore.spendings.forEach((s: Spending) => {
-      if (s.store) {
-        if (!map.has(s.store)) {
-          map.set(s.store, [])
-        }
-        map.get(s.store)!.push(s)
+      const store = s.store || 'Neznámé'
+      if (!map.has(store)) {
+        map.set(store, [])
       }
+      map.get(store)!.push(s)
     })
     return map
   })
@@ -59,14 +54,18 @@
   const spendingsByTag = computed(() => {
     const map = new Map<string, Spending[]>()
     spendingsStore.spendings.forEach((s: Spending) => {
-      if (s.tags && s.tags.length > 0) {
-        s.tags.forEach((tag: string) => {
-          if (!map.has(tag)) {
-            map.set(tag, [])
-          }
-          map.get(tag)!.push(s)
-        })
+      if (s.tags.length === 0) {
+        if (!map.has('Bez tagu')) {
+          map.set('Bez tagu', [])
+        }
+        map.get('Bez tagu')!.push(s)
       }
+      s.tags.forEach((tag: string) => {
+        if (!map.has(tag)) {
+          map.set(tag, [])
+        }
+        map.get(tag)!.push(s)
+      })
     })
     return map
   })

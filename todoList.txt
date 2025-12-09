@@ -2,6 +2,10 @@ BytEvidence todoList
 
 ---- TODO ----
 
+- pridat moznost pridani uctenky
+
+- pridat do obchodu a tagu kategorii "other" traba - ostatni zanamy se store=null a tags=[]
+- v datatable - pokud je tam jedina polozka subcategorygroup - defaultne ji rozbalit
 
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     - nebo vytvořit flag něco jako isZahrnutVJinýPoložce :D
@@ -35,3 +39,4 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - form new/edit spending - širší, klidně přes 80% vw - 2 sloupce, aby se nemuselo scrollovat
 - order category and store list by count
 - clear editedItems, newItems, deletedItems nefunguje (discard changes)
+- zvyraznit aktivni filtr v datatablu
