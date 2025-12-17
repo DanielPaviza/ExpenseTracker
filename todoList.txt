@@ -2,24 +2,19 @@ BytEvidence todoList
 
 ---- TODO ----
 
-- pridat moznost pridani uctenky
+- pridat moznost evcidence uctenky
 
-- pridat do obchodu a tagu kategorii "other" traba - ostatni zanamy se store=null a tags=[]
-- v datatable - pokud je tam jedina polozka subcategorygroup - defaultne ji rozbalit
+
 
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     - nebo vytvořit flag něco jako isZahrnutVJinýPoložce :D
 
 - Zapsat "zapomenutý" výdaje
-    - kam. deska koupelna
-    - prace madar - 18600 asi zednicky prace, 5000 malovani
-    - koupelna topeni + picoviny do sprch. koutu
-    - saved ingriš kabely+lišty+zasuvky ~18k
     - projit bank vypis
-    - vyliti podlahy + pokladka
 
     - kari varna deska + pojisteni
     - kari zásuvky
+    
     
     
 
@@ -40,3 +35,10 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - order category and store list by count
 - clear editedItems, newItems, deletedItems nefunguje (discard changes)
 - zvyraznit aktivni filtr v datatablu
+- datatable footer celkem nepocita s filtraci - porad ukazuje plny pocet polozek
+    - a taky zapocitava i usetrene
+- datatable zaplaceno - otocene ano a ne
+- arrows subrougpy na rozbalini jsou cerny - osklivy, spis modrou
+- moznost kopirovat nakup? 
+- v datatable - pokud je tam jedina polozka subcategorygroup - defaultne ji rozbalit
+- spending form tagy nyni navrhuji i vyplnenou skupinu a skupina nyni navrhuje i prirazene tagy

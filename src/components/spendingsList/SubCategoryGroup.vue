@@ -11,7 +11,7 @@
 
   import type { Spending } from '@/types/Spending'
 
-  const props = defineProps<{
+  const { subCategory, items, columns } = defineProps<{
     subCategory: string
     items: Spending[]
     columns: SpendingColumn[]
@@ -21,10 +21,10 @@
   const store = useSpendingsStore()
   const dialog = useDialog()
   const message = useMessage()
-  const isExpanded = ref(false)
+  const isExpanded = ref(items.length <= 1)
 
   const totalPrice = computed(() => {
-    return props.items
+    return items
       .filter((spending) => !spending.isFree && !spending.isToBePaid)
       .reduce((sum, spending) => sum + spending.totalPrice, 0)
   })
@@ -87,10 +87,14 @@
   >
     <td class="py-2">
       <div class="flex items-center gap-2 ps-3">
-        <n-icon :size="20" class="transition-transform" :class="{ 'rotate-90': isExpanded }">
+        <n-icon
+          :size="20"
+          class="transition-transform text-blue-500"
+          :class="{ 'rotate-90': isExpanded }"
+        >
           <ChevronForwardOutline />
         </n-icon>
-        <span class="font-semibold text-blue-700">{{ subCategory }}</span>
+        <span class="font-semibold text-blue-500">{{ subCategory }}</span>
         <span class="text-sm text-gray-600">({{ items.length }} položek)</span>
       </div>
     </td>
