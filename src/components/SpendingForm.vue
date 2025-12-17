@@ -66,34 +66,48 @@
     createdAt: new Date(),
   }
 
+  const setNewFormData = (spending: Spending) => {
+    return {
+      category: spending.category,
+      type: spending.type,
+      name: spending.name,
+      isToBePaid: spending.isToBePaid,
+      isFree: spending.isFree,
+      payer: spending.payer,
+      quantity: spending.quantity,
+      unitPrice: spending.unitPrice,
+      dimensions: spending.dimensions ?? '',
+      url: spending.url ?? '',
+      document: spending.document ?? '',
+      store: spending.store ?? '',
+      storeCode: spending.storeCode ?? '',
+      description: spending.description ?? '',
+      subCategory: spending.subCategory ?? '',
+      tags: spending.tags ?? [],
+      createdAt: spending.createdAt,
+    }
+  }
+
   // Form data
   const formData = ref(defaultFormData)
 
   // Watch for changes to the current spending to populate form
   watch(
     currentSpending,
-    (newSpending) => {
-      if (newSpending) {
-        formData.value = {
-          category: newSpending.category,
-          type: newSpending.type,
-          name: newSpending.name,
-          isToBePaid: newSpending.isToBePaid,
-          isFree: newSpending.isFree,
-          payer: newSpending.payer,
-          quantity: newSpending.quantity,
-          unitPrice: newSpending.unitPrice,
-          dimensions: newSpending.dimensions ?? '',
-          url: newSpending.url ?? '',
-          document: newSpending.document ?? '',
-          store: newSpending.store ?? '',
-          storeCode: newSpending.storeCode ?? '',
-          description: newSpending.description ?? '',
-          subCategory: newSpending.subCategory ?? '',
-          tags: newSpending.tags ?? [],
-          createdAt: newSpending.createdAt,
+    (currentSpending) => {
+      if (currentSpending) {
+        formData.value = setNewFormData(currentSpending)
+      } else {
+        console.log(route.query)
+        if (route.query.template) {
+          const templateSpending = store.spendings.find(
+            (s) => s.id === (route.query.template as string),
+          )
+          if (templateSpending) {
+            formData.value = setNewFormData(templateSpending)
+            return
+          }
         }
-      } else if (!isEditMode.value) {
         resetForm()
       }
     },
@@ -159,7 +173,10 @@
   })
 
   const subCategoryOptions = computed(() => {
-    return store.subCategories.map((subCategory) => ({ label: subCategory, value: subCategory }))
+    return [
+      ...store.subCategories.map((subCategory) => ({ label: subCategory, value: subCategory })),
+      ...formData.value.tags.map((tag) => ({ label: tag, value: tag })),
+    ]
   })
 
   const storeOptions = computed(() => {
@@ -167,7 +184,10 @@
   })
 
   const tagOptions = computed(() => {
-    return store.tags.map((tag) => ({ label: tag, value: tag }))
+    let allTags = store.tags.map((tag) => ({ label: tag, value: tag }))
+    if (!!formData.value.subCategory)
+      allTags.push({ label: formData.value.subCategory, value: formData.value.subCategory })
+    return allTags
   })
 
   const totalPrice = computed(() => {

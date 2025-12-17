@@ -15,12 +15,16 @@
   import {
     ArrowDownOutline,
     ArrowUpOutline,
+    BuildOutline,
     CloseCircleOutline,
-    CloseOutline,
+    Copy,
     ListOutline,
+    RemoveCircleOutline,
   } from '@vicons/ionicons5'
-  import { NButton, NIcon, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
+  import { NButton, NDropdown, NIcon, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
 
+  import { h } from 'vue'
+  import type { Component } from 'vue'
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   import type { ComponentPublicInstance } from 'vue'
   import { useRouter } from 'vue-router'
@@ -60,9 +64,49 @@
     isCollapsedDefault?: boolean
   }>()
 
+  function renderIcon(icon: Component, color: string) {
+    return () => {
+      return h(
+        NIcon,
+        { color },
+        {
+          default: () => h(icon),
+        },
+      )
+    }
+  }
+
+  const rowActionOptions = [
+    {
+      label: 'Smazat',
+      key: 'deleteSpending',
+      icon: renderIcon(RemoveCircleOutline, 'red'),
+    },
+    {
+      label: 'Kopírovat',
+      key: 'copySpending',
+      icon: renderIcon(Copy, 'green'),
+    },
+    {
+      label: 'Upravit',
+      key: 'editSpending',
+      icon: renderIcon(BuildOutline, 'orange'),
+    },
+  ]
+
+  const handleActionRowSelect = (row: Spending, action: string) => {
+    if (action === 'deleteSpending') {
+      handleDelete(row, null)
+    } else if (action === 'copySpending') {
+      handleGotoCopyNewSpending(row)
+    } else if (action === 'editSpending') {
+      handleGotoEditSpending(row)
+    }
+  }
+
   const isCollapsed = ref(isCollapsedDefault)
 
-  const totalCountSpendings = computed(() => data.length)
+  const totalCountSpendings = computed(() => sortedData.value.length)
 
   // Sorting state
   const sortState = ref<{ key: string | null; direction: 'asc' | 'desc' | null }>({
@@ -167,9 +211,15 @@
   }
 
   const totalPrice = computed(() => {
-    return sortedData.value.reduce((sum, spending) => {
-      return sum + spending.totalPrice
-    }, 0)
+    const totalPrice = (sortedData: Spending[]) => {
+      return sortedData.reduce((sum, spending) => sum + spending.totalPrice, 0)
+    }
+
+    if (sortedData.value.every((s) => s.isFree)) {
+      return totalPrice(sortedData.value)
+    }
+
+    return totalPrice(sortedData.value.filter((s) => !s.isFree))
   })
 
   const getCellContent = (
@@ -229,11 +279,19 @@
     if (event && (event.target as HTMLElement).closest('.delete-button, .spending-link')) {
       return
     }
+    handleGotoEditSpending(row)
+  }
+
+  function handleGotoEditSpending(row: Spending) {
     router.push(`/edit/${row.id}`)
   }
 
-  function handleDelete(row: Spending, event: Event) {
-    event.stopPropagation()
+  function handleGotoCopyNewSpending(row: Spending) {
+    router.push({ path: '/new', query: { template: row.id } })
+  }
+
+  function handleDelete(row: Spending, event: Event | null) {
+    event?.stopPropagation()
 
     dialog.warning({
       title: 'Smazat nákup',
@@ -375,19 +433,19 @@
                 <SpendingStatusIndicator :status="getSpendingStatus(group.item.id)" />
               </td>
               <td class="px-2 border-b border-blue-200">
-                <div class="opacity-75 hover:opacity-100">
-                  <n-button
-                    class="delete-button"
-                    size="tiny"
-                    color="#ef4444"
-                    @click="handleDelete(group.item, $event)"
+                <div class="opacity-75 hover:opacity-100 mb-1">
+                  <n-dropdown
+                    :options="rowActionOptions"
+                    @select="handleActionRowSelect(group.item, $event)"
                   >
-                    <template #icon>
-                      <n-icon>
-                        <CloseOutline />
-                      </n-icon>
-                    </template>
-                  </n-button>
+                    <n-button @click.stop>
+                      <div class="flex flex-col items-center justify-center font-bold text-[16px]">
+                        <span class="h-2 -mt-4">.</span>
+                        <span class="h-2">.</span>
+                        <span class="h-2">.</span>
+                      </div>
+                    </n-button>
+                  </n-dropdown>
                 </div>
               </td>
             </tr>

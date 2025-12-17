@@ -84,7 +84,7 @@ export const SpendingsColumns: SpendingColumn[] = [
     selectFilterEnabled: true,
     tooltip: 'Položka ještě nebyla zaplacena a čeká na úhradu',
     sortFn: (a, b) => Number(a.isToBePaid) - Number(b.isToBePaid),
-    filterVal: (row) => (row.isToBePaid ? 'Ano' : 'Ne'),
+    filterVal: (row) => (row.isToBePaid ? 'Ne' : 'Ano'),
     render: (row) => (row.isToBePaid ? 'Ne' : 'Ano'),
   },
   {
