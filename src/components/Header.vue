@@ -6,8 +6,10 @@
   import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
 
   import { computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
+  const { t } = useI18n()
   const isDev = import.meta.env.DEV
   const store = useSpendingsStore()
   const router = useRouter()
@@ -23,22 +25,22 @@
   async function handleSave() {
     try {
       await store.save()
-      message.success('Změny byly úspěšně uloženy')
+      message.success(t('messages.changesSavedSuccessfully'))
     } catch (error) {
-      message.error('Chyba při ukládání změn')
+      message.error(t('messages.errorSavingChanges'))
       console.error('Save error:', error)
     }
   }
 
   function handleDiscard() {
     dialog.warning({
-      title: 'Zahodit změny',
-      content: 'Opravdu chcete zahodit všechny neuložené změny? Tato akce je nevratná.',
-      positiveText: 'Zahodit',
-      negativeText: 'Zrušit',
+      title: t('dialogs.discardChangesTitle'),
+      content: t('dialogs.discardChangesContent'),
+      positiveText: t('dialogs.discard'),
+      negativeText: t('dialogs.cancel'),
       onPositiveClick: () => {
         store.discardChanges()
-        message.info('Změny byly zahozeny')
+        message.info(t('messages.changesDiscarded'))
       },
     })
   }
@@ -50,27 +52,33 @@
     <MarginContainer>
       <div class="flex items-center justify-between">
         <div class="flex items-center">
-          <h1 class="text-4xl font-extrabold tracking-tight text-blue me-5">Evidence nákupů</h1>
+          <h1 class="text-4xl font-extrabold tracking-tight text-blue me-5">
+            {{ $t('header.title') }}
+          </h1>
           <div class="mt-2">
             <n-button type="primary" color="#3b82f6" @click="openNewSpendingForm">
               <n-icon size="32">
                 <AddOutline />
               </n-icon>
-              <div class="font-bold">Přidat nový nákup</div>
+              <div class="font-bold">{{ $t('header.addNewPurchase') }}</div>
             </n-button>
           </div>
           <h1 class="text-4xl text-red font-bold ms-10">{{ isDev ? 'TEST' : '' }}</h1>
         </div>
         <div class="flex items-center gap-4">
           <div v-if="pendingChanges" class="flex items-center animate-breathing">
-            <div class="text-orange-600 font-semibold me-4">Neuložené změny</div>
+            <div class="text-orange-600 font-semibold me-4">{{ $t('header.unsavedChanges') }}</div>
             <div class="flex items-center gap-2 me-10 bg-orange-200 p-2 px-3 shadow rounded-md">
-              <n-button type="success" @click="handleSave"> Uložit změny </n-button>
-              <n-button type="error" @click="handleDiscard"> Zahodit změny </n-button>
+              <n-button type="success" @click="handleSave">
+                {{ $t('header.saveChanges') }}
+              </n-button>
+              <n-button type="error" @click="handleDiscard">
+                {{ $t('header.discardChanges') }}
+              </n-button>
             </div>
           </div>
           <div class="text-blue flex items-center font-semibold text-lg">
-            Celkové výdaje: {{ formatNumberToCzk(store.totalPrice) }}
+            {{ $t('header.totalExpenses') }}: {{ formatNumberToCzk(store.totalPrice) }}
           </div>
         </div>
       </div>

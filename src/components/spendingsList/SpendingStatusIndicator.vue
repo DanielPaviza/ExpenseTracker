@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import Tooltip from '@components/Tooltip.vue'
 
+  import { useI18n } from 'vue-i18n'
+
+  const { t } = useI18n()
   const { status } = defineProps<{
     status: 'new' | 'edited' | null
   }>()
@@ -9,7 +12,7 @@
 <template>
   <div v-if="status" class="status-indicator">
     <Tooltip
-      :text="status === 'new' ? 'Nový nákup' : 'Upravený nákup'"
+      :text="status === 'new' ? t('table.newPurchase') : t('table.editedPurchase')"
       :color="status === 'new' ? 'var(--color-green-500)' : 'var(--color-orange-400)'"
     >
       <div

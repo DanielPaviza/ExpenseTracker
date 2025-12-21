@@ -5,10 +5,11 @@
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   const store = useSpendingsStore()
   const { spendings, payers, totalPrice } = storeToRefs(store)
-
+  const { t } = useI18n()
   const MAX_DISPLAYED_ITEMS = 5
   const showAll = ref(false)
 
@@ -33,7 +34,7 @@
   const chartLabels = computed(() => payerStats.value.map((p) => `${p.name} (${p.percent}%)`))
   const chartDatasets = computed(() => [
     {
-      label: 'Výdaje dle plátců',
+      label: t('summary.expensesByPayers'),
       data: payerStats.value.map((p) => p.price),
       backgroundColor: generateColorPalette(payerStats.value.length, [
         '#06402b',
@@ -46,8 +47,8 @@
 
 <template>
   <SummaryCard
-    title="Celkové výdaje"
-    :subtitle="`Celkem ${formatNumberToCzk(totalPrice)}`"
+    :title="$t('summary.totalExpenses')"
+    :subtitle="`${$t('summary.total')} ${formatNumberToCzk(totalPrice)}`"
     chart-type="Doughnut"
     :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
@@ -66,7 +67,7 @@
           v-if="payer.unpaid > 0"
           class="flex justify-end text-blue text-sm text-muted-foreground"
         >
-          {{ formatNumberToCzk(payer.unpaid) }} nezaplaceno
+          {{ formatNumberToCzk(payer.unpaid) }} {{ $t('summary.unpaid') }}
         </div>
       </div>
     </div>
@@ -76,12 +77,12 @@
       @click="showAll = !showAll"
       class="mt-1 text-blueLight text-xs cursor-pointer"
     >
-      {{ showAll ? '▲ Zobrazit méně' : `▼ Zobrazit všechny (${payerStats.length})` }}
+      {{ showAll ? $t('common.showLess') : $t('common.showAll', { count: payerStats.length }) }}
     </div>
 
     <hr class="my-2 text-blue" />
     <div class="text-lg flex justify-between">
-      <span class="font-bold text-blue">Celkem:</span>
+      <span class="font-bold text-blue">{{ $t('summary.total') }}:</span>
       <span class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</span>
     </div>
   </SummaryCard>

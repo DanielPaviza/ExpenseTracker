@@ -2,7 +2,7 @@
 <template>
   <div class="flex justify-center items-center h-32">
     <span class="text-lg text-blue-600 animate-pulse">
-      <slot>Načítání dat...</slot>
+      <slot>{{ $t('common.loadingData') }}</slot>
     </span>
   </div>
 </template>

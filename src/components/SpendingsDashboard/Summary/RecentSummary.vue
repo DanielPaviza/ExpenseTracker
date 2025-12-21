@@ -66,7 +66,11 @@
           style="width: 70px"
         />
         <n-button size="tiny" @click="showAll = !showAll">
-          {{ showAll ? 'Zobrazit méně' : 'Zobrazit vše' }}
+          {{
+            showAll
+              ? $t('common.showLess')
+              : $t('common.showAll', { count: recentSpendings.length })
+          }}
         </n-button>
       </div>
     </div>

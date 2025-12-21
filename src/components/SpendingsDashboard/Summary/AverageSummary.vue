@@ -5,7 +5,9 @@
   import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
+  const { t } = useI18n()
   const store = useSpendingsStore()
   const { spendings, totalPrice } = storeToRefs(store)
 
@@ -52,10 +54,14 @@
     return totalMonths > 0 ? totalPrice.value / totalMonths : 0
   })
 
-  const chartLabels = computed(() => ['Denní', 'Týdenní', 'Měsíční'])
+  const chartLabels = computed(() => [
+    t('summary.daily'),
+    t('summary.weekly'),
+    t('summary.monthly'),
+  ])
   const chartDatasets = computed(() => [
     {
-      label: 'Průměrné výdaje',
+      label: t('summary.averageExpenses'),
       data: [averagePerDay.value, averagePerWeek.value, averagePerMonth.value],
       backgroundColor: ['#ef4444', '#f97316', '#eab308'],
     },
@@ -64,8 +70,8 @@
 
 <template>
   <SummaryCard
-    title="Průměrné výdaje"
-    subtitle="Vzhledem k časovému období"
+    :title="$t('summary.averageExpenses')"
+    :subtitle="$t('summary.basedOnTimePeriod')"
     chart-type="Bar"
     :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
@@ -73,24 +79,24 @@
   >
     <div class="w-100 space-y-2">
       <div class="flex justify-between">
-        <div class="font-bold text-blue">Průměr denně:</div>
+        <div class="font-bold text-blue">{{ $t('summary.avgDaily') }}:</div>
         <div class="font-semibold">{{ formatNumberToCzk(averagePerDay) }}</div>
       </div>
       <div class="flex justify-between">
-        <div class="font-bold text-blue">Průměr týdně:</div>
+        <div class="font-bold text-blue">{{ $t('summary.avgWeekly') }}:</div>
         <div class="font-semibold">{{ formatNumberToCzk(averagePerWeek) }}</div>
       </div>
       <div class="flex justify-between">
-        <div class="font-bold text-blue">Průměr měsíčně:</div>
+        <div class="font-bold text-blue">{{ $t('summary.avgMonthly') }}:</div>
         <div class="font-semibold">{{ formatNumberToCzk(averagePerMonth) }}</div>
       </div>
     </div>
     <template #footer>
       <div class="text-sm text-gray-500">
-        Celkem za
-        <span class="font-bold">{{ dateStats.totalDays }}</span> dní,
-        <span class="font-bold">{{ dateStats.totalWeeks }}</span> týdnů,
-        <span class="font-bold">{{ dateStats.totalMonths }}</span> měsíců.
+        {{ $t('summary.totalFor') }}
+        <span class="font-bold">{{ dateStats.totalDays }}</span> {{ $t('summary.days') }},
+        <span class="font-bold">{{ dateStats.totalWeeks }}</span> {{ $t('summary.weeks') }},
+        <span class="font-bold">{{ dateStats.totalMonths }}</span> {{ $t('summary.months') }}.
       </div>
     </template>
   </SummaryCard>

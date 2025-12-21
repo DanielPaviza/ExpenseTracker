@@ -11,11 +11,15 @@
   import TagSummary from '@components/SpendingsDashboard/Summary/TagSummary.vue'
   import UnpaidSummary from '@components/SpendingsDashboard/Summary/UnpaidSummary.vue'
 
+  import { useI18n } from 'vue-i18n'
+
+  const { t } = useI18n()
+
   const slides = [
-    { id: 0, label: 'Přehled a kategorie' },
-    { id: 1, label: 'Obchody a tagy' },
-    { id: 2, label: 'Statistiky' },
-    { id: 3, label: 'Platby' },
+    { id: 0, label: t('dashboard.overviewAndCategories') },
+    { id: 1, label: t('dashboard.storesAndTags') },
+    { id: 2, label: t('dashboard.statistics') },
+    { id: 3, label: t('dashboard.payments') },
   ]
 </script>
 <template>

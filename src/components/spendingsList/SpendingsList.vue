@@ -2,18 +2,23 @@
   import ButtonNavigation from '@components/ButtonNavigation.vue'
   import DeletedSpendingsTable from '@components/spendingsList/DeletedSpendingsTable.vue'
   import SpendingsCategoryTable from '@components/spendingsList/SpendingsCategoryTable.vue'
-  import { SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
+  import { useSpendingsColumns } from '@components/spendingsList/SpendingsColumns'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { NSelect } from 'naive-ui'
 
   import { computed, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { Spending } from '@/types/Spending'
 
+  const { t } = useI18n()
   const spendingsStore = useSpendingsStore()
+  const SpendingsColumns = useSpendingsColumns()
 
   const stores = computed(() => {
-    const storeSet = new Set(spendingsStore.spendings.map((s: Spending) => s?.store || 'Neznámé'))
+    const storeSet = new Set(
+      spendingsStore.spendings.map((s: Spending) => s?.store || t('table.unknown')),
+    )
     return [...storeSet].sort()
   })
 
@@ -42,7 +47,7 @@
   const spendingsByStore = computed(() => {
     const map = new Map<string, Spending[]>()
     spendingsStore.spendings.forEach((s: Spending) => {
-      const store = s.store || 'Neznámé'
+      const store = s.store || t('table.unknown')
       if (!map.has(store)) {
         map.set(store, [])
       }
@@ -55,10 +60,10 @@
     const map = new Map<string, Spending[]>()
     spendingsStore.spendings.forEach((s: Spending) => {
       if (s.tags.length === 0) {
-        if (!map.has('Bez tagu')) {
-          map.set('Bez tagu', [])
+        if (!map.has(t('table.noTag'))) {
+          map.set(t('table.noTag'), [])
         }
-        map.get('Bez tagu')!.push(s)
+        map.get(t('table.noTag'))!.push(s)
       }
       s.tags.forEach((tag: string) => {
         if (!map.has(tag)) {
@@ -83,15 +88,15 @@
   const VIEWS = computed(() => [
     {
       id: 0,
-      label: 'Vše v jedné tabulce',
-      categories: ['Všechny výdaje'],
+      label: t('table.allInOneTable'),
+      categories: [t('table.allExpenses')],
       hiddenColumnKeys: [],
       enableSorting: false,
       getSpendings: (_: string): Spending[] => getSortedSpendings(spendingsStore.spendings),
     },
     {
       id: 1,
-      label: 'Dle kategorií',
+      label: t('table.byCategories'),
       categories: spendingsStore.categories,
       hiddenColumnKeys: ['category'],
       enableSorting: true,
@@ -100,7 +105,7 @@
     },
     {
       id: 2,
-      label: 'Dle obchodů',
+      label: t('table.byStores'),
       categories: stores.value,
       hiddenColumnKeys: ['store'],
       enableSorting: true,
@@ -108,7 +113,7 @@
     },
     {
       id: 3,
-      label: 'Dle tagů',
+      label: t('table.byTags'),
       categories: allTags.value,
       hiddenColumnKeys: ['tags'],
       enableSorting: true,
@@ -222,24 +227,28 @@
 </script>
 <template>
   <hr class="my-8 border-blue" />
-  <h1 class="font-bold text-2xl text-blue mb-6">Zobrazení tabulky nákupů</h1>
+  <h1 class="font-bold text-2xl text-blue mb-6">{{ $t('table.viewTitle') }}</h1>
 
   <div class="flex items-end justify-between mb-4">
     <ButtonNavigation v-model:selected-id="currentViewId" :buttons="VIEWS" />
     <div class="flex items-end gap-2">
       <div class="">
-        <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">Skryté sloupce</div>
+        <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
+          {{ $t('table.hiddenColumns') }}
+        </div>
         <n-select
           class="min-w-[140px] hideColumnsSelect"
           v-model:value="hiddenColumnKeys"
-          placeholder="Skryté"
+          :placeholder="$t('table.hiddenPlaceholder')"
           multiple
           :options="hideColumnSelectHeaders"
           clearable
         />
       </div>
       <div v-if="currentView?.enableSorting">
-        <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">Řazení</div>
+        <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
+          {{ $t('table.sorting') }}
+        </div>
         <div class="flex gap-2">
           <button
             @click="toggleNameSort"
@@ -261,7 +270,7 @@
               'border-gray-300 bg-white text-gray-700 hover:border-blue': priceSortState === 'none',
             }"
           >
-            Cena
+            {{ $t('table.price') }}
             <span v-if="priceSortState === 'asc'"> ↑</span>
             <span v-if="priceSortState === 'desc'"> ↓</span>
           </button>
@@ -281,7 +290,7 @@
         :columns="columns"
         :isCollapsedDefault="view.id != 0"
       />
-      <div v-else class="text-center text-blue py-8 text-xl">Nebyly nalezeny žádné záznamy</div>
+      <div v-else class="text-center text-blue py-8 text-xl">{{ $t('table.noRecordsFound') }}</div>
     </template>
   </template>
 

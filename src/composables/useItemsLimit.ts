@@ -1,9 +1,11 @@
 import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export function useItemsLimit<T>(
     items: ComputedRef<T[]> | Ref<T[]>,
     maxItems: number = 8,
 ) {
+    const { t } = useI18n()
     const showAll = ref(false)
 
     const displayedItems = computed(() => {
@@ -14,8 +16,8 @@ export function useItemsLimit<T>(
 
     const toggleText = computed(() => {
         return showAll.value
-            ? '▲ Zobrazit méně'
-            : `▼ Zobrazit všechny (${items.value.length})`
+            ? t('common.showLess')
+            : t('common.showAll', { count: items.value.length })
     })
 
     return {

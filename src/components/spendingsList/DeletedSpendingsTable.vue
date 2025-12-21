@@ -1,7 +1,10 @@
 <script setup lang="ts">
   import Tooltip from '@components/Tooltip.vue'
   import SortIndicator from '@components/spendingsList/SortIndicator.vue'
-  import { type SpendingColumn, SpendingsColumns } from '@components/spendingsList/SpendingsColumns'
+  import {
+    type SpendingColumn,
+    useSpendingsColumns,
+  } from '@components/spendingsList/SpendingsColumns'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import {
     scrollFadeOnBeforeEnter,
@@ -15,8 +18,11 @@
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   import type { ComponentPublicInstance } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import type { Spending } from '@/types/Spending'
+
+  const { t } = useI18n()
 
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
@@ -37,6 +43,7 @@
 
   const isCollapsed = ref(false)
 
+  const SpendingsColumns = useSpendingsColumns()
   const columns = ref<SpendingColumn[]>(
     SpendingsColumns.filter((col) => col.key !== 'deleteAction'),
   )
@@ -103,24 +110,24 @@
     event.stopPropagation()
     try {
       await store.restoreSpending(row.id)
-      message.success(`"${row.name}" byl obnoven`)
+      message.success(t('messages.itemRestored', { name: row.name }))
     } catch (error) {
-      message.error(`Chyba při obnovování "${row.name}"`)
+      message.error(t('messages.errorRestoringItem', { name: row.name }))
     }
   }
 
   function handleRestoreAll() {
     dialog.warning({
-      title: 'Obnovit všechny smazané výdaje',
-      content: `Opravdu chcete obnovit všechny smazané výdaje (${totalCountSpendings.value})?`,
-      positiveText: 'Obnovit',
-      negativeText: 'Zrušit',
+      title: t('dialogs.restoreAllTitle'),
+      content: t('dialogs.restoreAllContent', { count: totalCountSpendings.value }),
+      positiveText: t('dialogs.restore'),
+      negativeText: t('dialogs.cancel'),
       onPositiveClick: async () => {
         try {
           await store.restoreAllDeletedSpendings()
-          message.success('Všechny smazané výdaje byly obnoveny')
+          message.success(t('messages.allDeletedItemsRestored'))
         } catch {
-          message.error('Chyba při obnovování všech smazaných výdajů')
+          message.error(t('messages.errorRestoringAllItems'))
         }
       },
     })
@@ -145,16 +152,18 @@
           <n-icon size="32" class="listIcon" color="#ef4444">
             <ListOutline />
           </n-icon>
-          <h2 class="text-red-500 text-2xl me-4 ms-2 font-bold text-left">Smazané</h2>
+          <h2 class="text-red-500 text-2xl me-4 ms-2 font-bold text-left">
+            {{ $t('table.deleted') }}
+          </h2>
           <div
             class="flex text-[15px] font-bold items-center gap-1 cursor-pointer text-black opacity-60 border-primaryDark border-b hover:text-red-500 hover:border-red-500"
             @click="isCollapsed = !isCollapsed"
           >
-            Zabalit tabulku
+            {{ $t('table.collapseTable') }}
           </div>
           <div class="ms-auto">
             <n-button class="ms-auto" size="tiny" color="#10b981" @click="handleRestoreAll">
-              Obnovit vše
+              {{ $t('table.restoreAll') }}
             </n-button>
           </div>
         </div>
@@ -185,7 +194,7 @@
               </span>
             </th>
             <th class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap text-white">
-              Obnovit
+              {{ $t('table.restoreColumn') }}
             </th>
           </tr>
         </thead>
@@ -229,7 +238,9 @@
         </tbody>
         <tfoot class="border-red-500 border-t">
           <tr class="bg-red-100 font-bold text-lg">
-            <td class="px-4 py-2 text-red-500">Celkem ({{ totalCountSpendings }}):</td>
+            <td class="px-4 py-2 text-red-500">
+              {{ t('table.total') }} ({{ totalCountSpendings }}):
+            </td>
             <td v-for="_v in filteredColumns.length - 2"></td>
             <td class="text-red-500">
               {{ formatNumberToCzk(totalPrice) }}
@@ -252,7 +263,7 @@
         <n-icon class="unCollapseIcon" size="32">
           <ArrowDownOutline />
         </n-icon>
-        <h2 class="text-xl font-bold text-left">Smazané</h2>
+        <h2 class="text-xl font-bold text-left">{{ t('table.deleted') }}</h2>
       </div>
       <div class="text-xl font-bold">
         {{ formatNumberToCzk(totalPrice) }}

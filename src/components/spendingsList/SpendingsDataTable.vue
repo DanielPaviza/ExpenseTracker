@@ -27,10 +27,12 @@
   import type { Component } from 'vue'
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   import type { ComponentPublicInstance } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
   import type { Spending } from '@/types/Spending'
 
+  const { t } = useI18n()
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
   function setSortIndicatorRef(idx: number, el: Element | ComponentPublicInstance | null) {
@@ -78,17 +80,17 @@
 
   const rowActionOptions = [
     {
-      label: 'Smazat',
+      label: t('actions.delete'),
       key: 'deleteSpending',
       icon: renderIcon(RemoveCircleOutline, 'red'),
     },
     {
-      label: 'Kopírovat',
+      label: t('actions.copy'),
       key: 'copySpending',
       icon: renderIcon(Copy, 'green'),
     },
     {
-      label: 'Upravit',
+      label: t('actions.edit'),
       key: 'editSpending',
       icon: renderIcon(BuildOutline, 'orange'),
     },
@@ -294,13 +296,13 @@
     event?.stopPropagation()
 
     dialog.warning({
-      title: 'Smazat nákup',
-      content: `Opravdu chcete smazat "${row.name}"?`,
-      positiveText: 'Smazat',
-      negativeText: 'Zrušit',
+      title: t('dialogs.deletePurchaseTitle'),
+      content: t('dialogs.deletePurchaseContent', { name: row.name }),
+      positiveText: t('dialogs.delete'),
+      negativeText: t('dialogs.cancel'),
       onPositiveClick: async () => {
         await store.removeSpending(row.id)
-        message.success('Nákup byl úspěšně smazán')
+        message.success(t('messages.purchaseDeletedSuccessfully'))
       },
     })
   }
@@ -334,7 +336,7 @@
             class="flex text-[15px] font-bold items-center gap-1 cursor-pointer text-black opacity-60 border-primaryDark border-b hover:text-blue hover:border-blue"
             @click="isCollapsed = !isCollapsed"
           >
-            Zabalit tabulku
+            {{ $t('table.collapseTable') }}
           </div>
         </div>
         <div class="flex items-center">
@@ -350,7 +352,7 @@
                   <CloseCircleOutline />
                 </n-icon>
               </template>
-              Vymazat filtry a řazení
+              {{ $t('table.clearFiltersAndSorting') }}
             </n-button>
           </div>
         </div>
@@ -390,7 +392,7 @@
                   :value="columnFilters[String(column.key)] || null"
                   @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
                   :options="columnFilterOptions[String(column.key)] || []"
-                  placeholder="Filtrovat"
+                  :placeholder="$t('table.filterPlaceholder')"
                   filterable
                   tag
                   clearable
@@ -400,7 +402,7 @@
                   v-else
                   :value="columnFilters[String(column.key)] || ''"
                   @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
-                  placeholder="Filtrovat"
+                  :placeholder="$t('table.filterPlaceholder')"
                   clearable
                   :class="{ 'border border-blue-300': columnFilters[String(column.key)] }"
                 />
@@ -461,7 +463,9 @@
         </tbody>
         <tfoot class="border-blue border-t">
           <tr class="bg-blue-100 font-bold text-lg">
-            <td class="px-4 py-2 text-blue">Celkem ({{ totalCountSpendings }}):</td>
+            <td class="px-4 py-2 text-blue">
+              {{ $t('table.total') }} ({{ totalCountSpendings }}):
+            </td>
             <td v-for="_v in columns.length - 2"></td>
             <td class="text-blue ps-3">
               {{ formatNumberToCzk(totalPrice) }}

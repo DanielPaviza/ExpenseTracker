@@ -6,7 +6,9 @@
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
+  const { t } = useI18n()
   const store = useSpendingsStore()
   const { spendings } = storeToRefs(store)
 
@@ -58,7 +60,7 @@
   const chartLabels = computed(() => spendingTrends.value.map((t) => t.date))
   const chartDatasets = computed(() => [
     {
-      label: `Výdaje za ${groupBy.value}`,
+      label: `${t('summary.expensesFor')} ${groupBy.value}`,
       data: spendingTrends.value.map((t) => t.total),
       backgroundColor: 'rgba(59, 130, 246, 0.5)',
       borderColor: 'rgba(59, 130, 246, 1)',
@@ -66,7 +68,7 @@
       tension: 0.4,
     },
     {
-      label: 'Kumulativní výdaje',
+      label: t('summary.cumulativeExpenses'),
       data: cumulativeSpending.value,
       backgroundColor: 'rgba(234, 179, 8, 0.5)',
       borderColor: 'rgba(234, 179, 8, 1)',
@@ -78,23 +80,23 @@
 
 <template>
   <SummaryCard
-    title="Trendy výdajů"
+    :title="$t('summary.spendingTrends')"
     chart-type="Line"
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
     :show-footer="false"
   >
     <div class="flex justify-between items-center mb-4">
-      <div class="font-bold text-blue">Seskupit podle:</div>
+      <div class="font-bold text-blue">{{ $t('summary.groupBy') }}:</div>
       <n-button-group size="tiny">
         <n-button :type="groupBy === 'day' ? 'primary' : 'default'" @click="groupBy = 'day'">
-          Den
+          {{ $t('summary.day') }}
         </n-button>
         <n-button :type="groupBy === 'week' ? 'primary' : 'default'" @click="groupBy = 'week'">
-          Týden
+          {{ $t('summary.week') }}
         </n-button>
         <n-button :type="groupBy === 'month' ? 'primary' : 'default'" @click="groupBy = 'month'">
-          Měsíc
+          {{ $t('summary.month') }}
         </n-button>
       </n-button-group>
     </div>

@@ -6,7 +6,9 @@
   import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
+  const { t } = useI18n()
   const store = useSpendingsStore()
   const { spendings, totalPrice } = storeToRefs(store)
 
@@ -32,12 +34,12 @@
   })
 
   const chartLabels = computed(() => [
-    `Zaplaceno (${100 - priceUnpaidPercent.value}%)`,
-    `Nezaplaceno (${priceUnpaidPercent.value}%)`,
+    `${t('summary.paid')} (${100 - priceUnpaidPercent.value}%)`,
+    `${t('summary.unpaid')} (${priceUnpaidPercent.value}%)`,
   ])
   const chartDatasets = computed(() => [
     {
-      label: 'Ušetřené výdaje',
+      label: t('summary.unpaidExpenses'),
       data: [totalPrice.value, priceUnpaid.value],
       backgroundColor: ['#06402b', '#e53e3e'],
     },
@@ -46,27 +48,27 @@
 
 <template>
   <SummaryCard
-    title="Nezaplacené výdaje"
-    :subtitle="`${unpaidSpendings.length} položek`"
+    :title="$t('summary.unpaidExpenses')"
+    :subtitle="`${unpaidSpendings.length} ${$t('summary.items')}`"
     chart-type="Doughnut"
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
     <div class="max-w-[90%]">
       <div class="flex justify-between">
-        <div class="font-bold text-blue me-3">Celkem zaplaceno:</div>
+        <div class="font-bold text-blue me-3">{{ $t('summary.totalPaid') }}:</div>
         <div class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</div>
       </div>
       <div class="flex justify-between">
-        <div class="font-bold text-blue">Zbývá zaplatit:</div>
+        <div class="font-bold text-blue">{{ $t('summary.remainingToPay') }}:</div>
         <div class="font-semibold text-red-600">{{ formatNumberToCzk(priceUnpaid) }}</div>
       </div>
       <div class="flex justify-between text-sm text-gray-500">
-        <div>(Celkem s nezaplacenými)</div>
+        <div>({{ $t('summary.totalWithUnpaid') }})</div>
         <div>{{ formatNumberToCzk(priceTotalWithUnpaid) }}</div>
       </div>
       <div class="border-t border-blue mt-4">
-        <div class="text-blue mb-2 mt-4">Nezaplacené položky:</div>
+        <div class="text-blue mb-2 mt-4">{{ $t('summary.unpaidItems') }}:</div>
         <div class="pr-2 text-sm">
           <div
             v-for="spending in displayedUnpaidSpendings"
@@ -80,7 +82,7 @@
             <span v-if="spending.store">-> {{ spending.store }}</span>
           </div>
           <div v-if="unpaidSpendings.length === 0" class="text-gray-500">
-            Všechny výdaje jsou zaplaceny.
+            {{ $t('summary.allExpensesPaid') }}
           </div>
         </div>
         <div
