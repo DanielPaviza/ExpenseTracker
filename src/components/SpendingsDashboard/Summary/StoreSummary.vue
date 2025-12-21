@@ -7,9 +7,11 @@
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import { Spending } from '@/types/Spending'
 
+  const { t } = useI18n()
   const store = useSpendingsStore()
   const { spendings, stores, totalPrice } = storeToRefs(store)
 
@@ -68,12 +70,12 @@
     const getLabel = () => {
       switch (sortBy.value) {
         case 'visits-desc':
-          return 'Návštěvy obchodů'
+          return t('summary.storeVisits')
         case 'avg-desc':
-          return 'Průměrná útrata na návštěvu'
+          return t('summary.avgSpendingPerVisit')
         case 'price-desc':
         default:
-          return 'Výdaje dle obchodů'
+          return t('summary.expensesByStores')
       }
     }
 
@@ -89,8 +91,8 @@
 
 <template>
   <SummaryCard
-    title="Výdaje dle obchodů"
-    :subtitle="`${stores.length} obchodů`"
+    :title="$t('summary.expensesByStores')"
+    :subtitle="`${stores.length} ${$t('summary.stores')}`"
     chart-type="Doughnut"
     :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
@@ -102,19 +104,19 @@
           :type="sortBy === 'price-desc' ? 'primary' : 'default'"
           @click="sortBy = 'price-desc'"
         >
-          Útrata ↓
+          {{ $t('summary.spending') }} ↓
         </n-button>
         <n-button
           :type="sortBy === 'visits-desc' ? 'primary' : 'default'"
           @click="sortBy = 'visits-desc'"
         >
-          Návštěvy ↓
+          {{ $t('summary.visits') }} ↓
         </n-button>
         <n-button
           :type="sortBy === 'avg-desc' ? 'primary' : 'default'"
           @click="sortBy = 'avg-desc'"
         >
-          Průměr ↓
+          {{ $t('summary.average') }} ↓
         </n-button>
       </n-button-group>
     </div>
@@ -130,7 +132,9 @@
       <div class="flex w-full justify-end items-center gap-2">
         <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(store.price) }}</div>
         <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
-          ({{ store.visits }}×, {{ formatNumberToCzk(store.avgPerVisit) }}/návštěva)
+          ({{ store.visits }}×, {{ formatNumberToCzk(store.avgPerVisit) }}/{{
+            $t('summary.visit')
+          }})
         </div>
       </div>
     </div>

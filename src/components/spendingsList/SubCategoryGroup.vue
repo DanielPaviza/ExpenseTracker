@@ -7,10 +7,12 @@
   import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
 
   import { type VNode, computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
   import type { Spending } from '@/types/Spending'
 
+  const { t } = useI18n()
   const { subCategory, items, columns } = defineProps<{
     subCategory: string
     items: Spending[]
@@ -57,13 +59,13 @@
     event.stopPropagation()
 
     dialog.warning({
-      title: 'Smazat nákup',
-      content: `Opravdu chcete smazat "${row.name}"?`,
-      positiveText: 'Smazat',
-      negativeText: 'Zrušit',
+      title: t('dialogs.deletePurchaseTitle'),
+      content: t('dialogs.deletePurchaseContent', { name: row.name }),
+      positiveText: t('dialogs.delete'),
+      negativeText: t('dialogs.cancel'),
       onPositiveClick: async () => {
         await store.removeSpending(row.id)
-        message.success('Nákup byl úspěšně smazán')
+        message.success(t('messages.purchaseDeletedSuccessfully'))
       },
     })
   }
@@ -95,7 +97,7 @@
           <ChevronForwardOutline />
         </n-icon>
         <span class="font-semibold text-blue-500">{{ subCategory }}</span>
-        <span class="text-sm text-gray-600">({{ items.length }} položek)</span>
+        <span class="text-sm text-gray-600">({{ items.length }} {{ $t('table.items') }})</span>
       </div>
     </td>
     <td v-for="_ in columns.length - 2"></td>

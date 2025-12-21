@@ -56,25 +56,25 @@
         </div>
         <n-button-group v-if="chartTypeChangeEnabled && chartType != 'None'" size="small">
           <div class="flex flex-col">
-            <div class="flex justify-end mb-1">Typ grafu</div>
+            <div class="flex justify-end mb-1">{{ $t('summary.chartType') }}</div>
             <div>
               <n-button
                 :type="selectedChartType === 'Doughnut' ? 'primary' : 'default'"
                 @click="selectedChartType = 'Doughnut'"
               >
-                Donut
+                {{ $t('summary.donut') }}
               </n-button>
               <n-button
                 :type="selectedChartType === 'Bar' ? 'primary' : 'default'"
                 @click="selectedChartType = 'Bar'"
               >
-                Sloupec
+                {{ $t('summary.bar') }}
               </n-button>
               <n-button
                 :type="selectedChartType === 'Line' ? 'primary' : 'default'"
                 @click="selectedChartType = 'Line'"
               >
-                Line
+                {{ $t('summary.line') }}
               </n-button>
             </div>
           </div>
@@ -105,7 +105,7 @@
       <template v-if="showTotalPrice">
         <hr class="mt-6 mb-3 border-blue-300" />
         <div class="flex font-bold w-full justify-between opacity-75">
-          <div class="text-blue">Celkem:</div>
+          <div class="text-blue">{{ $t('summary.total') }}:</div>
           <div>{{ formatNumberToCzk(totalPrice) }}</div>
         </div>
       </template>

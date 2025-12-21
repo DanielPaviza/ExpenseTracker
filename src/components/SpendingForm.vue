@@ -22,10 +22,12 @@
   } from 'naive-ui'
 
   import { computed, onUnmounted, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute, useRouter } from 'vue-router'
 
   import { Spending } from '@/types/Spending'
 
+  const { t } = useI18n()
   const store = useSpendingsStore()
   const formRef = ref<FormInst | null>(null)
   const route = useRoute()
@@ -35,7 +37,9 @@
 
   const show = computed(() => route.path === '/new' || route.path.startsWith('/edit/'))
   const isEditMode = computed(() => route.path.startsWith('/edit/'))
-  const drawerTitle = computed(() => (isEditMode.value ? 'Upravit nákup' : 'Nový nákup'))
+  const drawerTitle = computed(() =>
+    isEditMode.value ? t('form.editPurchase') : t('form.newPurchase'),
+  )
 
   // Get spending from store based on route param
   const currentSpending = computed(() => {
@@ -129,21 +133,21 @@
 
   // Form validation rules
   const rules: FormRules = {
-    category: [{ required: true, message: 'Kategorie je povinná', trigger: 'blur' }],
-    type: [{ required: true, message: 'Typ je povinný', trigger: 'blur' }],
-    name: [{ required: true, message: 'Název je povinný', trigger: 'blur' }],
-    payer: [{ required: true, message: 'Plátce je povinný', trigger: 'blur' }],
+    category: [{ required: true, message: t('validation.categoryRequired'), trigger: 'blur' }],
+    type: [{ required: true, message: t('validation.typeRequired'), trigger: 'blur' }],
+    name: [{ required: true, message: t('validation.nameRequired'), trigger: 'blur' }],
+    payer: [{ required: true, message: t('validation.payerRequired'), trigger: 'blur' }],
     quantity: [
       {
         required: true,
         type: 'number',
-        message: 'Množství je povinné',
+        message: t('validation.quantityRequired'),
         trigger: ['blur', 'change'],
       },
       {
         type: 'number',
         min: 0,
-        message: 'Množství musí být alespoň 0',
+        message: t('validation.quantityMinZero'),
         trigger: ['blur', 'change'],
       },
     ],
@@ -151,13 +155,13 @@
       {
         required: true,
         type: 'number',
-        message: 'Jednotková cena je povinná',
+        message: t('validation.unitPriceRequired'),
         trigger: ['blur', 'change'],
       },
       {
         type: 'number',
         min: 0,
-        message: 'Cena nemůže být záporná',
+        message: t('validation.priceCannotBeNegative'),
         trigger: ['blur', 'change'],
       },
     ],
@@ -245,7 +249,7 @@
           editedAt: new Date(),
         })
         await store.updateSpending(currentSpending.value.id, updatedSpending)
-        message.success('Nákup byl úspěšně upraven')
+        message.success(t('messages.purchaseEditedSuccessfully'))
       } else {
         // Create new
         const newSpending = new Spending({
@@ -253,14 +257,14 @@
           createdAt: formData.value.createdAt,
         })
         await store.addSpending(newSpending)
-        message.success('Nákup byl úspěšně vytvořen')
+        message.success(t('messages.purchaseCreatedSuccessfully'))
       }
 
       closeDrawer()
       resetForm()
     } catch (error) {
       console.error('Validation failed:', error)
-      message.error('Chyba při ukládání nákupu')
+      message.error(t('messages.errorSavingPurchase'))
     }
   }
 
@@ -268,14 +272,14 @@
     if (!currentSpending.value) return
 
     dialog.warning({
-      title: 'Smazat nákup',
-      content: `Opravdu chcete smazat "${currentSpending.value.name}"?`,
-      positiveText: 'Smazat',
-      negativeText: 'Zrušit',
+      title: t('dialogs.deletePurchaseTitle'),
+      content: t('dialogs.deletePurchaseContent', { name: currentSpending.value.name }),
+      positiveText: t('dialogs.delete'),
+      negativeText: t('dialogs.cancel'),
       onPositiveClick: async () => {
         if (currentSpending.value) {
           await store.removeSpending(currentSpending.value.id)
-          message.success(`Nákup byl úspěšně smazán`)
+          message.success(t('messages.purchaseDeletedSuccessfully'))
           closeDrawer()
           resetForm()
         }
@@ -304,11 +308,11 @@
         <!-- Timestamps for edit mode -->
         <div v-if="!!currentSpending?.createdAt" class="flex gap-8 text-sm mb-4">
           <div class="">
-            <span class="font-semibold text-gray-700">Vytvořeno:</span>
+            <span class="font-semibold text-gray-700">{{ t('form.created') }}:</span>
             <span class="ml-1 text-gray-600">{{ formatDate(currentSpending!.createdAt) }}</span>
           </div>
           <div v-if="!!currentSpending?.editedAt" class="">
-            <span class="font-semibold text-gray-700">Upraveno:</span>
+            <span class="font-semibold text-gray-700">{{ t('form.edited') }}:</span>
             <span class="ml-1 text-gray-600">{{ formatDate(currentSpending.editedAt) }}</span>
           </div>
         </div>
@@ -316,49 +320,49 @@
         <div class="flex gap-10">
           <div class="flex-1">
             <!-- Required fields -->
-            <n-form-item label="Kategorie" path="category">
+            <n-form-item :label="t('form.category')" path="category">
               <n-select
                 v-model:value="formData.category"
                 :options="categoryOptions"
-                placeholder="Vyberte kategorii"
+                :placeholder="t('form.selectCategory')"
                 filterable
                 tag
               />
             </n-form-item>
 
-            <n-form-item label="Typ" path="type">
-              <n-input v-model:value="formData.type" placeholder="Typ nákupu" />
+            <n-form-item :label="t('form.type')" path="type">
+              <n-input v-model:value="formData.type" :placeholder="t('form.typePlaceholder')" />
             </n-form-item>
 
-            <n-form-item label="Název" path="name">
-              <n-input v-model:value="formData.name" placeholder="Název položky" />
+            <n-form-item :label="t('form.name')" path="name">
+              <n-input v-model:value="formData.name" :placeholder="t('form.namePlaceholder')" />
             </n-form-item>
 
-            <n-form-item v-if="!isEditMode" label="Datum vytvoření" path="createdAt">
+            <n-form-item v-if="!isEditMode" :label="t('form.creationDate')" path="createdAt">
               <n-date-picker
                 v-model:value="createdAtTimestamp"
                 type="datetime"
-                placeholder="Vyberte datum a čas"
+                :placeholder="t('form.selectDateTime')"
                 class="w-full"
                 format="dd.MM.yyyy HH:mm"
               />
             </n-form-item>
 
-            <n-form-item label="Plátce" path="payer">
+            <n-form-item :label="t('form.payer')" path="payer">
               <n-select
                 v-model:value="formData.payer"
                 :options="payerOptions"
-                placeholder="Vyberte plátce"
+                :placeholder="t('form.selectPayer')"
                 filterable
                 tag
               />
             </n-form-item>
 
-            <n-form-item label="Obchod" path="store">
+            <n-form-item :label="t('form.store')" path="store">
               <n-select
                 v-model:value="formData.store"
                 :options="storeOptions"
-                placeholder="Vyberte obchod"
+                :placeholder="t('form.selectStore')"
                 filterable
                 tag
                 clearable
@@ -366,7 +370,7 @@
             </n-form-item>
 
             <div class="flex gap-4">
-              <n-form-item label="Množství" path="quantity" class="flex-1">
+              <n-form-item :label="t('form.quantity')" path="quantity" class="flex-1">
                 <n-input-number
                   v-model:value="formData.quantity"
                   :min="0"
@@ -375,7 +379,7 @@
                 />
               </n-form-item>
 
-              <n-form-item label="Jednotková cena (Kč)" path="unitPrice" class="flex-1">
+              <n-form-item :label="t('form.unitPrice')" path="unitPrice" class="flex-1">
                 <n-input-number
                   v-model:value="formData.unitPrice"
                   :min="0"
@@ -389,34 +393,34 @@
 
             <div class="mb-4 p-3 bg-blue-50 rounded flex justify-center">
               <div class="text-lg font-bold text-blue">
-                Celková cena: {{ totalPrice.toLocaleString('cs-CZ') }} Kč
+                {{ t('form.totalPrice') }}: {{ totalPrice.toLocaleString('cs-CZ') }} Kč
               </div>
             </div>
           </div>
           <div class="flex-1">
             <div class="flex justify-center">
               <div class="flex gap-20">
-                <n-form-item label="Prozatím nezaplaceno">
+                <n-form-item :label="t('form.toBePaid')">
                   <template #label>
                     <div class="flex items-center gap-1">
-                      Prozatím nezaplaceno
-                      <Tooltip text="Položka ještě nebyla zaplacena a čeká na úhradu" />
+                      {{ t('form.toBePaid') }}
+                      <Tooltip :text="t('form.toBePaidTooltip')" />
                     </div>
                   </template>
                   <n-checkbox v-model:checked="formData.isToBePaid">{{
-                    formData.isToBePaid ? 'Ano' : 'Ne'
+                    formData.isToBePaid ? t('form.yes') : t('form.no')
                   }}</n-checkbox>
                 </n-form-item>
 
-                <n-form-item label="Ušetřeno">
+                <n-form-item :label="t('form.free')">
                   <template #label>
                     <div class="flex items-center gap-1">
-                      Ušetřeno
-                      <Tooltip text="Položka byla získána zdarma" />
+                      {{ t('form.free') }}
+                      <Tooltip :text="t('form.freeTooltip')" />
                     </div>
                   </template>
                   <n-checkbox v-model:checked="formData.isFree">{{
-                    formData.isFree ? 'Ano' : 'Ne'
+                    formData.isFree ? t('form.yes') : t('form.no')
                   }}</n-checkbox>
                 </n-form-item>
               </div>
@@ -425,25 +429,25 @@
             <n-form-item path="subCategory">
               <template #label>
                 <div class="flex items-center gap-1">
-                  Skupina
-                  <Tooltip text="Vizuální seskupení položek v tabulkách" />
+                  {{ t('form.group') }}
+                  <Tooltip :text="t('form.groupTooltip')" />
                 </div>
               </template>
               <n-select
                 v-model:value="formData.subCategory"
                 :options="subCategoryOptions"
-                placeholder="Vyberte skupinu"
+                :placeholder="t('form.selectGroup')"
                 filterable
                 tag
                 clearable
               />
             </n-form-item>
 
-            <n-form-item label="Tagy" path="tags">
+            <n-form-item :label="t('form.tags')" path="tags">
               <n-select
                 v-model:value="formData.tags"
                 :options="tagOptions"
-                placeholder="Vyberte tagy"
+                :placeholder="t('form.selectTags')"
                 filterable
                 multiple
                 tag
@@ -451,21 +455,33 @@
               />
             </n-form-item>
 
-            <n-form-item label="Kód zboží" path="storeCode">
-              <n-input v-model:value="formData.storeCode" placeholder="Kód zboží" clearable />
+            <n-form-item :label="t('form.storeCode')" path="storeCode">
+              <n-input
+                v-model:value="formData.storeCode"
+                :placeholder="t('form.storeCodePlaceholder')"
+                clearable
+              />
             </n-form-item>
 
-            <n-form-item label="Rozměry" path="dimensions">
-              <n-input v-model:value="formData.dimensions" placeholder="Rozměry" clearable />
+            <n-form-item :label="t('form.dimensions')" path="dimensions">
+              <n-input
+                v-model:value="formData.dimensions"
+                :placeholder="t('form.dimensionsPlaceholder')"
+                clearable
+              />
             </n-form-item>
 
-            <n-form-item label="URL" path="url">
+            <n-form-item :label="t('form.url')" path="url">
               <div class="flex gap-2 w-full">
                 <div class="w-full">
-                  <n-input v-model:value="formData.url" placeholder="https://..." clearable />
+                  <n-input
+                    v-model:value="formData.url"
+                    :placeholder="t('form.urlPlaceholder')"
+                    clearable
+                  />
                 </div>
                 <a v-if="formData.url" :href="formData.url" target="_blank">
-                  <n-button color="#3b82f6" title="Otevřít odkaz">
+                  <n-button color="#3b82f6" :title="t('form.openLink')">
                     <template #icon>
                       <n-icon>
                         <OpenOutline />
@@ -476,19 +492,19 @@
               </div>
             </n-form-item>
 
-            <n-form-item label="Technický list" path="document">
+            <n-form-item :label="t('form.document')" path="document">
               <n-input
                 v-model:value="formData.document"
-                placeholder="Odkaz na technický list"
+                :placeholder="t('form.documentPlaceholder')"
                 clearable
               />
             </n-form-item>
 
-            <n-form-item label="Popis" path="description">
+            <n-form-item :label="t('form.description')" path="description">
               <n-input
                 v-model:value="formData.description"
                 type="textarea"
-                placeholder="Podrobný popis..."
+                :placeholder="t('form.descriptionPlaceholder')"
                 :rows="4"
                 clearable
               />
@@ -500,14 +516,14 @@
       <template #footer>
         <div class="flex justify-between w-full gap-3">
           <div class="flex gap-3">
-            <n-button @click="closeDrawer" color="#60a5fa">Zrušit</n-button>
+            <n-button @click="closeDrawer" color="#60a5fa">{{ t('dialogs.cancel') }}</n-button>
             <n-button v-if="isEditMode" @click="handleDelete" color="#ef4444">
               <template #icon>
                 <n-icon>
                   <TrashOutline />
                 </n-icon>
               </template>
-              Smazat
+              {{ t('dialogs.delete') }}
             </n-button>
           </div>
           <n-button color="#3b82f6" @click="handleSave">
@@ -516,7 +532,7 @@
                 <SaveOutline />
               </n-icon>
             </template>
-            {{ isEditMode ? 'Uložit změny' : 'Vytvořit nákup' }}
+            {{ isEditMode ? t('form.saveChangesButton') : t('form.createPurchaseButton') }}
           </n-button>
         </div>
       </template>

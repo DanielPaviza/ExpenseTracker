@@ -6,7 +6,9 @@
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
+  const { t } = useI18n()
   const store = useSpendingsStore()
   const { spendings, totalPrice } = storeToRefs(store)
 
@@ -70,11 +72,11 @@
     const getLabel = () => {
       switch (sortBy.value) {
         case 'count-desc':
-          return 'Počet nákupů dle typu'
+          return t('summary.purchasesByType')
         case 'price-desc':
         case 'alphabetical':
         default:
-          return 'Výdaje dle typu'
+          return t('summary.expensesByType')
       }
     }
 
@@ -90,8 +92,8 @@
 
 <template>
   <SummaryCard
-    title="Výdaje dle typu"
-    :subtitle="`${sortedTypes.length} typů`"
+    :title="$t('summary.expensesByType')"
+    :subtitle="`${sortedTypes.length} ${$t('summary.types')}`"
     chart-type="Doughnut"
     :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
@@ -103,13 +105,13 @@
           :type="sortBy === 'price-desc' ? 'primary' : 'default'"
           @click="sortBy = 'price-desc'"
         >
-          Cena ↓
+          {{ $t('table.price') }} ↓
         </n-button>
         <n-button
           :type="sortBy === 'count-desc' ? 'primary' : 'default'"
           @click="sortBy = 'count-desc'"
         >
-          Počet ↓
+          {{ $t('summary.count') }} ↓
         </n-button>
         <n-button
           :type="sortBy === 'alphabetical' ? 'primary' : 'default'"

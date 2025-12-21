@@ -2,6 +2,10 @@ BytEvidence todoList
 
 ---- TODO ----
 
+- srovnat delete dialogy - jsou asi na 3 mistech. Proverit ostatni dialogy
+- kontext spending row menu co se otevre po right mouse clicku, to samy jako ty 3 tecky. 3 tecky zanechat
+- 3 tecky v spending row chybi u polozek v subgroupe - srovnat
+
 - pridat moznost evcidence uctenky
 
 

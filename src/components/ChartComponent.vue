@@ -12,7 +12,7 @@
     Tooltip,
   } from 'chart.js'
 
-  import { computed, defineProps } from 'vue'
+  import { computed } from 'vue'
   import { Bar, Doughnut, Line } from 'vue-chartjs'
 
   ChartJS.register(
