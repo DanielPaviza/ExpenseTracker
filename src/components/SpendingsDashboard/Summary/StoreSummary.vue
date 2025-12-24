@@ -130,7 +130,9 @@
         {{ store.name }}:
       </div>
       <div class="flex w-full justify-end items-center gap-2">
-        <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(store.price) }}</div>
+        <div class="font-semibold whitespace-nowrap">
+          {{ formatNumberToCzk(store.price) }}
+        </div>
         <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
           ({{ store.visits }}×, {{ formatNumberToCzk(store.avgPerVisit) }}/{{
             $t('summary.visit')
@@ -141,8 +143,8 @@
 
     <div
       v-if="hasMore"
-      @click="showAll = !showAll"
       class="mt-1 text-blueLight text-xs cursor-pointer"
+      @click="showAll = !showAll"
     >
       {{ toggleText }}
     </div>

@@ -1,5 +1,6 @@
-import { Spending } from '@/types/Spending'
 import { VNode } from 'vue'
+
+import { Spending } from '@/types/Spending'
 
 export interface SpendingColumn {
   title: string

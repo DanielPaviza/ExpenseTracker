@@ -60,14 +60,20 @@
               <n-icon size="32">
                 <AddOutline />
               </n-icon>
-              <div class="font-bold">{{ $t('header.addNewPurchase') }}</div>
+              <div class="font-bold">
+                {{ $t('header.addNewPurchase') }}
+              </div>
             </n-button>
           </div>
-          <h1 class="text-4xl text-red font-bold ms-10">{{ isDev ? 'TEST' : '' }}</h1>
+          <h1 class="text-4xl text-red font-bold ms-10">
+            {{ isDev ? 'TEST' : '' }}
+          </h1>
         </div>
         <div class="flex items-center gap-4">
           <div v-if="pendingChanges" class="flex items-center animate-breathing">
-            <div class="text-orange-600 font-semibold me-4">{{ $t('header.unsavedChanges') }}</div>
+            <div class="text-orange-600 font-semibold me-4">
+              {{ $t('header.unsavedChanges') }}
+            </div>
             <div class="flex items-center gap-2 me-10 bg-orange-200 p-2 px-3 shadow rounded-md">
               <n-button type="success" @click="handleSave">
                 {{ $t('header.saveChanges') }}

@@ -1,18 +1,22 @@
-import { SpendingColumn } from '@/types/SpendingColumn'
 import { formatDateShort, formatNumberToCzk } from '@utils/formatUtils'
-import { ref } from 'vue'
 
+import { ref } from 'vue'
 import { h, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+import { SpendingColumn } from '@/types/SpendingColumn'
 
 export function useSpendingsColumns() {
   const { t, locale } = useI18n()
   const columns = ref<SpendingColumn[]>(getColumns())
 
   // Trigger re-computation of columns when locale changes
-  watch(() => locale.value, () => {
-    columns.value = getColumns()
-  })
+  watch(
+    () => locale.value,
+    () => {
+      columns.value = getColumns()
+    },
+  )
 
   function getColumns(): SpendingColumn[] {
     return [
@@ -48,21 +52,20 @@ export function useSpendingsColumns() {
         sortFn: (a, b) => a.name.localeCompare(b.name),
         filterVal: (row) => row.name,
         render: (row) =>
-          row.url ?
-            h(
-              'a',
-              {
-                class: 'spending-link',
-                style: { color: '#3b82f6', 'text-decoration': 'underline' },
-                target: "_blank",
-                rel: "noopener noreferrer",
-                color: "#3b82f6",
-                title: t('form.openLink'),
-                href: row.url,
-
-              },
-              row.name,
-            )
+          row.url
+            ? h(
+                'a',
+                {
+                  class: 'spending-link',
+                  style: { color: '#3b82f6', 'text-decoration': 'underline' },
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  color: '#3b82f6',
+                  title: t('form.openLink'),
+                  href: row.url,
+                },
+                row.name,
+              )
             : row.name,
       },
       {
@@ -135,27 +138,27 @@ export function useSpendingsColumns() {
         sortFn: (a, b) => (a.tags?.join(',') || '').localeCompare(b.tags?.join(',') || ''),
         filterVal: (row) => row.tags?.join(', ') || '',
         render: (row) =>
-          row.tags && row.tags.length > 0 ?
-            h(
-              'div',
-              { style: { display: 'flex', gap: '4px', 'flex-wrap': 'wrap' } },
-              row.tags.map((tag: string) =>
-                h(
-                  'span',
-                  {
-                    style: {
-                      padding: '2px 8px',
-                      'border-radius': '12px',
-                      'background-color': '#e0f2fe',
-                      color: '#0369a1',
-                      'font-size': '12px',
-                      'font-weight': '500',
+          row.tags && row.tags.length > 0
+            ? h(
+                'div',
+                { style: { display: 'flex', gap: '4px', 'flex-wrap': 'wrap' } },
+                row.tags.map((tag: string) =>
+                  h(
+                    'span',
+                    {
+                      style: {
+                        padding: '2px 8px',
+                        'border-radius': '12px',
+                        'background-color': '#e0f2fe',
+                        color: '#0369a1',
+                        'font-size': '12px',
+                        'font-weight': '500',
+                      },
                     },
-                  },
-                  tag,
+                    tag,
+                  ),
                 ),
-              ),
-            )
+              )
             : '-',
       },
       {
@@ -168,12 +171,8 @@ export function useSpendingsColumns() {
         sortFn: (a, b) => a.totalPrice - b.totalPrice,
         filterVal: (row) => String(row.totalPrice),
         render: (row) =>
-          h(
-            'div',
-            { style: { 'font-weight': 'bolder' } },
-            formatNumberToCzk(row.totalPrice),
-          ),
-      }
+          h('div', { style: { 'font-weight': 'bolder' } }, formatNumberToCzk(row.totalPrice)),
+      },
     ]
   }
 

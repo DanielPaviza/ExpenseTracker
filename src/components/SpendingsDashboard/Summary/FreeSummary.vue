@@ -27,7 +27,9 @@
 
   const priceFreePercent = computed(() => {
     const total = priceTotalWithFree.value
-    if (!total || total === 0) return 0
+    if (!total || total === 0) {
+      return 0
+    }
     return Math.round((priceFree.value / total) * 100)
   })
 
@@ -55,11 +57,15 @@
     <div class="max-w-[90%]">
       <div class="flex justify-between">
         <div class="font-bold text-blue me-3">{{ $t('summary.totalPaid') }}:</div>
-        <div class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</div>
+        <div class="font-semibold">
+          {{ formatNumberToCzk(totalPrice) }}
+        </div>
       </div>
       <div class="flex justify-between">
         <div class="font-bold text-blue">{{ $t('summary.saved') }}:</div>
-        <div class="font-semibold text-green-600">{{ formatNumberToCzk(priceFree) }}</div>
+        <div class="font-semibold text-green-600">
+          {{ formatNumberToCzk(priceFree) }}
+        </div>
       </div>
       <div class="flex justify-between text-sm text-gray-500">
         <div>({{ $t('summary.totalWithSaved') }})</div>
@@ -85,8 +91,8 @@
         </div>
         <div
           v-if="hasMore"
-          @click="showAll = !showAll"
           class="mt-1 text-blueLight text-xs cursor-pointer"
+          @click="showAll = !showAll"
         >
           {{ toggleText }}
         </div>

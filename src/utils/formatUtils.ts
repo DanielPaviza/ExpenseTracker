@@ -4,7 +4,9 @@
  * @returns The formatted number as a string.
  */
 export function formatNumberToCzk(num: number): string {
-  return `${Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} Kč`
+  return `${Math.round(num)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} Kč`
 }
 
 /**
@@ -25,9 +27,8 @@ export function generateColorPalette(colorsCount: number, preselected: string[] 
     const c = preselected[i]
     if (typeof c === 'string' && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(c)) {
       // Normalize short hex (#fff) to full (#ffffff)
-      const normalized = c.length === 4
-        ? '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3]
-        : c.toLowerCase()
+      const normalized =
+        c.length === 4 ? '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3] : c.toLowerCase()
 
       if (!result.includes(normalized)) {
         result.push(normalized)
@@ -64,7 +65,9 @@ export function generateColorPalette(colorsCount: number, preselected: string[] 
     const lightness = 45 + Math.floor(Math.random() * 15) // 45-60%
     const hex = hslToHex(hue, saturation, lightness)
     // avoid duplicates
-    if (!result.includes(hex)) result.push(hex)
+    if (!result.includes(hex)) {
+      result.push(hex)
+    }
   }
 
   return result.slice(0, colorsCount)

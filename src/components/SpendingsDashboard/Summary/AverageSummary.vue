@@ -80,15 +80,21 @@
     <div class="w-100 space-y-2">
       <div class="flex justify-between">
         <div class="font-bold text-blue">{{ $t('summary.avgDaily') }}:</div>
-        <div class="font-semibold">{{ formatNumberToCzk(averagePerDay) }}</div>
+        <div class="font-semibold">
+          {{ formatNumberToCzk(averagePerDay) }}
+        </div>
       </div>
       <div class="flex justify-between">
         <div class="font-bold text-blue">{{ $t('summary.avgWeekly') }}:</div>
-        <div class="font-semibold">{{ formatNumberToCzk(averagePerWeek) }}</div>
+        <div class="font-semibold">
+          {{ formatNumberToCzk(averagePerWeek) }}
+        </div>
       </div>
       <div class="flex justify-between">
         <div class="font-bold text-blue">{{ $t('summary.avgMonthly') }}:</div>
-        <div class="font-semibold">{{ formatNumberToCzk(averagePerMonth) }}</div>
+        <div class="font-semibold">
+          {{ formatNumberToCzk(averagePerMonth) }}
+        </div>
       </div>
     </div>
     <template #footer>

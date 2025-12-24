@@ -1,8 +1,9 @@
-import { Spending } from '@/types/Spending'
 import { loadSpendings, saveSpendings } from '@utils/spendingStorage'
 import { defineStore } from 'pinia'
 
 import { computed, ref } from 'vue'
+
+import { Spending } from '@/types/Spending'
 
 export const useSpendingsStore = defineStore('spendings', () => {
   const spendings = ref<Spending[]>([])
@@ -15,8 +16,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
   const deletedSpendings = ref<Spending[]>([])
 
   const pendingChanges = computed(() => {
-    const current = JSON.stringify(spendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
-    const original = JSON.stringify(originalSpendings.value.map(s => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)))
+    const current = JSON.stringify(
+      spendings.value.map((s) => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)),
+    )
+    const original = JSON.stringify(
+      originalSpendings.value.map((s) => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)),
+    )
     return current !== original
   })
 
@@ -103,7 +108,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct categories
   const categories = computed(() => {
-    if (spendings.value.length === 0) return []
+    if (spendings.value.length === 0) {
+      return []
+    }
 
     const countMap = new Map<string, number>()
     for (const s of spendings.value) {
@@ -117,7 +124,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
   })
 
   const subCategories = computed(() => {
-    if (spendings.value.length === 0) return []
+    if (spendings.value.length === 0) {
+      return []
+    }
 
     const countMap = new Map<string, number>()
     for (const s of spendings.value) {
@@ -132,7 +141,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct payers
   const payers = computed(() => {
-    if (spendings.value.length === 0) return []
+    if (spendings.value.length === 0) {
+      return []
+    }
 
     const countMap = new Map<string, number>()
     for (const s of spendings.value) {
@@ -147,7 +158,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct stores
   const stores = computed(() => {
-    if (spendings.value.length === 0) return []
+    if (spendings.value.length === 0) {
+      return []
+    }
 
     const countMap = new Map<string, number>()
     for (const s of spendings.value) {
@@ -160,7 +173,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
   })
 
   const totalPrice = computed(() => {
-    return spendings.value.filter((s) => !s.isFree && !s.isToBePaid).reduce((sum, spending) => sum + spending.totalPrice, 0)
+    return spendings.value
+      .filter((s) => !s.isFree && !s.isToBePaid)
+      .reduce((sum, spending) => sum + spending.totalPrice, 0)
   })
 
   const totalUnpaid = computed(() => {
@@ -171,7 +186,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct tags
   const tags = computed(() => {
-    if (spendings.value.length === 0) return []
+    if (spendings.value.length === 0) {
+      return []
+    }
 
     const countMap = new Map<string, number>()
     for (const s of spendings.value) {

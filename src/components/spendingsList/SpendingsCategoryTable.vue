@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import SpendingsDataTable from '@components/spendingsList/SpendingsDataTable.vue'
-
   import { computed } from 'vue'
 
   import { Spending } from '@/types/Spending'
@@ -35,7 +34,7 @@
       :data="spendings"
       :columns="columns"
       :title="category"
-      :isCollapsedDefault="isCollapsedDefault"
+      :is-collapsed-default="isCollapsedDefault"
     />
   </div>
 </template>

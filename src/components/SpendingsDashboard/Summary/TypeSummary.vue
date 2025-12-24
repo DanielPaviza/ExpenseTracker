@@ -21,7 +21,9 @@
   const types = computed(() => {
     const set = new Set<string>()
     for (const s of spendings.value) {
-      if (s.type) set.add(s.type)
+      if (s.type) {
+        set.add(s.type)
+      }
     }
     return Array.from(set)
   })
@@ -126,7 +128,9 @@
       <div class="font-bold min-w-[100px] w-full text-blue truncate" :title="type.name">
         {{ type.name }}:
       </div>
-      <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(type.price) }}</div>
+      <div class="font-semibold whitespace-nowrap">
+        {{ formatNumberToCzk(type.price) }}
+      </div>
       <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
         ({{ type.count }}×)
       </div>
@@ -134,8 +138,8 @@
 
     <div
       v-if="sortedTypes.length > MAX_DISPLAYED_ITEMS"
-      @click="showAll = !showAll"
       class="mt-1 text-blueLight text-xs cursor-pointer"
+      @click="showAll = !showAll"
     >
       {{ showAll ? '▲ Zobrazit méně' : `▼ Zobrazit všechny (${sortedTypes.length})` }}
     </div>

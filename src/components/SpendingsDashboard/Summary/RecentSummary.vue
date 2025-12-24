@@ -83,7 +83,9 @@
         <div class="font-semibold text-blue text-xs w-[65px] shrink-0">
           {{ formatDateShort(spending.createdAt) }}
         </div>
-        <div class="font-bold w-full truncate" :title="spending.name">{{ spending.name }}</div>
+        <div class="font-bold w-full truncate" :title="spending.name">
+          {{ spending.name }}
+        </div>
         <div class="ms-2 font-semibold whitespace-nowrap">
           {{ formatNumberToCzk(spending.totalPrice) }}
         </div>

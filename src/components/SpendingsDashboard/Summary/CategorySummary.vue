@@ -141,7 +141,9 @@
         {{ category.name }}:
       </div>
       <div class="flex gap-2 items-center">
-        <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(category.price) }}</div>
+        <div class="font-semibold whitespace-nowrap">
+          {{ formatNumberToCzk(category.price) }}
+        </div>
         <div class="text-blue text-xs text-muted-foreground whitespace-nowrap flex justify-end">
           ({{ category.percent }}%, {{ category.count }}×)
         </div>
@@ -150,8 +152,8 @@
 
     <div
       v-if="hasMore"
-      @click="showAll = !showAll"
       class="mt-1 text-blueLight text-xs cursor-pointer"
+      @click="showAll = !showAll"
     >
       {{ toggleText }}
     </div>

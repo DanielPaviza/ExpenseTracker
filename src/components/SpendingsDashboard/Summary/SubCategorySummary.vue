@@ -18,7 +18,9 @@
   const subCategories = computed(() => {
     const set = new Set<string>()
     for (const s of spendings.value) {
-      if (s.subCategory) set.add(s.subCategory)
+      if (s.subCategory) {
+        set.add(s.subCategory)
+      }
     }
     return Array.from(set)
   })
@@ -133,14 +135,16 @@
       <div class="font-bold min-w-[100px] text-blue truncate" :title="sub.name">
         {{ sub.name }}:
       </div>
-      <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(sub.price) }}</div>
+      <div class="font-semibold whitespace-nowrap">
+        {{ formatNumberToCzk(sub.price) }}
+      </div>
       <div class="text-blue text-xs text-muted-foreground">({{ sub.count }}×)</div>
     </div>
 
     <div
       v-if="hasMore"
-      @click="showAll = !showAll"
       class="mt-1 text-blueLight text-xs cursor-pointer"
+      @click="showAll = !showAll"
     >
       {{ toggleText }}
     </div>
