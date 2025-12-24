@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
-  import type { SpendingColumn } from '@components/spendingsList/SpendingsColumns'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { ChevronForwardOutline, CloseOutline } from '@vicons/ionicons5'
@@ -11,6 +10,7 @@
   import { useRouter } from 'vue-router'
 
   import type { Spending } from '@/types/Spending'
+  import type { SpendingColumn } from '@/types/SpendingColumn'
 
   const { t } = useI18n()
   const { subCategory, items, columns } = defineProps<{

@@ -1,10 +1,6 @@
 <script setup lang="ts">
   import Tooltip from '@components/Tooltip.vue'
   import SortIndicator from '@components/spendingsList/SortIndicator.vue'
-  import {
-    type SpendingColumn,
-    useSpendingsColumns,
-  } from '@components/spendingsList/SpendingsColumns'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import {
     scrollFadeOnBeforeEnter,
@@ -20,7 +16,9 @@
   import type { ComponentPublicInstance } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
   import type { Spending } from '@/types/Spending'
+  import type { SpendingColumn } from '@/types/SpendingColumn'
 
   const { t } = useI18n()
 
@@ -43,9 +41,9 @@
 
   const isCollapsed = ref(false)
 
-  const SpendingsColumns = useSpendingsColumns()
+  const { columns: allColumns } = useSpendingsColumns()
   const columns = ref<SpendingColumn[]>(
-    SpendingsColumns.filter((col) => col.key !== 'deleteAction'),
+    allColumns.value.filter((col) => col.key !== 'deleteAction'),
   )
   const filteredColumns = computed(() => {
     return columns.value.filter((col) => !col.isHidden)
@@ -230,7 +228,7 @@
                       <RefreshOutline />
                     </n-icon>
                   </template>
-                  Obnovit
+                  {{ $t('dialogs.restore') }}
                 </n-button>
               </div>
             </td>

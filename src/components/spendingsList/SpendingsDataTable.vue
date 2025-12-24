@@ -2,7 +2,6 @@
   import Tooltip from '@components/Tooltip.vue'
   import SortIndicator from '@components/spendingsList/SortIndicator.vue'
   import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
-  import { type SpendingColumn } from '@components/spendingsList/SpendingsColumns'
   import SubCategoryGroup from '@components/spendingsList/SubCategoryGroup.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import {
@@ -31,6 +30,7 @@
   import { useRouter } from 'vue-router'
 
   import type { Spending } from '@/types/Spending'
+  import { type SpendingColumn } from '@/types/SpendingColumn'
 
   const { t } = useI18n()
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>

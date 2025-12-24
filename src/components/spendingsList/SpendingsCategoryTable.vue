@@ -4,8 +4,7 @@
   import { computed } from 'vue'
 
   import { Spending } from '@/types/Spending'
-
-  import { SpendingColumn } from './SpendingsColumns'
+  import { SpendingColumn } from '@/types/SpendingColumn'
 
   const {
     category,
