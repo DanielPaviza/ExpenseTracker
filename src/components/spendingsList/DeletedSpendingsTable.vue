@@ -10,17 +10,19 @@
   } from '@utils/animations'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { ArrowDownOutline, ArrowUpOutline, ListOutline, RefreshOutline } from '@vicons/ionicons5'
-  import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
+  import { NButton, NIcon, useMessage } from 'naive-ui'
 
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
   import type { ComponentPublicInstance } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
   import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
 
   const { t } = useI18n()
+  const { restoreAllChangesDialog } = useSpendingDialogAction()
 
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
@@ -37,7 +39,6 @@
 
   const store = useSpendingsStore()
   const message = useMessage()
-  const dialog = useDialog()
 
   const isCollapsed = ref(false)
 
@@ -122,23 +123,6 @@
       message.error(t('messages.errorRestoringItem', { name: row.name }))
     }
   }
-
-  function handleRestoreAll(): void {
-    dialog.warning({
-      title: t('dialogs.restoreAllTitle'),
-      content: t('dialogs.restoreAllContent', { count: totalCountSpendings.value }),
-      positiveText: t('dialogs.restore'),
-      negativeText: t('dialogs.cancel'),
-      onPositiveClick: async () => {
-        try {
-          await store.restoreAllDeletedSpendings()
-          message.success(t('messages.allDeletedItemsRestored'))
-        } catch {
-          message.error(t('messages.errorRestoringAllItems'))
-        }
-      },
-    })
-  }
 </script>
 
 <template>
@@ -169,7 +153,12 @@
             {{ $t('table.collapseTable') }}
           </div>
           <div class="ms-auto">
-            <n-button class="ms-auto" size="tiny" color="#10b981" @click="handleRestoreAll">
+            <n-button
+              class="ms-auto"
+              size="tiny"
+              color="#10b981"
+              @click="restoreAllChangesDialog(totalCountSpendings)"
+            >
               {{ $t('table.restoreAll') }}
             </n-button>
           </div>

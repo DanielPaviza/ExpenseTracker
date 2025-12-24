@@ -3,16 +3,17 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { ChevronForwardOutline, CloseOutline } from '@vicons/ionicons5'
-  import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
+  import { NButton, NIcon } from 'naive-ui'
 
   import { type VNode, computed, ref } from 'vue'
-  import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
+  import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
 
-  const { t } = useI18n()
+  const { deleteDialog } = useSpendingDialogAction()
+
   const { subCategory, items, columns } = defineProps<{
     subCategory: string
     items: Spending[]
@@ -21,8 +22,6 @@
 
   const router = useRouter()
   const store = useSpendingsStore()
-  const dialog = useDialog()
-  const message = useMessage()
   const isExpanded = ref(items.length <= 1)
 
   const totalPrice = computed(() => {
@@ -53,21 +52,6 @@
       return
     }
     router.push(`/edit/${row.id}`)
-  }
-
-  function handleDelete(row: Spending, event: Event): void {
-    event.stopPropagation()
-
-    dialog.warning({
-      title: t('dialogs.deletePurchaseTitle'),
-      content: t('dialogs.deletePurchaseContent', { name: row.name }),
-      positiveText: t('dialogs.delete'),
-      negativeText: t('dialogs.cancel'),
-      onPositiveClick: async () => {
-        await store.removeSpending(row.id)
-        message.success(t('messages.purchaseDeletedSuccessfully'))
-      },
-    })
   }
 
   function toggleExpanded(event: Event): void {
@@ -141,7 +125,7 @@
             class="delete-button"
             size="tiny"
             color="#ef4444"
-            @click="handleDelete(row, $event)"
+            @click="deleteDialog(row, $event)"
           >
             <template #icon>
               <n-icon>

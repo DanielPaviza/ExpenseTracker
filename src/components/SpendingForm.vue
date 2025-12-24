@@ -17,7 +17,6 @@
     NInput,
     NInputNumber,
     NSelect,
-    useDialog,
     useMessage,
   } from 'naive-ui'
 
@@ -26,15 +25,16 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import { createSpending } from '@/composables/useSpending'
+  import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
   import { SPENDING_FORM_DATA_DEFAULT } from '@/constants/spendingFormData'
   import { Spending } from '@/types/Spending'
 
+  const { deleteDialog } = useSpendingDialogAction()
   const { t } = useI18n()
   const store = useSpendingsStore()
   const formRef = ref<FormInst | null>(null)
   const route = useRoute()
   const router = useRouter()
-  const dialog = useDialog()
   const message = useMessage()
 
   const show = computed(() => route.path === '/new' || route.path.startsWith('/edit/'))
@@ -185,25 +185,6 @@
     try {
       await formRef.value?.validate()
 
-      // const spendingData: Partial<Spending> = {
-      //   category: formData.value.category,
-      //   type: formData.value.type,
-      //   name: formData.value.name,
-      //   isToBePaid: formData.value.isToBePaid,
-      //   isFree: formData.value.isFree,
-      //   payer: formData.value.payer,
-      //   quantity: formData.value.quantity,
-      //   unitPrice: formData.value.unitPrice,
-      //   dimensions: formData.value.dimensions || null,
-      //   url: formData.value.url || null,
-      //   document: formData.value.document || null,
-      //   store: formData.value.store || null,
-      //   storeCode: formData.value.storeCode || null,
-      //   description: formData.value.description || null,
-      //   subCategory: formData.value.subCategory || null,
-      //   tags: formData.value.tags || [],
-      // }
-
       // Update existing
       if (isEditMode.value && currentSpending.value) {
         const updatedSpending = {
@@ -225,23 +206,13 @@
     }
   }
 
-  function handleDelete(): void {
+  async function handleDelete(): Promise<void> {
     if (!currentSpending.value) {
       return
     }
 
-    dialog.warning({
-      title: t('dialogs.deletePurchaseTitle'),
-      content: t('dialogs.deletePurchaseContent', { name: currentSpending.value.name }),
-      positiveText: t('dialogs.delete'),
-      negativeText: t('dialogs.cancel'),
-      onPositiveClick: async () => {
-        if (currentSpending.value) {
-          await store.removeSpending(currentSpending.value.id)
-          message.success(t('messages.purchaseDeletedSuccessfully'))
-          closeDrawer()
-        }
-      },
+    await deleteDialog(currentSpending.value, null).then(() => {
+      closeDrawer()
     })
   }
 

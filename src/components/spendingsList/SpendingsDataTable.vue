@@ -20,7 +20,7 @@
     ListOutline,
     RemoveCircleOutline,
   } from '@vicons/ionicons5'
-  import { NButton, NDropdown, NIcon, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
+  import { NButton, NDropdown, NIcon, NInput, NSelect } from 'naive-ui'
 
   import { h } from 'vue'
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
@@ -28,9 +28,11 @@
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
+  import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
   import type { Spending } from '@/types/Spending'
   import { type SpendingColumn } from '@/types/SpendingColumn'
 
+  const { deleteDialog } = useSpendingDialogAction()
   const { t } = useI18n()
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
@@ -48,8 +50,6 @@
 
   const router = useRouter()
   const store = useSpendingsStore()
-  const dialog = useDialog()
-  const message = useMessage()
 
   const {
     data,
@@ -97,7 +97,7 @@
 
   const handleActionRowSelect = (row: Spending, action: string): void => {
     if (action === 'deleteSpending') {
-      handleDelete(row, null)
+      deleteDialog(row, null)
     } else if (action === 'copySpending') {
       handleGotoCopyNewSpending(row)
     } else if (action === 'editSpending') {
@@ -302,21 +302,6 @@
 
   function handleGotoCopyNewSpending(row: Spending): void {
     router.push({ path: '/new', query: { template: row.id } })
-  }
-
-  function handleDelete(row: Spending, event: Event | null): void {
-    event?.stopPropagation()
-
-    dialog.warning({
-      title: t('dialogs.deletePurchaseTitle'),
-      content: t('dialogs.deletePurchaseContent', { name: row.name }),
-      positiveText: t('dialogs.delete'),
-      negativeText: t('dialogs.cancel'),
-      onPositiveClick: async () => {
-        await store.removeSpending(row.id)
-        message.success(t('messages.purchaseDeletedSuccessfully'))
-      },
-    })
   }
 
   function getSpendingStatus(id: string): 'new' | 'edited' | null {
