@@ -55,7 +55,7 @@
 
   const chartLabels = computed(() => sortedStores.value.map((s) => `${s.name} (${s.percent}%)`))
   const chartDatasets = computed(() => {
-    const getData = () => {
+    const getData = (): number[] => {
       switch (sortBy.value) {
         case 'visits-desc':
           return sortedStores.value.map((s) => s.visits)
@@ -67,7 +67,7 @@
       }
     }
 
-    const getLabel = () => {
+    const getLabel = (): string => {
       switch (sortBy.value) {
         case 'visits-desc':
           return t('summary.storeVisits')
@@ -121,22 +121,14 @@
       </n-button-group>
     </div>
 
-    <div
-      v-for="store in displayedStores"
-      :key="store.name"
-      class="flex items-center gap-5 text-base"
-    >
-      <div class="font-bold min-w-[100px] text-blue truncate" :title="store.name">
-        {{ store.name }}:
-      </div>
+    <div v-for="s in displayedStores" :key="s.name" class="flex items-center gap-5 text-base">
+      <div class="font-bold min-w-[100px] text-blue truncate" :title="s.name">{{ s.name }}:</div>
       <div class="flex w-full justify-end items-center gap-2">
         <div class="font-semibold whitespace-nowrap">
-          {{ formatNumberToCzk(store.price) }}
+          {{ formatNumberToCzk(s.price) }}
         </div>
         <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
-          ({{ store.visits }}×, {{ formatNumberToCzk(store.avgPerVisit) }}/{{
-            $t('summary.visit')
-          }})
+          ({{ s.visits }}×, {{ formatNumberToCzk(s.avgPerVisit) }}/{{ $t('summary.visit') }})
         </div>
       </div>
     </div>

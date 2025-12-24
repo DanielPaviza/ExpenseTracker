@@ -8,7 +8,6 @@
   } = defineProps<{
     text: string
     color?: string
-    colorHover?: string
   }>()
 </script>
 <template>

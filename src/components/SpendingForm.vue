@@ -26,6 +26,7 @@
   import { useRoute, useRouter } from 'vue-router'
 
   import { createSpending } from '@/composables/useSpending'
+  import { SPENDING_FORM_DATA_DEFAULT } from '@/constants/spendingFormData'
   import { Spending } from '@/types/Spending'
 
   const { t } = useI18n()
@@ -51,70 +52,38 @@
     return null
   })
 
-  const defaultFormData = {
-    category: '',
-    type: '',
-    name: '',
-    isToBePaid: false,
-    isFree: false,
-    payer: '',
-    quantity: 1,
-    unitPrice: 0,
-    dimensions: '',
-    url: '',
-    document: '',
-    store: '',
-    storeCode: '',
-    description: '',
-    subCategory: '',
-    tags: [] as string[],
-    createdAt: new Date(),
-  }
-
-  const setNewFormData = (spending: Spending) => {
-    return {
-      category: spending.category,
-      type: spending.type,
-      name: spending.name,
-      isToBePaid: spending.isToBePaid,
-      isFree: spending.isFree,
-      payer: spending.payer,
-      quantity: spending.quantity,
-      unitPrice: spending.unitPrice,
-      dimensions: spending.dimensions ?? '',
-      url: spending.url ?? '',
-      document: spending.document ?? '',
-      store: spending.store ?? '',
-      storeCode: spending.storeCode ?? '',
-      description: spending.description ?? '',
-      subCategory: spending.subCategory ?? '',
-      tags: spending.tags ?? [],
-      createdAt: spending.createdAt,
-    }
-  }
-
   // Form data
-  const formData = ref(defaultFormData)
+  const formData = ref<Spending>(createSpending(SPENDING_FORM_DATA_DEFAULT))
 
   // Watch for changes to the current spending to populate form
   watch(
     currentSpending,
-    (currentSpending) => {
-      if (currentSpending) {
-        formData.value = setNewFormData(currentSpending)
-      } else {
-        console.log(route.query)
-        if (route.query.template) {
-          const templateSpending = store.spendings.find(
-            (s) => s.id === (route.query.template as string),
-          )
-          if (templateSpending) {
-            formData.value = setNewFormData(templateSpending)
-            return
-          }
-        }
-        resetForm()
+    (newSpending) => {
+      // edit spending form
+      if (newSpending !== null) {
+        formData.value = createSpending(newSpending)
+        return
       }
+
+      // Check for template spending for new form
+      const templateSpending = store.spendings.find(
+        (s) => s.id === (route.query.template as string),
+      )
+
+      // If no template found, use default new spending
+      if (!templateSpending) {
+        formData.value = createSpending(SPENDING_FORM_DATA_DEFAULT)
+        return
+      }
+
+      // New form data prefilled from template
+      const sanitizedTemplate: Partial<Spending> = {
+        ...templateSpending,
+        id: '',
+        createdAt: new Date(),
+        editedAt: null,
+      }
+      formData.value = createSpending(sanitizedTemplate)
     },
     { immediate: true },
   )
@@ -208,69 +177,55 @@
     },
   })
 
-  function resetForm() {
-    formData.value = {
-      ...defaultFormData,
-      createdAt: new Date(),
-    }
-  }
-
-  function closeDrawer() {
+  function closeDrawer(): void {
     router.push('/')
   }
 
-  async function handleSave() {
+  async function handleSave(): Promise<void> {
     try {
       await formRef.value?.validate()
 
-      const spendingData: Partial<Spending> = {
-        category: formData.value.category,
-        type: formData.value.type,
-        name: formData.value.name,
-        isToBePaid: formData.value.isToBePaid,
-        isFree: formData.value.isFree,
-        payer: formData.value.payer,
-        quantity: formData.value.quantity,
-        unitPrice: formData.value.unitPrice,
-        dimensions: formData.value.dimensions || null,
-        url: formData.value.url || null,
-        document: formData.value.document || null,
-        store: formData.value.store || null,
-        storeCode: formData.value.storeCode || null,
-        description: formData.value.description || null,
-        subCategory: formData.value.subCategory || null,
-        tags: formData.value.tags || [],
-      }
+      // const spendingData: Partial<Spending> = {
+      //   category: formData.value.category,
+      //   type: formData.value.type,
+      //   name: formData.value.name,
+      //   isToBePaid: formData.value.isToBePaid,
+      //   isFree: formData.value.isFree,
+      //   payer: formData.value.payer,
+      //   quantity: formData.value.quantity,
+      //   unitPrice: formData.value.unitPrice,
+      //   dimensions: formData.value.dimensions || null,
+      //   url: formData.value.url || null,
+      //   document: formData.value.document || null,
+      //   store: formData.value.store || null,
+      //   storeCode: formData.value.storeCode || null,
+      //   description: formData.value.description || null,
+      //   subCategory: formData.value.subCategory || null,
+      //   tags: formData.value.tags || [],
+      // }
 
+      // Update existing
       if (isEditMode.value && currentSpending.value) {
-        // Update existing
-        const updatedSpending = createSpending({
-          ...spendingData,
-          id: currentSpending.value.id,
-          createdAt: currentSpending.value.createdAt,
+        const updatedSpending = {
+          ...formData.value,
           editedAt: new Date(),
-        })
+        }
         await store.updateSpending(currentSpending.value.id, updatedSpending)
         message.success(t('messages.purchaseEditedSuccessfully'))
       } else {
         // Create new
-        const newSpending = createSpending({
-          ...spendingData,
-          createdAt: formData.value.createdAt,
-        })
-        await store.addSpending(newSpending)
+        await store.addSpending(formData.value)
         message.success(t('messages.purchaseCreatedSuccessfully'))
       }
 
       closeDrawer()
-      resetForm()
     } catch (error) {
       console.error('Validation failed:', error)
       message.error(t('messages.errorSavingPurchase'))
     }
   }
 
-  function handleDelete() {
+  function handleDelete(): void {
     if (!currentSpending.value) {
       return
     }
@@ -285,7 +240,6 @@
           await store.removeSpending(currentSpending.value.id)
           message.success(t('messages.purchaseDeletedSuccessfully'))
           closeDrawer()
-          resetForm()
         }
       },
     })

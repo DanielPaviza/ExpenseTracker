@@ -25,7 +25,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     return current !== original
   })
 
-  async function load() {
+  async function load(): Promise<void> {
     isLoading.value = true
     try {
       const loadedData = await loadSpendings()
@@ -43,7 +43,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  async function save() {
+  async function save(): Promise<void> {
     isLoading.value = true
     try {
       await saveSpendings(spendings.value)
@@ -56,12 +56,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  async function addSpending(spending: Spending) {
+  async function addSpending(spending: Spending): Promise<void> {
     spendings.value.push(spending)
     newSpendingIds.value.add(spending.id)
   }
 
-  async function removeSpending(id: string) {
+  async function removeSpending(id: string): Promise<void> {
     const index = spendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       const spending = spendings.value[index]
@@ -73,7 +73,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  async function restoreSpending(id: string) {
+  async function restoreSpending(id: string): Promise<void> {
     const index = deletedSpendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       const spending = deletedSpendings.value[index]
@@ -82,13 +82,13 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  async function restoreAllDeletedSpendings() {
+  async function restoreAllDeletedSpendings(): Promise<void> {
     spendings.value.push(...deletedSpendings.value)
     console.log('Restoring all deleted spendings:', deletedSpendings.value)
     deletedSpendings.value = []
   }
 
-  async function updateSpending(id: string, updatedSpending: Spending) {
+  async function updateSpending(id: string, updatedSpending: Spending): Promise<void> {
     const index = spendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       spendings.value[index] = updatedSpending
@@ -99,7 +99,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  function discardChanges() {
+  function discardChanges(): void {
     spendings.value = [...originalSpendings.value]
     deletedSpendings.value = []
     newSpendingIds.value.clear()

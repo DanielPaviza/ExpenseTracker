@@ -50,7 +50,7 @@ export function parseSpendings(jsonData: string): Spending[] {
       return []
     }
 
-    const parsedSpendings = parsed.map((item: any) => createSpending(item))
+    const parsedSpendings = parsed.map((item: Spending) => createSpending(item))
     return parsedSpendings
   } catch (error) {
     console.error('Failed to parse spendings:', error)

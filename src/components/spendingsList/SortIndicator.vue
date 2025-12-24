@@ -10,7 +10,7 @@
     (e: 'update:direction', value: 'asc' | 'desc' | null): void
   }>()
 
-  function toggleSort() {
+  function toggleSort(): void {
     if (props.direction === null) {
       emit('update:direction', 'asc')
     } else if (props.direction === 'asc') {
@@ -57,10 +57,7 @@
       fill="none"
       viewBox="0 0 16 16"
     >
-      <g
-stroke="currentColor"
-stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
->
+      <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline v-for="(line, i) in iconData" :key="i" :points="line.points" />
       </g>
     </svg>

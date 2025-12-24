@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import SortIndicator from '@components/spendingsList/SortIndicator.vue'
   import Tooltip from '@components/Tooltip.vue'
+  import SortIndicator from '@components/spendingsList/SortIndicator.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import {
     scrollFadeOnBeforeEnter,
@@ -11,22 +11,21 @@
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { ArrowDownOutline, ArrowUpOutline, ListOutline, RefreshOutline } from '@vicons/ionicons5'
   import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
+
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
+  import type { ComponentPublicInstance } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
-  import type { ComponentPublicInstance } from 'vue'
-  import type { ComponentPublicInstance } from 'vue'
-
-  import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
 
   const { t } = useI18n()
 
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
-  function setSortIndicatorRef(idx: number, el: Element | ComponentPublicInstance | null) {
-    if (el && typeof (el as any).toggleSort === 'function') {
+  function setSortIndicatorRef(idx: number, el: Element | ComponentPublicInstance | null): void {
+    if (el && typeof (el as SortIndicatorInstance).toggleSort === 'function') {
       sortIndicatorRefs.value[idx] = el as SortIndicatorInstance
     } else if (el === null) {
       sortIndicatorRefs.value[idx] = null
@@ -74,7 +73,7 @@
     return sorted
   })
 
-  function updateSort(key: string, direction: 'asc' | 'desc' | null) {
+  function updateSort(key: string, direction: 'asc' | 'desc' | null): void {
     if (direction === null) {
       sortState.value = { key: null, direction: null }
     } else {
@@ -103,10 +102,10 @@
       return String(result)
     }
     const value = row[column.key as keyof Spending]
-    return value != null ? String(value) : '-'
+    return value !== null ? String(value) : '-'
   }
 
-  function handleRowClick(_row: Spending, event?: MouseEvent) {
+  function handleRowClick(_row: Spending, event?: MouseEvent): void {
     // Don't navigate if clicking on the restore button
     if (event && (event.target as HTMLElement).closest('.restore-button')) {
       return
@@ -114,17 +113,17 @@
     // Don't navigate for deleted items
   }
 
-  async function handleRestore(row: Spending, event: Event) {
+  async function handleRestore(row: Spending, event: Event): Promise<void> {
     event.stopPropagation()
     try {
       await store.restoreSpending(row.id)
       message.success(t('messages.itemRestored', { name: row.name }))
-    } catch (error) {
+    } catch {
       message.error(t('messages.errorRestoringItem', { name: row.name }))
     }
   }
 
-  function handleRestoreAll() {
+  function handleRestoreAll(): void {
     dialog.warning({
       title: t('dialogs.restoreAllTitle'),
       content: t('dialogs.restoreAllContent', { count: totalCountSpendings.value }),
@@ -170,12 +169,7 @@
             {{ $t('table.collapseTable') }}
           </div>
           <div class="ms-auto">
-            <n-button
-              class="ms-auto"
-              size="tiny"
-              color="#10b981"
-              @click="handleRestoreAll"
-            >
+            <n-button class="ms-auto" size="tiny" color="#10b981" @click="handleRestoreAll">
               {{ $t('table.restoreAll') }}
             </n-button>
           </div>
@@ -254,7 +248,7 @@
             <td class="px-4 py-2 text-red-500">
               {{ t('table.total') }} ({{ totalCountSpendings }}):
             </td>
-            <td v-for="_v in filteredColumns.length - 2" />
+            <td v-for="_ in filteredColumns.length - 2" :key="_" />
             <td class="text-red-500">
               {{ formatNumberToCzk(totalPrice) }}
             </td>

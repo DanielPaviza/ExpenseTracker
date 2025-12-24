@@ -14,7 +14,7 @@
   const store = useSpendingsStore()
   const router = useRouter()
 
-  function openNewSpendingForm() {
+  function openNewSpendingForm(): void {
     router.push('/new')
   }
 
@@ -22,7 +22,7 @@
   const dialog = useDialog()
   const message = useMessage()
 
-  async function handleSave() {
+  async function handleSave(): Promise<void> {
     try {
       await store.save()
       message.success(t('messages.changesSavedSuccessfully'))
@@ -32,7 +32,7 @@
     }
   }
 
-  function handleDiscard() {
+  function handleDiscard(): void {
     dialog.warning({
       title: t('dialogs.discardChangesTitle'),
       content: t('dialogs.discardChangesContent'),

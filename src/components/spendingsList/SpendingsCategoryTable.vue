@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import SpendingsDataTable from '@components/spendingsList/SpendingsDataTable.vue'
+
   import { computed } from 'vue'
 
   import { Spending } from '@/types/Spending'

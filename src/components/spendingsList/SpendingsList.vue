@@ -10,6 +10,7 @@
 
   import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
   import { Spending } from '@/types/Spending'
+  import { SpendingList, SpendingListKey } from '@/types/SpendingList'
 
   const { t } = useI18n()
   const spendingsStore = useSpendingsStore()
@@ -75,27 +76,17 @@
     return map
   })
 
-  const currentViewId = ref<number>(0)
-
-  type View = {
-    id: number
-    label: string
-    categories: string[]
-    hiddenColumnKeys: string[]
-    getSpendings: (categoryOrStoreOrTag: string) => Spending[]
-  }
-
-  const VIEWS = computed(() => [
-    {
-      id: 0,
+  const VIEWS = computed<Record<SpendingListKey, SpendingList>>(() => ({
+    allInOne: {
+      id: 'allInOne',
       label: t('table.allInOneTable'),
       categories: [t('table.allExpenses')],
       hiddenColumnKeys: [],
       enableSorting: false,
       getSpendings: (_: string): Spending[] => getSortedSpendings(spendingsStore.spendings),
     },
-    {
-      id: 1,
+    byCategories: {
+      id: 'byCategories',
       label: t('table.byCategories'),
       categories: spendingsStore.categories,
       hiddenColumnKeys: ['category'],
@@ -103,49 +94,53 @@
       getSpendings: (category: string): Spending[] =>
         getSortedSpendings(getSpendingsByCategory(category)),
     },
-    {
-      id: 2,
+    byStores: {
+      id: 'byStores',
       label: t('table.byStores'),
       categories: stores.value,
       hiddenColumnKeys: ['store'],
       enableSorting: true,
       getSpendings: (store: string): Spending[] => getSortedSpendings(getSpendingsByStore(store)),
     },
-    {
-      id: 3,
+    byTags: {
+      id: 'byTags',
       label: t('table.byTags'),
       categories: allTags.value,
       hiddenColumnKeys: ['tags'],
       enableSorting: true,
       getSpendings: (tag: string): Spending[] => getSortedSpendings(getSpendingsByTag(tag)),
     },
-  ])
-
-  const currentView = computed(() => VIEWS.value.find((v) => v.id === currentViewId.value))
-
-  const hideColumnSelectHeaders = allColumns.value.map((col) => ({
-    label: col.title,
-    value: String(col.key),
   }))
+
+  const defaultView: SpendingList = VIEWS.value.allInOne
+  //const currentView = ref<SpendingList>(defaultView)
+  const currentViewKey = ref<SpendingListKey>('allInOne')
+  const currentView = computed<SpendingList>(() => VIEWS.value[currentViewKey.value])
+
+  const hideColumnSelectHeaders = computed(() => {
+    return allColumns.value.map((col) => ({
+      label: col.title,
+      value: String(col.key),
+    }))
+  })
 
   const hiddenColumnKeys = ref<string[]>(
     allColumns.value.filter((col) => col.isHidden).map((col) => String(col.key)),
   )
 
   const columns = computed(() => {
-    //const cols = allColumns.filter((col) => !hiddenColumnKeys.value.includes(String(col.key)))
-    //console.log(cols)
     return allColumns.value.filter((col) => !hiddenColumnKeys.value.includes(String(col.key)))
   })
-  // const columns = computed(() =>
-  //   allColumns.filter((col) => !hiddenColumnKeys.value.includes(String(col.key))),
-  // )
 
-  const getSpendingsByCategory = (category: string) => spendingsByCategory.value.get(category) || []
-  const getSpendingsByStore = (store: string) => spendingsByStore.value.get(store) || []
-  const getSpendingsByTag = (tag: string) => spendingsByTag.value.get(tag) || []
+  const getSpendingsByCategory = (category: string): Spending[] =>
+    spendingsByCategory.value.get(category) || []
+  const getSpendingsByStore = (store: string): Spending[] => spendingsByStore.value.get(store) || []
+  const getSpendingsByTag = (tag: string): Spending[] => spendingsByTag.value.get(tag) || []
 
-  const hideColumnsOnViewChange = (newView: View | undefined, oldView: View | undefined) => {
+  const hideColumnsOnViewChange = (
+    newView: SpendingList | undefined,
+    oldView: SpendingList | undefined,
+  ): void => {
     hiddenColumnKeys.value = [
       ...hiddenColumnKeys.value.filter((key) => !oldView?.hiddenColumnKeys.includes(key)),
       ...(newView?.hiddenColumnKeys || []),
@@ -160,16 +155,12 @@
     { immediate: true },
   )
 
-  watch(columns, (newColumns) => {
-    console.log('Updated columns:', newColumns)
-  })
-
   // Sorting state - two independent buttons with 3 states each
   type SortState = 'none' | 'asc' | 'desc'
   const nameSortState = ref<SortState>('asc') // Default to alphabetically ascending
   const priceSortState = ref<SortState>('none')
 
-  const toggleNameSort = () => {
+  const toggleNameSort = (): void => {
     if (nameSortState.value === 'none') {
       nameSortState.value = 'asc'
       priceSortState.value = 'none'
@@ -181,7 +172,7 @@
     }
   }
 
-  const togglePriceSort = () => {
+  const togglePriceSort = (): void => {
     if (priceSortState.value === 'none') {
       priceSortState.value = 'asc'
       nameSortState.value = 'none'
@@ -212,7 +203,7 @@
   }
 
   // Sort categories by name or total price
-  const getSortedCategories = (categories: string[], view: View): string[] => {
+  const getSortedCategories = (categories: string[], view: SpendingList): string[] => {
     const sorted = [...categories]
 
     if (nameSortState.value !== 'none') {
@@ -235,13 +226,13 @@
   }
 </script>
 <template>
-  <hr class="my-8 border-blue">
+  <hr class="my-8 border-blue" />
   <h1 class="font-bold text-2xl text-blue mb-6">
     {{ $t('table.viewTitle') }}
   </h1>
 
   <div class="flex items-end justify-between mb-4">
-    <ButtonNavigation v-model:selected-id="currentViewId" :buttons="VIEWS" />
+    <ButtonNavigation v-model:selected-id="currentViewKey" :buttons="Object.values(VIEWS)" />
     <div class="flex items-end gap-2">
       <div class="">
         <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
@@ -290,22 +281,19 @@
     </div>
   </div>
 
-  <template v-for="view in VIEWS">
-    <template v-if="currentView?.id === view.id">
-      <SpendingsCategoryTable
-        v-for="category in getSortedCategories(view.categories || [], view)"
-        v-if="view.categories?.length > 0"
-        :key="category"
-        :category="category"
-        :spendings="view.getSpendings(category)"
-        :columns="columns"
-        :is-collapsed-default="view.id != 0"
-      />
-      <div v-else class="text-center text-blue py-8 text-xl">
-        {{ $t('table.noRecordsFound') }}
-      </div>
-    </template>
-  </template>
+  <div v-if="currentView.categories?.length > 0" class="pb-10">
+    <SpendingsCategoryTable
+      v-for="category in getSortedCategories(currentView.categories || [], currentView)"
+      :key="category"
+      :category="category"
+      :spendings="currentView.getSpendings(category)"
+      :columns="columns"
+      :is-collapsed-default="currentView.id != defaultView.id"
+    />
+  </div>
+  <div v-else class="text-center text-blue py-8 text-xl">
+    {{ $t('table.noRecordsFound') }}
+  </div>
 
   <!-- Deleted Spendings Section -->
   <div class="my-8">
