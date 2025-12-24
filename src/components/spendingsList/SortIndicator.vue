@@ -11,9 +11,13 @@
   }>()
 
   function toggleSort() {
-    if (props.direction === null) emit('update:direction', 'asc')
-    else if (props.direction === 'asc') emit('update:direction', 'desc')
-    else emit('update:direction', null)
+    if (props.direction === null) {
+      emit('update:direction', 'asc')
+    } else if (props.direction === 'asc') {
+      emit('update:direction', 'desc')
+    } else {
+      emit('update:direction', null)
+    }
   }
 
   defineExpose({ toggleSort })
@@ -45,15 +49,18 @@
           ? 'Zrušit řazení'
           : 'Seřadit vzestupně'
     "
-    @click.stop="toggleSort"
     tabindex="0"
+    @click.stop="toggleSort"
   >
     <svg
       :class="['w-6 h-6 ', direction === 'asc' || direction === 'desc' ? 'text-white' : '']"
       fill="none"
       viewBox="0 0 16 16"
     >
-      <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <g
+stroke="currentColor"
+stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+>
         <polyline v-for="(line, i) in iconData" :key="i" :points="line.points" />
       </g>
     </svg>

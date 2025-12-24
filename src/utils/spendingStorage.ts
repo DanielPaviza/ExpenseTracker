@@ -1,7 +1,7 @@
-import { Spending } from '@/types/Spending'
-
 import { invoke } from '@tauri-apps/api/core'
-import { createSpending } from "@/composables/useSpending";
+
+import { createSpending } from '@/composables/useSpending'
+import { Spending } from '@/types/Spending'
 
 /**
  * Fetches spending data from a local JSON file.

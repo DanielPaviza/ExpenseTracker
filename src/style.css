@@ -1,7 +1,13 @@
 @import 'tailwindcss';
 
 body {
-  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(230, 236, 234, 0.28) 0%, rgba(44, 93, 76, 0.08) 50%, rgba(6, 64, 43, 0.08) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(230, 236, 234, 0.28) 0%,
+    rgba(44, 93, 76, 0.08) 50%,
+    rgba(6, 64, 43, 0.08) 100%
+  );
 }
 
 @theme {
@@ -11,6 +17,6 @@ body {
   --color-green: #06402b;
   --color-blue: #3b82f6;
   --color-blueLight: #60a5fa;
-  --color-red: #C62828;
+  --color-red: #c62828;
   --color-pink: #ff4551;
 }

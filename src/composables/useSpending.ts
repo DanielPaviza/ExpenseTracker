@@ -1,4 +1,5 @@
 import { reactive } from 'vue'
+
 import type { Spending } from '@/types/Spending'
 
 export function createSpending(data?: Partial<Spending>): Spending {
@@ -26,6 +27,6 @@ export function createSpending(data?: Partial<Spending>): Spending {
     editedAt: data?.editedAt ? new Date(data.editedAt) : null,
     get totalPrice() {
       return this.unitPrice * this.quantity
-    }
+    },
   }) as Spending
 }

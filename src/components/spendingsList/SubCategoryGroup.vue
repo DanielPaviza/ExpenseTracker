@@ -76,8 +76,12 @@
   }
 
   function getSpendingStatus(id: string): 'new' | 'edited' | null {
-    if (store.newSpendingIds.has(id)) return 'new'
-    if (store.editedSpendingIds.has(id)) return 'edited'
+    if (store.newSpendingIds.has(id)) {
+      return 'new'
+    }
+    if (store.editedSpendingIds.has(id)) {
+      return 'edited'
+    }
     return null
   }
 </script>
@@ -100,13 +104,13 @@
         <span class="text-sm text-gray-600">({{ items.length }} {{ $t('table.items') }})</span>
       </div>
     </td>
-    <td v-for="_ in columns.length - 2"></td>
+    <td v-for="_ in columns.length - 2" />
     <td class="font-bold text-black ps-3">
       <template v-if="!isExpanded">
         {{ formatNumberToCzk(totalPrice) }}
       </template>
     </td>
-    <td></td>
+    <td />
   </tr>
 
   <template v-if="isExpanded">

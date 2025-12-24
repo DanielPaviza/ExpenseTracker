@@ -23,9 +23,8 @@
   import { NButton, NDropdown, NIcon, NInput, NSelect, useDialog, useMessage } from 'naive-ui'
 
   import { h } from 'vue'
-  import type { Component } from 'vue'
   import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
-  import type { ComponentPublicInstance } from 'vue'
+  import type { Component, ComponentPublicInstance } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
@@ -125,11 +124,15 @@
 
     // Apply each column filter
     for (const [columnKey, filterValue] of Object.entries(columnFilters.value)) {
-      if (!filterValue || filterValue.trim() === '') continue
+      if (!filterValue || filterValue.trim() === '') {
+        continue
+      }
 
       const filterLower = filterValue.toLowerCase().trim()
       const column = columns.find((c) => c.key === columnKey)
-      if (!column) continue
+      if (!column) {
+        continue
+      }
 
       result = result.filter((row) => {
         // Use the column's filterVal function to get the filterable value
@@ -144,11 +147,17 @@
   })
 
   const sortedData = computed(() => {
-    if (!sortState.value.key || !sortState.value.direction) return filteredData.value
+    if (!sortState.value.key || !sortState.value.direction) {
+      return filteredData.value
+    }
     const col = columns.find((c) => c.key === sortState.value.key && c.sortFn)
-    if (!col || !col.sortFn) return filteredData.value
+    if (!col || !col.sortFn) {
+      return filteredData.value
+    }
     const sorted = [...filteredData.value].sort(col.sortFn)
-    if (sortState.value.direction === 'desc') sorted.reverse()
+    if (sortState.value.direction === 'desc') {
+      sorted.reverse()
+    }
     return sorted
   })
 
@@ -198,8 +207,11 @@
   })
 
   function updateSort(key: string, direction: 'asc' | 'desc' | null) {
-    if (direction === null) sortState.value = { key: null, direction: null }
-    else sortState.value = { key, direction }
+    if (direction === null) {
+      sortState.value = { key: null, direction: null }
+    } else {
+      sortState.value = { key, direction }
+    }
   }
 
   // Build initial hidden columns list from defaults
@@ -308,8 +320,12 @@
   }
 
   function getSpendingStatus(id: string): 'new' | 'edited' | null {
-    if (store.newSpendingIds.has(id)) return 'new'
-    if (store.editedSpendingIds.has(id)) return 'edited'
+    if (store.newSpendingIds.has(id)) {
+      return 'new'
+    }
+    if (store.editedSpendingIds.has(id)) {
+      return 'edited'
+    }
     return null
   }
 </script>
@@ -331,7 +347,9 @@
           <n-icon size="32" class="listIcon" color="#3b82f6">
             <ListOutline />
           </n-icon>
-          <h2 class="text-blue text-2xl me-4 ms-2 font-bold text-left">{{ title }}</h2>
+          <h2 class="text-blue text-2xl me-4 ms-2 font-bold text-left">
+            {{ title }}
+          </h2>
           <div
             class="flex text-[15px] font-bold items-center gap-1 cursor-pointer text-black opacity-60 border-primaryDark border-b hover:text-blue hover:border-blue"
             @click="isCollapsed = !isCollapsed"
@@ -343,9 +361,9 @@
           <div class="me-3 flex items-center">
             <n-button
               v-if="hasActiveFiltersOrSorting"
-              @click.stop="clearAllFiltersAndSorting"
               size="tiny"
               color="#3b82f6"
+              @click.stop="clearAllFiltersAndSorting"
             >
               <template #icon>
                 <n-icon>
@@ -382,7 +400,7 @@
                 />
               </span>
             </th>
-            <th></th>
+            <th />
           </tr>
           <tr class="bg-white">
             <th v-for="column in columns" :key="`filter-${String(column.key)}`">
@@ -390,25 +408,25 @@
                 <n-select
                   v-if="column.selectFilterEnabled"
                   :value="columnFilters[String(column.key)] || null"
-                  @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
                   :options="columnFilterOptions[String(column.key)] || []"
                   :placeholder="$t('table.filterPlaceholder')"
                   filterable
                   tag
                   clearable
                   :class="{ 'border border-blue-300': columnFilters[String(column.key)] }"
+                  @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
                 />
                 <n-input
                   v-else
                   :value="columnFilters[String(column.key)] || ''"
-                  @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
                   :placeholder="$t('table.filterPlaceholder')"
                   clearable
                   :class="{ 'border border-blue-300': columnFilters[String(column.key)] }"
+                  @update:value="(val) => (columnFilters[String(column.key)] = val || '')"
                 />
               </div>
             </th>
-            <th class="mx-2"></th>
+            <th class="mx-2" />
           </tr>
         </thead>
         <tbody>
@@ -455,7 +473,7 @@
             <!-- SubCategory group -->
             <SubCategoryGroup
               v-else-if="group.type === 'group' && group.subCategory && group.items"
-              :subCategory="group.subCategory"
+              :sub-category="group.subCategory"
               :items="group.items"
               :columns="columns"
             />
@@ -466,11 +484,11 @@
             <td class="px-4 py-2 text-blue">
               {{ $t('table.total') }} ({{ totalCountSpendings }}):
             </td>
-            <td v-for="_v in columns.length - 2"></td>
+            <td v-for="_v in columns.length - 2" />
             <td class="text-blue ps-3">
               {{ formatNumberToCzk(totalPrice) }}
             </td>
-            <td></td>
+            <td />
           </tr>
         </tfoot>
       </table>
@@ -488,7 +506,9 @@
         <n-icon class="unCollapseIcon" size="32">
           <ArrowDownOutline />
         </n-icon>
-        <h2 class="text-xl font-bold text-left">{{ title }}</h2>
+        <h2 class="text-xl font-bold text-left">
+          {{ title }}
+        </h2>
       </div>
       <div class="text-xl font-bold text-white">
         {{ formatNumberToCzk(totalPrice) }}

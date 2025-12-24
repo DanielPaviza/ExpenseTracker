@@ -56,7 +56,9 @@
         </div>
         <n-button-group v-if="chartTypeChangeEnabled && chartType != 'None'" size="small">
           <div class="flex flex-col">
-            <div class="flex justify-end mb-1">{{ $t('summary.chartType') }}</div>
+            <div class="flex justify-end mb-1">
+              {{ $t('summary.chartType') }}
+            </div>
             <div>
               <n-button
                 :type="selectedChartType === 'Doughnut' ? 'primary' : 'default'"
@@ -80,7 +82,7 @@
           </div>
         </n-button-group>
       </div>
-      <hr class="mt-4 mb-6 text-blue" />
+      <hr class="mt-4 mb-6 text-blue">
       <div class="flex flex-col md:flex-row xl:flex-col 2xl:flex-row justify-around">
         <div
           class="mb-6 md:mb-0 xl:mb-6 2xl:mb-0 flex flex-col text-lg gap-1 whitespace-nowrap justify-center"
@@ -88,8 +90,8 @@
           <slot />
         </div>
         <div
-          class="flex justify-center items-center"
           v-if="chartType != 'None' && chartLabels && chartDatasets"
+          class="flex justify-center items-center"
         >
           <ChartComponent
             :type="selectedChartType"
@@ -99,11 +101,11 @@
         </div>
       </div>
       <div v-if="showFooter && $slots.footer" class="mt-4">
-        <hr class="mb-4 text-gray-300" />
+        <hr class="mb-4 text-gray-300">
         <slot name="footer" />
       </div>
       <template v-if="showTotalPrice">
-        <hr class="mt-6 mb-3 border-blue-300" />
+        <hr class="mt-6 mb-3 border-blue-300">
         <div class="flex font-bold w-full justify-between opacity-75">
           <div class="text-blue">{{ $t('summary.total') }}:</div>
           <div>{{ formatNumberToCzk(totalPrice) }}</div>

@@ -235,8 +235,10 @@
   }
 </script>
 <template>
-  <hr class="my-8 border-blue" />
-  <h1 class="font-bold text-2xl text-blue mb-6">{{ $t('table.viewTitle') }}</h1>
+  <hr class="my-8 border-blue">
+  <h1 class="font-bold text-2xl text-blue mb-6">
+    {{ $t('table.viewTitle') }}
+  </h1>
 
   <div class="flex items-end justify-between mb-4">
     <ButtonNavigation v-model:selected-id="currentViewId" :buttons="VIEWS" />
@@ -246,8 +248,8 @@
           {{ $t('table.hiddenColumns') }}
         </div>
         <n-select
-          class="min-w-[140px] hideColumnsSelect"
           v-model:value="hiddenColumnKeys"
+          class="min-w-[140px] hideColumnsSelect"
           :placeholder="$t('table.hiddenPlaceholder')"
           multiple
           :options="hideColumnSelectHeaders"
@@ -260,24 +262,24 @@
         </div>
         <div class="flex gap-2">
           <button
-            @click="toggleNameSort"
             class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
             :class="{
               'border-blue bg-blue text-white': nameSortState !== 'none',
               'border-gray-300 bg-white text-gray-700 hover:border-blue': nameSortState === 'none',
             }"
+            @click="toggleNameSort"
           >
             ABC
             <span v-if="nameSortState === 'asc'"> ↑</span>
             <span v-if="nameSortState === 'desc'"> ↓</span>
           </button>
           <button
-            @click="togglePriceSort"
             class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
             :class="{
               'border-blue bg-blue text-white': priceSortState !== 'none',
               'border-gray-300 bg-white text-gray-700 hover:border-blue': priceSortState === 'none',
             }"
+            @click="togglePriceSort"
           >
             {{ $t('table.price') }}
             <span v-if="priceSortState === 'asc'"> ↑</span>
@@ -291,15 +293,17 @@
   <template v-for="view in VIEWS">
     <template v-if="currentView?.id === view.id">
       <SpendingsCategoryTable
-        v-if="view.categories?.length > 0"
         v-for="category in getSortedCategories(view.categories || [], view)"
+        v-if="view.categories?.length > 0"
         :key="category"
         :category="category"
         :spendings="view.getSpendings(category)"
         :columns="columns"
-        :isCollapsedDefault="view.id != 0"
+        :is-collapsed-default="view.id != 0"
       />
-      <div v-else class="text-center text-blue py-8 text-xl">{{ $t('table.noRecordsFound') }}</div>
+      <div v-else class="text-center text-blue py-8 text-xl">
+        {{ $t('table.noRecordsFound') }}
+      </div>
     </template>
   </template>
 

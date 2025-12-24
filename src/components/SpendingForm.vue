@@ -190,8 +190,9 @@
 
   const tagOptions = computed(() => {
     let allTags = store.tags.map((tag) => ({ label: tag, value: tag }))
-    if (!!formData.value.subCategory)
+    if (formData.value.subCategory) {
       allTags.push({ label: formData.value.subCategory, value: formData.value.subCategory })
+    }
     return allTags
   })
 
@@ -270,7 +271,9 @@
   }
 
   function handleDelete() {
-    if (!currentSpending.value) return
+    if (!currentSpending.value) {
+      return
+    }
 
     dialog.warning({
       title: t('dialogs.deletePurchaseTitle'),
@@ -294,10 +297,12 @@
 </script>
 
 <template>
-  <n-drawer :show="show" @update:show="closeDrawer" width="80%" placement="right">
+  <n-drawer :show="show" width="80%" placement="right" @update:show="closeDrawer">
     <n-drawer-content :title="drawerTitle" closable class="p-4">
       <template #header>
-        <div class="text-2xl font-bold text-blue">{{ drawerTitle }}</div>
+        <div class="text-2xl font-bold text-blue">
+          {{ drawerTitle }}
+        </div>
       </template>
       <n-form
         ref="formRef"
@@ -408,9 +413,9 @@
                       <Tooltip :text="t('form.toBePaidTooltip')" />
                     </div>
                   </template>
-                  <n-checkbox v-model:checked="formData.isToBePaid">{{
-                    formData.isToBePaid ? t('form.yes') : t('form.no')
-                  }}</n-checkbox>
+                  <n-checkbox v-model:checked="formData.isToBePaid">
+                    {{ formData.isToBePaid ? t('form.yes') : t('form.no') }}
+                  </n-checkbox>
                 </n-form-item>
 
                 <n-form-item :label="t('form.free')">
@@ -420,9 +425,9 @@
                       <Tooltip :text="t('form.freeTooltip')" />
                     </div>
                   </template>
-                  <n-checkbox v-model:checked="formData.isFree">{{
-                    formData.isFree ? t('form.yes') : t('form.no')
-                  }}</n-checkbox>
+                  <n-checkbox v-model:checked="formData.isFree">
+                    {{ formData.isFree ? t('form.yes') : t('form.no') }}
+                  </n-checkbox>
                 </n-form-item>
               </div>
             </div>
@@ -517,8 +522,10 @@
       <template #footer>
         <div class="flex justify-between w-full gap-3">
           <div class="flex gap-3">
-            <n-button @click="closeDrawer" color="#60a5fa">{{ t('dialogs.cancel') }}</n-button>
-            <n-button v-if="isEditMode" @click="handleDelete" color="#ef4444">
+            <n-button color="#60a5fa" @click="closeDrawer">
+              {{ t('dialogs.cancel') }}
+            </n-button>
+            <n-button v-if="isEditMode" color="#ef4444" @click="handleDelete">
               <template #icon>
                 <n-icon>
                   <TrashOutline />

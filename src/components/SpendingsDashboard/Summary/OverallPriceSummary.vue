@@ -60,7 +60,9 @@
       </div>
       <div>
         <div class="flex items-center gap-2">
-          <div class="font-semibold whitespace-nowrap">{{ formatNumberToCzk(payer.price) }}</div>
+          <div class="font-semibold whitespace-nowrap">
+            {{ formatNumberToCzk(payer.price) }}
+          </div>
           <div class="text-blue text-sm text-muted-foreground">({{ payer.percent }}%)</div>
         </div>
         <div
@@ -74,13 +76,13 @@
 
     <div
       v-if="payerStats.length > MAX_DISPLAYED_ITEMS"
-      @click="showAll = !showAll"
       class="mt-1 text-blueLight text-xs cursor-pointer"
+      @click="showAll = !showAll"
     >
       {{ showAll ? $t('common.showLess') : $t('common.showAll', { count: payerStats.length }) }}
     </div>
 
-    <hr class="my-2 text-blue" />
+    <hr class="my-2 text-blue">
     <div class="text-lg flex justify-between">
       <span class="font-bold text-blue">{{ $t('summary.total') }}:</span>
       <span class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</span>

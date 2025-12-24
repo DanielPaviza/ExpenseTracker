@@ -25,7 +25,9 @@
     </template>
     <div class="flex items-center">
       {{ text }}
-      <div class="ms-2"><slot /></div>
+      <div class="ms-2">
+        <slot />
+      </div>
     </div>
   </n-tooltip>
 </template>

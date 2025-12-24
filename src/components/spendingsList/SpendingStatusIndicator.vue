@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import Tooltip from '@components/Tooltip.vue'
-
   import { useI18n } from 'vue-i18n'
 
   const { t } = useI18n()
@@ -21,7 +20,7 @@
           'bg-green-500': status === 'new',
           'bg-orange-400': status === 'edited',
         }"
-      ></div>
+      />
     </Tooltip>
   </div>
 </template>
