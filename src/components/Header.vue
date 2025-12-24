@@ -3,12 +3,15 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatNumberToCzk } from '@utils/formatUtils'
   import { AddOutline } from '@vicons/ionicons5'
-  import { NButton, NIcon, useDialog, useMessage } from 'naive-ui'
+  import { NButton, NIcon, useMessage } from 'naive-ui'
 
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
+  import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
+
+  const { discardChangesDialog } = useSpendingDialogAction()
   const { t } = useI18n()
   const isDev = import.meta.env.DEV
   const store = useSpendingsStore()
@@ -19,7 +22,6 @@
   }
 
   const pendingChanges = computed(() => store.pendingChanges)
-  const dialog = useDialog()
   const message = useMessage()
 
   async function handleSave(): Promise<void> {
@@ -30,19 +32,6 @@
       message.error(t('messages.errorSavingChanges'))
       console.error('Save error:', error)
     }
-  }
-
-  function handleDiscard(): void {
-    dialog.warning({
-      title: t('dialogs.discardChangesTitle'),
-      content: t('dialogs.discardChangesContent'),
-      positiveText: t('dialogs.discard'),
-      negativeText: t('dialogs.cancel'),
-      onPositiveClick: () => {
-        store.discardChanges()
-        message.info(t('messages.changesDiscarded'))
-      },
-    })
   }
 </script>
 <template>
@@ -78,7 +67,7 @@
               <n-button type="success" @click="handleSave">
                 {{ $t('header.saveChanges') }}
               </n-button>
-              <n-button type="error" @click="handleDiscard">
+              <n-button type="error" @click="discardChangesDialog()">
                 {{ $t('header.discardChanges') }}
               </n-button>
             </div>
