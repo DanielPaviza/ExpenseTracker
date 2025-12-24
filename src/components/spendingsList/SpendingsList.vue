@@ -2,18 +2,18 @@
   import ButtonNavigation from '@components/ButtonNavigation.vue'
   import DeletedSpendingsTable from '@components/spendingsList/DeletedSpendingsTable.vue'
   import SpendingsCategoryTable from '@components/spendingsList/SpendingsCategoryTable.vue'
-  import { useSpendingsColumns } from '@components/spendingsList/SpendingsColumns'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { NSelect } from 'naive-ui'
 
   import { computed, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
   import { Spending } from '@/types/Spending'
 
   const { t } = useI18n()
   const spendingsStore = useSpendingsStore()
-  const SpendingsColumns = useSpendingsColumns()
+  const { columns: allColumns } = useSpendingsColumns()
 
   const stores = computed(() => {
     const storeSet = new Set(
@@ -123,18 +123,23 @@
 
   const currentView = computed(() => VIEWS.value.find((v) => v.id === currentViewId.value))
 
-  const hideColumnSelectHeaders = SpendingsColumns.map((col) => ({
+  const hideColumnSelectHeaders = allColumns.value.map((col) => ({
     label: col.title,
     value: String(col.key),
   }))
 
   const hiddenColumnKeys = ref<string[]>(
-    SpendingsColumns.filter((col) => col.isHidden).map((col) => String(col.key)),
+    allColumns.value.filter((col) => col.isHidden).map((col) => String(col.key)),
   )
 
-  const columns = computed(() =>
-    SpendingsColumns.filter((col) => !hiddenColumnKeys.value.includes(String(col.key))),
-  )
+  const columns = computed(() => {
+    //const cols = allColumns.filter((col) => !hiddenColumnKeys.value.includes(String(col.key)))
+    //console.log(cols)
+    return allColumns.value.filter((col) => !hiddenColumnKeys.value.includes(String(col.key)))
+  })
+  // const columns = computed(() =>
+  //   allColumns.filter((col) => !hiddenColumnKeys.value.includes(String(col.key))),
+  // )
 
   const getSpendingsByCategory = (category: string) => spendingsByCategory.value.get(category) || []
   const getSpendingsByStore = (store: string) => spendingsByStore.value.get(store) || []
@@ -154,6 +159,10 @@
     },
     { immediate: true },
   )
+
+  watch(columns, (newColumns) => {
+    console.log('Updated columns:', newColumns)
+  })
 
   // Sorting state - two independent buttons with 3 states each
   type SortState = 'none' | 'asc' | 'desc'

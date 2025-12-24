@@ -1,6 +1,7 @@
 import { Spending } from '@/types/Spending'
 
 import { invoke } from '@tauri-apps/api/core'
+import { createSpending } from "@/composables/useSpending";
 
 /**
  * Fetches spending data from a local JSON file.
@@ -49,7 +50,7 @@ export function parseSpendings(jsonData: string): Spending[] {
       return []
     }
 
-    const parsedSpendings = parsed.map((item: any) => new Spending(item))
+    const parsedSpendings = parsed.map((item: any) => createSpending(item))
     return parsedSpendings
   } catch (error) {
     console.error('Failed to parse spendings:', error)

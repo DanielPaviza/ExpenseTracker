@@ -80,6 +80,10 @@
           <div class="text-blue flex items-center font-semibold text-lg">
             {{ $t('header.totalExpenses') }}: {{ formatNumberToCzk(store.totalPrice) }}
           </div>
+          <select v-model="$i18n.locale" class="ms-2 p-1 border border-gray-300 rounded">
+            <option value="en">English</option>
+            <option value="cs">Čeština</option>
+          </select>
         </div>
       </div>
     </MarginContainer>

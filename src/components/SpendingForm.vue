@@ -25,6 +25,7 @@
   import { useI18n } from 'vue-i18n'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { createSpending } from '@/composables/useSpending'
   import { Spending } from '@/types/Spending'
 
   const { t } = useI18n()
@@ -242,7 +243,7 @@
 
       if (isEditMode.value && currentSpending.value) {
         // Update existing
-        const updatedSpending = new Spending({
+        const updatedSpending = createSpending({
           ...spendingData,
           id: currentSpending.value.id,
           createdAt: currentSpending.value.createdAt,
@@ -252,7 +253,7 @@
         message.success(t('messages.purchaseEditedSuccessfully'))
       } else {
         // Create new
-        const newSpending = new Spending({
+        const newSpending = createSpending({
           ...spendingData,
           createdAt: formData.value.createdAt,
         })
