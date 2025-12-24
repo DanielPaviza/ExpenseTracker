@@ -1,9 +1,9 @@
 <script setup lang="ts">
   const { buttons } = defineProps<{
-    buttons: { id: number; label: string }[]
+    buttons: { id: number | string; label: string }[]
   }>()
 
-  const selectedId = defineModel<number>('selectedId', { default: 0 })
+  const selectedId = defineModel<number | string>('selectedId')
 </script>
 
 <template>

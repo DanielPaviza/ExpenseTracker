@@ -1,7 +1,15 @@
 import { type ComputedRef, type Ref, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-export function useItemsLimit<T>(items: ComputedRef<T[]> | Ref<T[]>, maxItems: number = 8) {
+export function useItemsLimit<T>(
+  items: ComputedRef<T[]> | Ref<T[]>,
+  maxItems: number = 8,
+): {
+  displayedItems: ComputedRef<T[]>
+  showAll: Ref<boolean>
+  hasMore: ComputedRef<boolean>
+  toggleText: ComputedRef<string>
+} {
   const { t } = useI18n()
   const showAll = ref(false)
 

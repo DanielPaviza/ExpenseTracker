@@ -1,12 +1,12 @@
 import { formatDateShort, formatNumberToCzk } from '@utils/formatUtils'
 
-import { ref } from 'vue'
+import { Ref, ref } from 'vue'
 import { h, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { SpendingColumn } from '@/types/SpendingColumn'
 
-export function useSpendingsColumns() {
+export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
   const { t, locale } = useI18n()
   const columns = ref<SpendingColumn[]>(getColumns())
 

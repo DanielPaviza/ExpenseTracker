@@ -44,10 +44,10 @@
       return String(result)
     }
     const value = row[column.key as keyof Spending]
-    return value != null ? String(value) : '-'
+    return value !== null ? String(value) : '-'
   }
 
-  function handleRowClick(row: Spending, event?: MouseEvent) {
+  function handleRowClick(row: Spending, event?: MouseEvent): void {
     // Don't navigate if clicking on the delete button
     if (event && (event.target as HTMLElement).closest('.delete-button')) {
       return
@@ -55,7 +55,7 @@
     router.push(`/edit/${row.id}`)
   }
 
-  function handleDelete(row: Spending, event: Event) {
+  function handleDelete(row: Spending, event: Event): void {
     event.stopPropagation()
 
     dialog.warning({
@@ -70,7 +70,7 @@
     })
   }
 
-  function toggleExpanded(event: Event) {
+  function toggleExpanded(event: Event): void {
     event.stopPropagation()
     isExpanded.value = !isExpanded.value
   }
@@ -104,7 +104,7 @@
         <span class="text-sm text-gray-600">({{ items.length }} {{ $t('table.items') }})</span>
       </div>
     </td>
-    <td v-for="_ in columns.length - 2" />
+    <td v-for="_ in columns.length - 2" :key="_" />
     <td class="font-bold text-black ps-3">
       <template v-if="!isExpanded">
         {{ formatNumberToCzk(totalPrice) }}

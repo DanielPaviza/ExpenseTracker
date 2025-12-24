@@ -60,7 +60,7 @@
 
   const chartLabels = computed(() => sortedTypes.value.map((t) => `${t.name} (${t.percent}%)`))
   const chartDatasets = computed(() => {
-    const getData = () => {
+    const getData = (): number[] => {
       switch (sortBy.value) {
         case 'count-desc':
           return sortedTypes.value.map((t) => t.count)
@@ -71,7 +71,7 @@
       }
     }
 
-    const getLabel = () => {
+    const getLabel = (): string => {
       switch (sortBy.value) {
         case 'count-desc':
           return t('summary.purchasesByType')

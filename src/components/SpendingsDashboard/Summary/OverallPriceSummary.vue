@@ -82,7 +82,7 @@
       {{ showAll ? $t('common.showLess') : $t('common.showAll', { count: payerStats.length }) }}
     </div>
 
-    <hr class="my-2 text-blue">
+    <hr class="my-2 text-blue" />
     <div class="text-lg flex justify-between">
       <span class="font-bold text-blue">{{ $t('summary.total') }}:</span>
       <span class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</span>

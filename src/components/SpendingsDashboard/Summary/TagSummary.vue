@@ -59,7 +59,7 @@
 
   const chartLabels = computed(() => sortedTags.value.map((tag) => `${tag.name} (${tag.percent}%)`))
   const chartDatasets = computed(() => {
-    const getData = () => {
+    const getData = (): number[] => {
       switch (sortBy.value) {
         case 'count-desc':
           return sortedTags.value.map((tag) => tag.count)
@@ -71,7 +71,7 @@
       }
     }
 
-    const getLabel = () => {
+    const getLabel = (): string => {
       switch (sortBy.value) {
         case 'count-desc':
           return t('summary.purchasesByTags')

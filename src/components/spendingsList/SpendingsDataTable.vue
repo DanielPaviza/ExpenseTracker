@@ -34,9 +34,9 @@
   const { t } = useI18n()
   type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
-  function setSortIndicatorRef(idx: number, el: Element | ComponentPublicInstance | null) {
+  function setSortIndicatorRef(idx: number, el: Element | ComponentPublicInstance | null): void {
     // Only store the component instance, not DOM elements
-    if (el && typeof (el as any).toggleSort === 'function') {
+    if (el && typeof (el as SortIndicatorInstance).toggleSort === 'function') {
       sortIndicatorRefs.value[idx] = el as SortIndicatorInstance
     } else if (el === null) {
       sortIndicatorRefs.value[idx] = null
@@ -66,7 +66,7 @@
   }>()
 
   function renderIcon(icon: Component, color: string) {
-    return () => {
+    return (): VNode => {
       return h(
         NIcon,
         { color },
@@ -95,7 +95,7 @@
     },
   ]
 
-  const handleActionRowSelect = (row: Spending, action: string) => {
+  const handleActionRowSelect = (row: Spending, action: string): void => {
     if (action === 'deleteSpending') {
       handleDelete(row, null)
     } else if (action === 'copySpending') {
@@ -206,7 +206,7 @@
     return result
   })
 
-  function updateSort(key: string, direction: 'asc' | 'desc' | null) {
+  function updateSort(key: string, direction: 'asc' | 'desc' | null): void {
     if (direction === null) {
       sortState.value = { key: null, direction: null }
     } else {
@@ -225,7 +225,7 @@
   }
 
   const totalPrice = computed(() => {
-    const totalPrice = (sortedData: Spending[]) => {
+    const totalPrice = (sortedData: Spending[]): number => {
       return sortedData.reduce((sum, spending) => sum + spending.totalPrice, 0)
     }
 
@@ -249,7 +249,7 @@
       return String(result)
     }
     const value = row[column.key as keyof Spending]
-    return value != null ? String(value) : '-'
+    return value !== null ? String(value) : '-'
   }
 
   const hasActiveFiltersOrSorting = computed(() => {
@@ -259,7 +259,7 @@
     )
   })
 
-  const clearAllFiltersAndSorting = () => {
+  const clearAllFiltersAndSorting = (): void => {
     // Clear all filters
     columnFilters.value = {}
     // Clear sorting
@@ -288,7 +288,7 @@
     return options
   })
 
-  function handleRowClick(row: Spending, event?: MouseEvent) {
+  function handleRowClick(row: Spending, event?: MouseEvent): void {
     // Don't navigate if clicking on the delete button or a link
     if (event && (event.target as HTMLElement).closest('.delete-button, .spending-link')) {
       return
@@ -296,15 +296,15 @@
     handleGotoEditSpending(row)
   }
 
-  function handleGotoEditSpending(row: Spending) {
+  function handleGotoEditSpending(row: Spending): void {
     router.push(`/edit/${row.id}`)
   }
 
-  function handleGotoCopyNewSpending(row: Spending) {
+  function handleGotoCopyNewSpending(row: Spending): void {
     router.push({ path: '/new', query: { template: row.id } })
   }
 
-  function handleDelete(row: Spending, event: Event | null) {
+  function handleDelete(row: Spending, event: Event | null): void {
     event?.stopPropagation()
 
     dialog.warning({
@@ -484,7 +484,7 @@
             <td class="px-4 py-2 text-blue">
               {{ $t('table.total') }} ({{ totalCountSpendings }}):
             </td>
-            <td v-for="_v in columns.length - 2" />
+            <td v-for="_ in columns.length - 2" :key="_" />
             <td class="text-blue ps-3">
               {{ formatNumberToCzk(totalPrice) }}
             </td>

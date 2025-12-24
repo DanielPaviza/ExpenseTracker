@@ -49,27 +49,6 @@ module.exports = [
     },
 
     rules: {
-      'import/order': [
-        'warn',
-        {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'object',
-            'type',
-          ],
-
-          'newlines-between': 'always',
-
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
-        },
-      ],
-
       'vue/block-order': [
         'error',
         {
@@ -80,7 +59,6 @@ module.exports = [
       'jsx-quotes': ['error', 'prefer-single'],
       'prettier/prettier': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-      'no-console': 'off',
       'no-debugger': 'error',
       eqeqeq: ['error', 'always'],
       curly: ['error', 'all'],
@@ -95,13 +73,22 @@ module.exports = [
 
       'vue/no-mutating-props': 'error',
       'vue/no-unused-components': 'warn',
+      'vue/no-unused-vars': [
+        'warn',
+        {
+          ignorePattern: '^_',
+        },
+      ],
       'vue/no-v-html': 'warn',
+      'vue/html-self-closing': 'off',
+      'vue/singleline-html-element-content-newline': 'off',
       'vue/multi-word-component-names': 'off',
+      'vue/require-default-prop': 'off',
       'vue/max-attributes-per-line': [
         'error',
         {
           singleline: {
-            max: 3,
+            max: 4,
           },
           multiline: {
             max: 1,
