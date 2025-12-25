@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
+  import { generateColorPalette } from '@utils/formatUtils'
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
+
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const store = useSpendingsStore()
   const { spendings, payers, totalPrice } = storeToRefs(store)
@@ -48,7 +50,7 @@
 <template>
   <SummaryCard
     :title="$t('summary.totalExpenses')"
-    :subtitle="`${$t('summary.total')} ${formatNumberToCzk(totalPrice)}`"
+    :subtitle="`${$t('summary.total')} ${formatCurrency(totalPrice)}`"
     chart-type="Doughnut"
     :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
@@ -61,7 +63,7 @@
       <div>
         <div class="flex items-center gap-2">
           <div class="font-semibold whitespace-nowrap">
-            {{ formatNumberToCzk(payer.price) }}
+            {{ formatCurrency(payer.price) }}
           </div>
           <div class="text-blue text-sm text-muted-foreground">({{ payer.percent }}%)</div>
         </div>
@@ -69,7 +71,7 @@
           v-if="payer.unpaid > 0"
           class="flex justify-end text-blue text-sm text-muted-foreground"
         >
-          {{ formatNumberToCzk(payer.unpaid) }} {{ $t('summary.unpaid') }}
+          {{ formatCurrency(payer.unpaid) }} {{ $t('summary.unpaid') }}
         </div>
       </div>
     </div>
@@ -85,7 +87,7 @@
     <hr class="my-2 text-blue" />
     <div class="text-lg flex justify-between">
       <span class="font-bold text-blue">{{ $t('summary.total') }}:</span>
-      <span class="font-semibold">{{ formatNumberToCzk(totalPrice) }}</span>
+      <span class="font-semibold">{{ formatCurrency(totalPrice) }}</span>
     </div>
   </SummaryCard>
 </template>

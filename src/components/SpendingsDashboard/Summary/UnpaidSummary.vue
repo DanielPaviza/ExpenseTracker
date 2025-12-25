@@ -2,11 +2,12 @@
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useItemsLimit } from '@composables/useItemsLimit'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk } from '@utils/formatUtils'
   import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
+
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { t } = useI18n()
   const store = useSpendingsStore()
@@ -60,18 +61,18 @@
       <div class="flex justify-between">
         <div class="font-bold text-blue me-3">{{ $t('summary.totalPaid') }}:</div>
         <div class="font-semibold">
-          {{ formatNumberToCzk(totalPrice) }}
+          {{ formatCurrency(totalPrice) }}
         </div>
       </div>
       <div class="flex justify-between">
         <div class="font-bold text-blue">{{ $t('summary.remainingToPay') }}:</div>
         <div class="font-semibold text-red-600">
-          {{ formatNumberToCzk(priceUnpaid) }}
+          {{ formatCurrency(priceUnpaid) }}
         </div>
       </div>
       <div class="flex justify-between text-sm text-gray-500">
         <div>({{ $t('summary.totalWithUnpaid') }})</div>
-        <div>{{ formatNumberToCzk(priceTotalWithUnpaid) }}</div>
+        <div>{{ formatCurrency(priceTotalWithUnpaid) }}</div>
       </div>
       <div class="border-t border-blue mt-4">
         <div class="text-blue mb-2 mt-4">{{ $t('summary.unpaidItems') }}:</div>
@@ -83,7 +84,7 @@
           >
             <span class="truncate font-semibold" :title="spending.name">{{ spending.name }}</span>
             <span class="font-semibold whitespace-nowrap">{{
-              formatNumberToCzk(spending.totalPrice)
+              formatCurrency(spending.totalPrice)
             }}</span>
             <span v-if="spending.store">-> {{ spending.store }}</span>
           </div>

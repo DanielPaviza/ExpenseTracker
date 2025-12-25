@@ -1,12 +1,13 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk } from '@utils/formatUtils'
   import { NButton, NButtonGroup } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
+
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { t } = useI18n()
   const store = useSpendingsStore()
@@ -107,7 +108,7 @@
         class="flex justify-between items-center"
       >
         <span>{{ trend.date }}:</span>
-        <span class="font-semibold">{{ formatNumberToCzk(trend.total) }}</span>
+        <span class="font-semibold">{{ formatCurrency(trend.total) }}</span>
       </div>
     </div>
   </SummaryCard>

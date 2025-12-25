@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { formatNumberToCzk } from '@utils/formatUtils'
-
   import { useI18n } from 'vue-i18n'
+
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { t } = useI18n()
 
@@ -18,7 +18,7 @@
       <td class="px-4 py-2">{{ t('table.total') }} ({{ totalCount }}):</td>
       <td v-for="_ in columnCount - 2" :key="_" />
       <td class="ps-3">
-        {{ formatNumberToCzk(totalPrice) }}
+        {{ formatCurrency(totalPrice) }}
       </td>
       <td />
     </tr>

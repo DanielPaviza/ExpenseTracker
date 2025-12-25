@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk } from '@utils/formatUtils'
   import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
 
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
   import { Spending } from '@/types/Spending'
 
   const store = useSpendingsStore()
@@ -111,11 +111,11 @@
       <!-- Averages -->
       <div class="flex justify-between gap-4">
         <span class="font-bold text-blue">{{ $t('summary.avgPerPurchase') }}:</span>
-        <span class="font-semibold">{{ formatNumberToCzk(averagePricePerSpending) }}</span>
+        <span class="font-semibold">{{ formatCurrency(averagePricePerSpending) }}</span>
       </div>
       <div class="flex justify-between gap-4">
         <span class="font-bold text-blue">{{ $t('summary.avgPerItem') }}:</span>
-        <span class="font-semibold">{{ formatNumberToCzk(averagePricePerItem) }}</span>
+        <span class="font-semibold">{{ formatCurrency(averagePricePerItem) }}</span>
       </div>
 
       <div class="flex justify-between gap-4">
@@ -124,20 +124,20 @@
       </div>
       <div class="flex justify-between gap-4">
         <span class="font-bold text-blue">{{ $t('summary.medianPrice') }}:</span>
-        <span class="font-semibold">{{ formatNumberToCzk(medianSpendingPrice) }}</span>
+        <span class="font-semibold">{{ formatCurrency(medianSpendingPrice) }}</span>
       </div>
 
       <!-- Extremes -->
       <div class="flex justify-between gap-4">
         <span class="font-bold text-blue">{{ $t('summary.mostExpensive') }}:</span>
         <span class="font-semibold" :title="mostExpensiveItem?.name">
-          {{ formatNumberToCzk(mostExpensiveItem?.totalPrice ?? 0) }}
+          {{ formatCurrency(mostExpensiveItem?.totalPrice ?? 0) }}
         </span>
       </div>
       <div class="flex justify-between gap-4">
         <span class="font-bold text-blue">{{ $t('summary.cheapest') }}:</span>
         <span class="font-semibold" :title="leastExpensiveItem?.name">
-          {{ formatNumberToCzk(leastExpensiveItem?.totalPrice ?? 0) }}
+          {{ formatCurrency(leastExpensiveItem?.totalPrice ?? 0) }}
         </span>
       </div>
 
@@ -152,7 +152,7 @@
       <div class="flex justify-between gap-4">
         <span class="font-bold text-blue">{{ $t('summary.mostExpensivePerUnit') }}:</span>
         <span class="font-semibold text-sm" :title="mostExpensiveSingleUnit?.name">
-          {{ formatNumberToCzk(mostExpensiveSingleUnit?.unitPrice ?? 0) }}
+          {{ formatCurrency(mostExpensiveSingleUnit?.unitPrice ?? 0) }}
         </span>
       </div>
 
@@ -172,12 +172,12 @@
       <div class="text-xs text-muted-foreground">
         <span class="font-bold text-blue">{{ $t('summary.mostExpensivePurchase') }}:</span>
         {{ mostExpensiveItem.name }} ({{ mostExpensiveItem.quantity }}×
-        {{ formatNumberToCzk(mostExpensiveItem.unitPrice) }})
+        {{ formatCurrency(mostExpensiveItem.unitPrice) }})
       </div>
       <div class="text-xs text-muted-foreground">
         <span class="font-bold text-blue">{{ $t('summary.cheapestPurchase') }}:</span>
         {{ leastExpensiveItem?.name }} ({{ leastExpensiveItem?.quantity }}×
-        {{ formatNumberToCzk(leastExpensiveItem?.unitPrice ?? 0) }})
+        {{ formatCurrency(leastExpensiveItem?.unitPrice ?? 0) }})
       </div>
       <div
         v-if="largestQuantityPurchase && largestQuantityPurchase.quantity > 1"
@@ -185,7 +185,7 @@
       >
         <span class="font-bold text-blue">{{ $t('summary.largestQuantity') }}:</span>
         {{ largestQuantityPurchase.name }} ({{ largestQuantityPurchase.quantity }}×
-        {{ $t('summary.pricePerUnit') }} {{ formatNumberToCzk(largestQuantityPurchase.unitPrice) }})
+        {{ $t('summary.pricePerUnit') }} {{ formatCurrency(largestQuantityPurchase.unitPrice) }})
       </div>
     </div>
   </SummaryCard>

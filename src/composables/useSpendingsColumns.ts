@@ -1,9 +1,10 @@
-import { formatDateShort, formatNumberToCzk } from '@utils/formatUtils'
+import { formatDateShort } from '@utils/formatUtils'
 
 import { Ref, ref } from 'vue'
 import { h, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+import { formatCurrency } from '@/composables/useCurrencyFormat'
 import { SpendingColumn } from '@/types/SpendingColumn'
 
 export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
@@ -171,7 +172,7 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         sortFn: (a, b) => a.totalPrice - b.totalPrice,
         filterVal: (row) => String(row.totalPrice),
         render: (row) =>
-          h('div', { style: { 'font-weight': 'bolder' } }, formatNumberToCzk(row.totalPrice)),
+          h('div', { style: { 'font-weight': 'bolder' } }, formatCurrency(row.totalPrice)),
       },
     ]
   }

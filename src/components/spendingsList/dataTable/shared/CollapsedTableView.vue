@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { formatNumberToCzk } from '@utils/formatUtils'
   import { ArrowDownOutline, ListOutline } from '@vicons/ionicons5'
   import { NIcon } from 'naive-ui'
+
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { title, totalPrice } = defineProps<{
     title: string
@@ -34,7 +35,7 @@
       </h2>
     </div>
     <div class="text-xl font-bold text-white">
-      {{ formatNumberToCzk(totalPrice) }}
+      {{ formatCurrency(totalPrice) }}
     </div>
   </div>
 </template>
