@@ -2,119 +2,30 @@
   import ButtonNavigation from '@components/ButtonNavigation.vue'
   import DeletedSpendingsTable from '@components/spendingsList/DeletedSpendingsTable.vue'
   import SpendingsCategoryTable from '@components/spendingsList/SpendingsCategoryTable.vue'
-  import { useSpendingsStore } from '@stores/spendingsStore'
+  import SpendingsDataTable from '@components/spendingsList/dataTable/SpendingsDataTable.vue'
   import { NSelect } from 'naive-ui'
 
   import { computed, ref, watch } from 'vue'
-  import { useI18n } from 'vue-i18n'
 
   import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
-  import { Spending } from '@/types/Spending'
+  import { useSpendingsViews } from '@/composables/useSpendingsViews'
+  import { useViewSort } from '@/composables/useViewSort'
   import { SpendingList, SpendingListKey } from '@/types/SpendingList'
 
-  const { t } = useI18n()
-  const spendingsStore = useSpendingsStore()
   const { columns: allColumns } = useSpendingsColumns()
 
-  const stores = computed(() => {
-    const storeSet = new Set(
-      spendingsStore.spendings.map((s: Spending) => s?.store || t('table.unknown')),
-    )
-    return [...storeSet].sort()
-  })
+  // Use new composables for views and sorting
+  const { nameSortState, priceSortState, toggleNameSort, togglePriceSort, getSortedCategories } =
+    useViewSort()
+  const { createViews } = useSpendingsViews() // stores and allTags used internally
 
-  const allTags = computed(() => {
-    const tagSet = new Set<string>()
-    spendingsStore.spendings.forEach((s: Spending) => {
-      if (s.tags && s.tags.length > 0) {
-        s.tags.forEach((tag: string) => tagSet.add(tag))
-      }
-    })
-    return [...tagSet].sort()
-  })
+  const VIEWS = computed<Record<SpendingListKey, SpendingList>>(() =>
+    createViews(nameSortState.value, priceSortState.value),
+  )
 
-  // Memoized maps that only recalculate when spendingsStore.spendings changes
-  const spendingsByCategory = computed(() => {
-    const map = new Map<string, Spending[]>()
-    spendingsStore.spendings.forEach((s: Spending) => {
-      if (!map.has(s.category)) {
-        map.set(s.category, [])
-      }
-      map.get(s.category)!.push(s)
-    })
-    return map
-  })
-
-  const spendingsByStore = computed(() => {
-    const map = new Map<string, Spending[]>()
-    spendingsStore.spendings.forEach((s: Spending) => {
-      const store = s.store || t('table.unknown')
-      if (!map.has(store)) {
-        map.set(store, [])
-      }
-      map.get(store)!.push(s)
-    })
-    return map
-  })
-
-  const spendingsByTag = computed(() => {
-    const map = new Map<string, Spending[]>()
-    spendingsStore.spendings.forEach((s: Spending) => {
-      if (s.tags.length === 0) {
-        if (!map.has(t('table.noTag'))) {
-          map.set(t('table.noTag'), [])
-        }
-        map.get(t('table.noTag'))!.push(s)
-      }
-      s.tags.forEach((tag: string) => {
-        if (!map.has(tag)) {
-          map.set(tag, [])
-        }
-        map.get(tag)!.push(s)
-      })
-    })
-    return map
-  })
-
-  const VIEWS = computed<Record<SpendingListKey, SpendingList>>(() => ({
-    allInOne: {
-      id: 'allInOne',
-      label: t('table.allInOneTable'),
-      categories: [t('table.allExpenses')],
-      hiddenColumnKeys: [],
-      enableSorting: false,
-      getSpendings: (_: string): Spending[] => getSortedSpendings(spendingsStore.spendings),
-    },
-    byCategories: {
-      id: 'byCategories',
-      label: t('table.byCategories'),
-      categories: spendingsStore.categories,
-      hiddenColumnKeys: ['category'],
-      enableSorting: true,
-      getSpendings: (category: string): Spending[] =>
-        getSortedSpendings(getSpendingsByCategory(category)),
-    },
-    byStores: {
-      id: 'byStores',
-      label: t('table.byStores'),
-      categories: stores.value,
-      hiddenColumnKeys: ['store'],
-      enableSorting: true,
-      getSpendings: (store: string): Spending[] => getSortedSpendings(getSpendingsByStore(store)),
-    },
-    byTags: {
-      id: 'byTags',
-      label: t('table.byTags'),
-      categories: allTags.value,
-      hiddenColumnKeys: ['tags'],
-      enableSorting: true,
-      getSpendings: (tag: string): Spending[] => getSortedSpendings(getSpendingsByTag(tag)),
-    },
-  }))
-
-  const defaultView: SpendingList = VIEWS.value.allInOne
-  //const currentView = ref<SpendingList>(defaultView)
-  const currentViewKey = ref<SpendingListKey>('allInOne')
+  const defaultViewKey = 'allInOne' as SpendingListKey
+  const defaultView: SpendingList = VIEWS.value[defaultViewKey]
+  const currentViewKey = ref<SpendingListKey>(defaultViewKey)
   const currentView = computed<SpendingList>(() => VIEWS.value[currentViewKey.value])
 
   const hideColumnSelectHeaders = computed(() => {
@@ -131,11 +42,6 @@
   const columns = computed(() => {
     return allColumns.value.filter((col) => !hiddenColumnKeys.value.includes(String(col.key)))
   })
-
-  const getSpendingsByCategory = (category: string): Spending[] =>
-    spendingsByCategory.value.get(category) || []
-  const getSpendingsByStore = (store: string): Spending[] => spendingsByStore.value.get(store) || []
-  const getSpendingsByTag = (tag: string): Spending[] => spendingsByTag.value.get(tag) || []
 
   const hideColumnsOnViewChange = (
     newView: SpendingList | undefined,
@@ -154,76 +60,6 @@
     },
     { immediate: true },
   )
-
-  // Sorting state - two independent buttons with 3 states each
-  type SortState = 'none' | 'asc' | 'desc'
-  const nameSortState = ref<SortState>('asc') // Default to alphabetically ascending
-  const priceSortState = ref<SortState>('none')
-
-  const toggleNameSort = (): void => {
-    if (nameSortState.value === 'none') {
-      nameSortState.value = 'asc'
-      priceSortState.value = 'none'
-    } else if (nameSortState.value === 'asc') {
-      nameSortState.value = 'desc'
-      priceSortState.value = 'none'
-    } else {
-      nameSortState.value = 'none'
-    }
-  }
-
-  const togglePriceSort = (): void => {
-    if (priceSortState.value === 'none') {
-      priceSortState.value = 'asc'
-      nameSortState.value = 'none'
-    } else if (priceSortState.value === 'asc') {
-      priceSortState.value = 'desc'
-      nameSortState.value = 'none'
-    } else {
-      priceSortState.value = 'none'
-    }
-  }
-
-  const getSortedSpendings = (spendings: Spending[]): Spending[] => {
-    const sorted = [...spendings]
-
-    if (nameSortState.value !== 'none') {
-      sorted.sort((a, b) => {
-        const comparison = a.name.localeCompare(b.name, 'cs')
-        return nameSortState.value === 'asc' ? comparison : -comparison
-      })
-    } else if (priceSortState.value !== 'none') {
-      sorted.sort((a, b) => {
-        const comparison = a.totalPrice - b.totalPrice
-        return priceSortState.value === 'asc' ? comparison : -comparison
-      })
-    }
-
-    return sorted
-  }
-
-  // Sort categories by name or total price
-  const getSortedCategories = (categories: string[], view: SpendingList): string[] => {
-    const sorted = [...categories]
-
-    if (nameSortState.value !== 'none') {
-      sorted.sort((a, b) => {
-        const comparison = a.localeCompare(b, 'cs')
-        return nameSortState.value === 'asc' ? comparison : -comparison
-      })
-    } else if (priceSortState.value !== 'none') {
-      sorted.sort((a, b) => {
-        const spendingsA = view.getSpendings(a)
-        const spendingsB = view.getSpendings(b)
-        const totalA = spendingsA.reduce((sum, s) => sum + s.totalPrice, 0)
-        const totalB = spendingsB.reduce((sum, s) => sum + s.totalPrice, 0)
-        const comparison = totalA - totalB
-        return priceSortState.value === 'asc' ? comparison : -comparison
-      })
-    }
-
-    return sorted
-  }
 </script>
 <template>
   <hr class="my-8 border-blue" />
@@ -289,8 +125,18 @@
       :spendings="currentView.getSpendings(category)"
       :columns="columns"
       :is-collapsed-default="currentView.id != defaultView.id"
-    />
+    >
+      <template #default="{ data, title, columns: cols, isCollapsedDefault: collapsed }">
+        <SpendingsDataTable
+          :data="data"
+          :columns="cols"
+          :title="title"
+          :is-collapsed-default="collapsed"
+        />
+      </template>
+    </SpendingsCategoryTable>
   </div>
+
   <div v-else class="text-center text-blue py-8 text-xl">
     {{ $t('table.noRecordsFound') }}
   </div>

@@ -2,14 +2,18 @@ BytEvidence todoList
 
 ---- TODO ----
 
-- srovnat delete dialogy - jsou asi na 3 mistech. Proverit ostatni dialogy
-- kontext spending row menu co se otevre po right mouse clicku, to samy jako ty 3 tecky. 3 tecky zanechat
-- 3 tecky v spending row chybi u polozek v subgroupe - srovnat
-- refactor SpendingForm.vue
-
-- pridat moznost evcidence uctenky
 
 
+- i18n dotahnout měnu (czk, usd, eur)
+
+- mazani (cely context menu pravdepodobne) se po par pouzitich chova divne - mozna to targetuje spatnej row (spendingId)
+- pridat moznost evidence uctenky
+
+- pridat nastaveni
+    - persistentni nastaveni v settings.json (novy file, stejne misto jako db.json)
+    - nastaveni jazyka, defaulni razeni datatables, defaultni zalozka summaries a spendingsTable
+    - novy endpoint v rustu, na stejny brdo (nastaveni, default hodnoty ve vue)
+    - default rozbaleny/zabaleny subgroup 
 
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
     - nebo vytvořit flag něco jako isZahrnutVJinýPoložce :D
@@ -47,3 +51,11 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - moznost kopirovat nakup? 
 - v datatable - pokud je tam jedina polozka subcategorygroup - defaultne ji rozbalit
 - spending form tagy nyni navrhuji i vyplnenou skupinu a skupina nyni navrhuje i prirazene tagy
+- refactor SpendingForm.vue
+- srovnat delete dialogy - jsou asi na 3 mistech. Proverit ostatni dialogy
+- 3 tecky v spending row chybi u polozek v subgroupe - srovnat
+- kontext spending row menu co se otevre po right mouse clicku, to samy jako ty 3 tecky. 3 tecky zanechat
+- dataTable refactor
+- dataTable subgroup 
+    - cena celkem zmizi po rozbaleni - porad ji zobrazovat na stejnem miste, mozna s napr. opacity-50
+    - pokud vsechny polozky v tablu maji stejnou subGroupu, defaultne ji rozbalit

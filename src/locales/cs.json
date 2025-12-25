@@ -61,7 +61,7 @@
     "free": "Ušetřeno",
     "freeTooltip": "Položka byla získána zdarma",
     "group": "Skupina",
-    "groupTooltip": "Vizuální seskupení položek v tabulkách",
+    "groupTooltip": "Vizuální seskupení položek v tabulkách do rozbalitelných podskupin",
     "selectGroup": "Vyberte skupinu",
     "tags": "Tagy",
     "selectTags": "Vyberte tagy",
