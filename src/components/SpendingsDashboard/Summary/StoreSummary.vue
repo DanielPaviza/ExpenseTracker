@@ -2,13 +2,14 @@
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useItemsLimit } from '@composables/useItemsLimit'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
+  import { generateColorPalette } from '@utils/formatUtils'
   import { NButton, NButtonGroup } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
   import { Spending } from '@/types/Spending'
 
   const { t } = useI18n()
@@ -125,10 +126,10 @@
       <div class="font-bold min-w-[100px] text-blue truncate" :title="s.name">{{ s.name }}:</div>
       <div class="flex w-full justify-end items-center gap-2">
         <div class="font-semibold whitespace-nowrap">
-          {{ formatNumberToCzk(s.price) }}
+          {{ formatCurrency(s.price) }}
         </div>
         <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
-          ({{ s.visits }}×, {{ formatNumberToCzk(s.avgPerVisit) }}/{{ $t('summary.visit') }})
+          ({{ s.visits }}×, {{ formatCurrency(s.avgPerVisit) }}/{{ $t('summary.visit') }})
         </div>
       </div>
     </div>

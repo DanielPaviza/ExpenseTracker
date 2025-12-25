@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk } from '@utils/formatUtils'
   import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
+
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { t } = useI18n()
   const store = useSpendingsStore()
@@ -81,19 +82,19 @@
       <div class="flex justify-between">
         <div class="font-bold text-blue">{{ $t('summary.avgDaily') }}:</div>
         <div class="font-semibold">
-          {{ formatNumberToCzk(averagePerDay) }}
+          {{ formatCurrency(averagePerDay) }}
         </div>
       </div>
       <div class="flex justify-between">
         <div class="font-bold text-blue">{{ $t('summary.avgWeekly') }}:</div>
         <div class="font-semibold">
-          {{ formatNumberToCzk(averagePerWeek) }}
+          {{ formatCurrency(averagePerWeek) }}
         </div>
       </div>
       <div class="flex justify-between">
         <div class="font-bold text-blue">{{ $t('summary.avgMonthly') }}:</div>
         <div class="font-semibold">
-          {{ formatNumberToCzk(averagePerMonth) }}
+          {{ formatCurrency(averagePerMonth) }}
         </div>
       </div>
     </div>

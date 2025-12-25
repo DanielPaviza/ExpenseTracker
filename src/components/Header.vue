@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import MarginContainer from '@components/MarginContainer.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk } from '@utils/formatUtils'
   import { AddOutline } from '@vicons/ionicons5'
   import { NButton, NIcon, useMessage } from 'naive-ui'
 
@@ -9,6 +8,7 @@
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
   import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
 
   const { discardChangesDialog } = useSpendingDialogAction()
@@ -73,7 +73,7 @@
             </div>
           </div>
           <div class="text-blue flex items-center font-semibold text-lg">
-            {{ $t('header.totalExpenses') }}: {{ formatNumberToCzk(store.totalPrice) }}
+            {{ $t('header.totalExpenses') }}: {{ formatCurrency(store.totalPrice) }}
           </div>
           <select v-model="$i18n.locale" class="ms-2 p-1 border border-gray-300 rounded">
             <option value="en">English</option>

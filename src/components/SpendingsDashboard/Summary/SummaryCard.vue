@@ -1,11 +1,12 @@
 <script setup lang="ts">
   import ChartComponent from '@components/ChartComponent.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk } from '@utils/formatUtils'
   import { NButton, NButtonGroup, NCard } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
   import { ref } from 'vue'
+
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const {
     title,
@@ -108,7 +109,7 @@
         <hr class="mt-6 mb-3 border-blue-300" />
         <div class="flex font-bold w-full justify-between opacity-75">
           <div class="text-blue">{{ $t('summary.total') }}:</div>
-          <div>{{ formatNumberToCzk(totalPrice) }}</div>
+          <div>{{ formatCurrency(totalPrice) }}</div>
         </div>
       </template>
     </n-card>

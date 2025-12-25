@@ -1,12 +1,13 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatDateShort, formatNumberToCzk } from '@utils/formatUtils'
+  import { formatDateShort } from '@utils/formatUtils'
   import { NButton, NButtonGroup, NInputNumber } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
 
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
   import { Spending } from '@/types/Spending'
 
   const store = useSpendingsStore()
@@ -87,7 +88,7 @@
           {{ spending.name }}
         </div>
         <div class="ms-2 font-semibold whitespace-nowrap">
-          {{ formatNumberToCzk(spending.totalPrice) }}
+          {{ formatCurrency(spending.totalPrice) }}
         </div>
       </div>
     </div>

@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatNumberToCzk, generateColorPalette } from '@utils/formatUtils'
+  import { generateColorPalette } from '@utils/formatUtils'
   import { NButton, NButtonGroup } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
+
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { t } = useI18n()
   const store = useSpendingsStore()
@@ -129,7 +131,7 @@
         {{ type.name }}:
       </div>
       <div class="font-semibold whitespace-nowrap">
-        {{ formatNumberToCzk(type.price) }}
+        {{ formatCurrency(type.price) }}
       </div>
       <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
         ({{ type.count }}×)

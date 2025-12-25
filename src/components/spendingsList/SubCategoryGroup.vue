@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import TableRow from '@components/spendingsList/dataTable/shared/TableRow.vue'
-  import { formatNumberToCzk } from '@utils/formatUtils'
   import { ChevronForwardOutline } from '@vicons/ionicons5'
   import { NIcon } from 'naive-ui'
 
   import { computed, ref } from 'vue'
 
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
   import { calculateTotalPrice } from '@/utils/tableUtils'
@@ -48,7 +48,7 @@
     <td v-for="_ in columns.length - 2" :key="_" />
     <td class="font-bold ps-3" :class="isExpanded ? 'text-blue' : ' text-black'">
       <template v-if="!isExpanded"> </template>
-      {{ formatNumberToCzk(totalPrice) }}
+      {{ formatCurrency(totalPrice) }}
     </td>
     <td />
   </tr>

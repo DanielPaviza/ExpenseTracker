@@ -3,10 +3,10 @@
  * @param num - The number to format.
  * @returns The formatted number as a string.
  */
-export function formatNumberToCzk(num: number): string {
+export function formatNumberToCurrency(num: number, symbol: string): string {
   return `${Math.round(num)
     .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} Kč`
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} ${symbol}`
 }
 
 /**
