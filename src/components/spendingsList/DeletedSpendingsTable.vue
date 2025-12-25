@@ -1,41 +1,23 @@
 <script setup lang="ts">
   import Tooltip from '@components/Tooltip.vue'
-  import SortIndicator from '@components/spendingsList/SortIndicator.vue'
+  import CollapsedTableView from '@components/spendingsList/dataTable/shared/CollapsedTableView.vue'
+  import TableFooter from '@components/spendingsList/dataTable/shared/TableFooter.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import {
-    scrollFadeOnBeforeEnter,
-    scrollFadeOnBeforeLeave,
-    scrollFadeOnEnter,
-    scrollFadeOnLeave,
-  } from '@utils/animations'
-  import { formatNumberToCzk } from '@utils/formatUtils'
-  import { ArrowDownOutline, ArrowUpOutline, ListOutline, RefreshOutline } from '@vicons/ionicons5'
+  import { ArrowUpOutline, ListOutline, RefreshOutline } from '@vicons/ionicons5'
   import { NButton, NIcon, useMessage } from 'naive-ui'
 
-  import { type VNode, computed, onBeforeUpdate, ref } from 'vue'
-  import type { ComponentPublicInstance } from 'vue'
+  import { type VNode, computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
   import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
+  import { useTableSort } from '@/composables/useTableSort'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
+  import { calculateTotalPrice, getCellContent } from '@/utils/tableUtils'
 
   const { t } = useI18n()
   const { restoreAllChangesDialog } = useSpendingDialogAction()
-
-  type SortIndicatorInstance = ComponentPublicInstance<{ toggleSort: () => void }>
-  const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
-  function setSortIndicatorRef(idx: number, el: Element | ComponentPublicInstance | null): void {
-    if (el && typeof (el as SortIndicatorInstance).toggleSort === 'function') {
-      sortIndicatorRefs.value[idx] = el as SortIndicatorInstance
-    } else if (el === null) {
-      sortIndicatorRefs.value[idx] = null
-    }
-  }
-  onBeforeUpdate(() => {
-    sortIndicatorRefs.value = []
-  })
 
   const store = useSpendingsStore()
   const message = useMessage()
@@ -52,59 +34,13 @@
 
   const data = computed(() => store.deletedSpendings)
 
+  const { sortedData } = useTableSort(
+    () => data.value,
+    () => columns.value,
+  )
+
   const totalCountSpendings = computed(() => data.value.length)
-
-  const sortState = ref<{ key: string | null; direction: 'asc' | 'desc' | null }>({
-    key: null,
-    direction: null,
-  })
-
-  const sortedData = computed(() => {
-    if (!sortState.value.key || !sortState.value.direction) {
-      return data.value
-    }
-    const col = columns.value.find((c) => c.key === sortState.value.key && c.sortFn)
-    if (!col || !col.sortFn) {
-      return data.value
-    }
-    const sorted = [...data.value].sort(col.sortFn)
-    if (sortState.value.direction === 'desc') {
-      sorted.reverse()
-    }
-    return sorted
-  })
-
-  function updateSort(key: string, direction: 'asc' | 'desc' | null): void {
-    if (direction === null) {
-      sortState.value = { key: null, direction: null }
-    } else {
-      sortState.value = { key, direction }
-    }
-  }
-
-  const totalPrice = computed(() => {
-    return sortedData.value
-      .filter((spending) => !spending.isFree && !spending.isToBePaid)
-      .reduce((sum, spending) => {
-        return sum + spending.totalPrice
-      }, 0)
-  })
-
-  const getCellContent = (
-    column: SpendingColumn,
-    row: Spending,
-    rowIndex: number,
-  ): string | VNode => {
-    if (column.render) {
-      const result = column.render(row, rowIndex)
-      if (typeof result === 'object' && result !== null && '__v_isVNode' in result) {
-        return result as VNode
-      }
-      return String(result)
-    }
-    const value = row[column.key as keyof Spending]
-    return value !== null ? String(value) : '-'
-  }
+  const totalPrice = computed(() => calculateTotalPrice(sortedData.value))
 
   function handleRowClick(_row: Spending, event?: MouseEvent): void {
     // Don't navigate if clicking on the restore button
@@ -123,17 +59,14 @@
       message.error(t('messages.errorRestoringItem', { name: row.name }))
     }
   }
+
+  function toggleCollapse(): void {
+    isCollapsed.value = !isCollapsed.value
+  }
 </script>
 
 <template>
-  <Transition
-    v-if="totalCountSpendings > 0"
-    name="scroll-fade-table"
-    @before-enter="scrollFadeOnBeforeEnter"
-    @enter="scrollFadeOnEnter"
-    @before-leave="scrollFadeOnBeforeLeave"
-    @leave="scrollFadeOnLeave"
-  >
+  <Transition v-if="totalCountSpendings > 0" name="scroll-fade-table">
     <div v-if="!isCollapsed" key="expanded" class="overflow-x-auto">
       <div class="flex justify-between items-center">
         <div class="flex items-end w-full py-2">
@@ -148,7 +81,7 @@
           </h2>
           <div
             class="flex text-[15px] font-bold items-center gap-1 cursor-pointer text-black opacity-60 border-primaryDark border-b hover:text-red-500 hover:border-red-500"
-            @click="isCollapsed = !isCollapsed"
+            @click="toggleCollapse"
           >
             {{ $t('table.collapseTable') }}
           </div>
@@ -168,25 +101,15 @@
         <thead class="">
           <tr class="bg-red-300 text-[15px]">
             <th
-              v-for="(column, colIdx) in filteredColumns"
+              v-for="column in filteredColumns"
               :key="String(column.key)"
-              class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap cursor-pointer hover:bg-red-500 hover:text-white"
-              :class="{ 'bg-red-400': sortState.key === column.key }"
-              @click="column.sortFn && sortIndicatorRefs[colIdx]?.toggleSort()"
+              class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap text-white"
             >
               <span class="flex justify-between items-center">
                 <div class="flex items-center gap-2">
-                  <span class="text-white">{{ column.title }}</span>
+                  <span>{{ column.title }}</span>
                   <Tooltip v-if="!!column.tooltip" :text="column.tooltip" color="white" />
                 </div>
-
-                <SortIndicator
-                  v-if="column.sortFn"
-                  :ref="(el) => setSortIndicatorRef(colIdx, el)"
-                  :active="sortState.key === column.key"
-                  :direction="sortState.key === column.key ? sortState.direction : null"
-                  @update:direction="(dir) => updateSort(String(column.key), dir)"
-                />
               </span>
             </th>
             <th class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap text-white">
@@ -207,7 +130,7 @@
               class="border-b border-red-200 px-4 py-2"
             >
               <template v-if="typeof getCellContent(column, row, index) === 'object'">
-                <component :is="getCellContent(column, row, index)" />
+                <component :is="getCellContent(column, row, index) as VNode" />
               </template>
               <template v-else>
                 {{ getCellContent(column, row, index) }}
@@ -232,41 +155,21 @@
             </td>
           </tr>
         </tbody>
-        <tfoot class="border-red-500 border-t">
-          <tr class="bg-red-100 font-bold text-lg">
-            <td class="px-4 py-2 text-red-500">
-              {{ t('table.total') }} ({{ totalCountSpendings }}):
-            </td>
-            <td v-for="_ in filteredColumns.length - 2" :key="_" />
-            <td class="text-red-500">
-              {{ formatNumberToCzk(totalPrice) }}
-            </td>
-            <td />
-          </tr>
-        </tfoot>
+        <TableFooter
+          :total-count="totalCountSpendings"
+          :total-price="totalPrice"
+          :column-count="filteredColumns.length"
+        />
       </table>
     </div>
-    <div
+    <CollapsedTableView
       v-else
       key="collapsed"
-      class="collapsedRow bg-red-300 opacity-80 shadow text-white cursor-pointer w-full p-3 flex items-center justify-between rounded hover:bg-red-500"
-      @click="isCollapsed = !isCollapsed"
-    >
-      <div class="flex items-center gap-4">
-        <n-icon class="listIcon" size="32">
-          <ListOutline />
-        </n-icon>
-        <n-icon class="unCollapseIcon" size="32">
-          <ArrowDownOutline />
-        </n-icon>
-        <h2 class="text-xl font-bold text-left">
-          {{ t('table.deleted') }}
-        </h2>
-      </div>
-      <div class="text-xl font-bold">
-        {{ formatNumberToCzk(totalPrice) }}
-      </div>
-    </div>
+      :title="t('table.deleted')"
+      :total-price="totalPrice"
+      class="bg-red-300 hover:bg-red-500"
+      @toggle-collapse="toggleCollapse"
+    />
   </Transition>
 </template>
 
@@ -281,47 +184,30 @@
   .collapseRow:hover .listIcon {
     display: none;
   }
+
   table {
     box-shadow:
       0 4px 6px -1px rgba(239, 68, 68, 0.1),
       0 2px 4px -1px rgba(239, 68, 68, 0.06);
   }
-  thead tr:first-child th .sortIndicator {
-    color: #ef4444;
-  }
-  thead tr:first-child th:hover .sortIndicator {
-    color: white;
-  }
+
   thead tr:first-child th:first-child {
     border-radius: 6px 0 0 0;
   }
   thead tr:first-child th:last-child {
     border-radius: 0 6px 0 0;
   }
-  tfoot tr:last-child td:first-child {
-    border-radius: 0 0 0 6px;
-  }
-  tfoot tr:last-child td:last-child {
-    border-radius: 0 0 8px 0;
-  }
+
   .scroll-fade-table-enter-active,
   .scroll-fade-table-leave-active {
     overflow: hidden;
   }
-  th:hover .sortIndicator {
-    stroke: #ef4444;
+
+  /* Override TableFooter colors for red theme */
+  :deep(tfoot tr) {
+    background-color: #fecaca; /* red-100 */
   }
-  .collapseRow:hover h2,
-  .collapseRow:hover div {
-    color: #ef4444 !important;
-  }
-  .collapsedRow:hover .listIcon {
-    display: none;
-  }
-  .collapsedRow:hover .unCollapseIcon {
-    display: inline;
-  }
-  .unCollapseIcon {
-    display: none;
+  :deep(tfoot td) {
+    color: #ef4444; /* red-500 */
   }
 </style>

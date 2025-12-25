@@ -61,7 +61,7 @@
     "free": "Saved",
     "freeTooltip": "Item was obtained for free",
     "group": "Group",
-    "groupTooltip": "Visual grouping of items in tables",
+    "groupTooltip": "Visual grouping of items in tables into expandable subgroups",
     "selectGroup": "Select group",
     "tags": "Tags",
     "selectTags": "Select tags",
