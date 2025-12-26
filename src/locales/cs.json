@@ -33,7 +33,10 @@
     "delete": "Smazat",
     "restoreAllTitle": "Obnovit všechny smazané výdaje",
     "restoreAllContent": "Opravdu chcete obnovit všechny smazané výdaje ({count})?",
-    "restore": "Obnovit"
+    "restore": "Obnovit",
+    "unsavedChangesTitle": "Neuložené změny",
+    "unsavedChangesContent": "Máte neuložené změny. Opravdu chcete ukončit aplikaci bez uložení?",
+    "closeWithoutSaving": "Ukončit bez uložení"
   },
   "form": {
     "editPurchase": "Upravit nákup",

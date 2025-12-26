@@ -33,7 +33,10 @@
     "delete": "Delete",
     "restoreAllTitle": "Restore All Deleted Expenses",
     "restoreAllContent": "Do you really want to restore all deleted expenses ({count})?",
-    "restore": "Restore"
+    "restore": "Restore",
+    "unsavedChangesTitle": "Unsaved Changes",
+    "unsavedChangesContent": "You have unsaved changes. Do you really want to exit the application without saving?",
+    "closeWithoutSaving": "Exit without saving"
   },
   "form": {
     "editPurchase": "Edit Purchase",
