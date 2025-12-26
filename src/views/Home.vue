@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Loading from '@components/Loading.vue'
   import MarginContainer from '@components/MarginContainer.vue'
-  import SpendingsDashboard from '@components/SpendingsDashboard/Dashboard.vue'
+  import SpendingsDashboard from '@components/spendingsDashboard/Dashboard.vue'
   import SpendingsList from '@components/spendingsList/SpendingsList.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
 

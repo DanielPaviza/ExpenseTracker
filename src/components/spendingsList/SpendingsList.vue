@@ -138,7 +138,7 @@
   </div>
 
   <div v-else class="text-center text-blue py-8 text-xl">
-    {{ $t('table.noRecordsFound') }}
+    {{ $t('common.noRecordsFound') }}
   </div>
 
   <!-- Deleted Spendings Section -->

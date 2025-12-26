@@ -100,7 +100,6 @@
     "hiddenPlaceholder": "Hidden",
     "sorting": "Sorting",
     "price": "Price",
-    "noRecordsFound": "No records found",
     "collapseTable": "Collapse table",
     "clearFiltersAndSorting": "Clear filters and sorting",
     "filterPlaceholder": "Filter",
@@ -188,7 +187,7 @@
     "savedExpenses": "Saved Expenses",
     "totalPaid": "Total Paid",
     "saved": "Saved",
-    "totalWithSaved": "(Total with saved)",
+    "totalWithSaved": "Total with saved",
     "freeItems": "Free Items",
     "noSavedExpenses": "No saved expenses.",
     "unpaidExpenses": "Unpaid Expenses",
@@ -221,6 +220,7 @@
   "common": {
     "showLess": "▲ Show less",
     "showAll": "▼ Show all ({count})",
-    "loadingData": "Loading data..."
+    "loadingData": "Loading data...",
+    "noRecordsFound": "No records found"
   }
 }

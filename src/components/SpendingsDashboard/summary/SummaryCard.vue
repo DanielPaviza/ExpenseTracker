@@ -4,7 +4,7 @@
   import { NButton, NButtonGroup, NCard } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
@@ -36,11 +36,15 @@
   })
 
   const spendingsStore = useSpendingsStore()
-  const { totalPrice } = storeToRefs(spendingsStore)
+  const { totalPrice, spendings } = storeToRefs(spendingsStore)
 
   const selectedChartType = ref<'Doughnut' | 'Bar' | 'Line'>(
     chartType !== 'None' ? (chartType as 'Doughnut' | 'Bar' | 'Line') : 'Doughnut',
   )
+
+  const showContent = computed(() => {
+    return spendings.value.length > 0
+  })
 </script>
 
 <template>
@@ -88,10 +92,13 @@
         <div
           class="mb-6 md:mb-0 xl:mb-6 2xl:mb-0 flex flex-col text-lg gap-1 whitespace-nowrap justify-center"
         >
-          <slot />
+          <slot v-if="showContent" />
+          <div v-else class="text-gray-500">
+            {{ $t('common.noRecordsFound') }}
+          </div>
         </div>
         <div
-          v-if="chartType != 'None' && chartLabels && chartDatasets"
+          v-if="chartType != 'None' && chartLabels && chartDatasets && showContent"
           class="flex justify-center items-center"
         >
           <ChartComponent

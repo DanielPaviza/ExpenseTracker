@@ -100,7 +100,6 @@
     "hiddenPlaceholder": "Skryté",
     "sorting": "Řazení",
     "price": "Cena",
-    "noRecordsFound": "Nebyly nalezeny žádné záznamy",
     "collapseTable": "Zabalit tabulku",
     "clearFiltersAndSorting": "Vymazat filtry a řazení",
     "filterPlaceholder": "Filtrovat",
@@ -188,7 +187,7 @@
     "savedExpenses": "Ušetřené výdaje",
     "totalPaid": "Celkem zaplaceno",
     "saved": "Ušetřeno",
-    "totalWithSaved": "(Celkem s ušetřenými)",
+    "totalWithSaved": "Celkem s ušetřenými",
     "freeItems": "Položky zdarma",
     "noSavedExpenses": "Žádné ušetřené výdaje.",
     "unpaidExpenses": "Nezaplacené výdaje",
@@ -221,6 +220,7 @@
   "common": {
     "showLess": "▲ Zobrazit méně",
     "showAll": "▼ Zobrazit všechny ({count})",
-    "loadingData": "Načítání dat..."
+    "loadingData": "Načítání dat...",
+    "noRecordsFound": "Nebyly nalezeny žádné záznamy"
   }
 }
