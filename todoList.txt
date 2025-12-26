@@ -2,8 +2,6 @@ BytEvidence todoList
 
 ---- TODO ----
 
-- kdyz nejsou zadne zaznamy, zobrazit hlasku v summaries, takhle to vypada divne
-- refactor summaries
 - refactor cely appky - priprava na zverejneni
 - pridat moznost evidence uctenky
     - zatim staci "prolinkovani", neresit nahravani obrazku, pouze moznost spojit zaznam s jiz nekde umistenym
@@ -62,3 +60,5 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - i18n dotahnout měnu (czk, usd, eur)
 - mazani (cely context menu pravdepodobne) se po par pouzitich chova divne - mozna to targetuje spatnej row (spendingId)
 - prejmenovat z bytEvidence na neco ANG a vice generickeho - ExpenseTracker?
+- kdyz nejsou zadne zaznamy, zobrazit hlasku v summaries, takhle to vypada divne
+- refactor summaries
