@@ -20,7 +20,8 @@
     "errorRestoringItem": "Chyba při obnovování \"{name}\"",
     "allDeletedItemsRestored": "Všechny smazané výdaje byly obnoveny",
     "errorRestoringAllItems": "Chyba při obnovování všech smazaných výdajů",
-    "errorLoadingData": "Chyba při načítání dat"
+    "errorLoadingData": "Chyba při načítání dat",
+    "errorRequiredData": "Vyplňte všechna povinná pole"
   },
   "dialogs": {
     "discardChangesTitle": "Zahodit změny",

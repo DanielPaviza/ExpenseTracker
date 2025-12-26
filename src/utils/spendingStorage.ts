@@ -3,6 +3,8 @@ import { invoke } from '@tauri-apps/api/core'
 import { createSpending } from '@/composables/useSpending'
 import { Spending } from '@/types/Spending'
 
+const DEV_DB_PATH = './../src-tauri/expenseTrackerDb.json'
+
 /**
  * Fetches spending data from a local JSON file.
  * This is used as a fallback when the invoke command fails.
@@ -10,7 +12,7 @@ import { Spending } from '@/types/Spending'
  */
 async function fetchSpendingsFromFile(): Promise<Spending[]> {
   try {
-    const response = await fetch('./../src-tauri/bytEvidenceDb.json')
+    const response = await fetch(DEV_DB_PATH)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
@@ -26,13 +28,16 @@ async function fetchSpendingsFromFile(): Promise<Spending[]> {
  * Loads spending data from the backend or falls back to a local JSON file.
  * @returns Array of Spending objects, or empty array if parsing fails
  */
-export async function loadSpendings(): Promise<Spending[]> {
+export async function loadSpendings(): Promise<Spending[] | void> {
   try {
     const jsonData = await invoke<string>('load_data')
     return parseSpendings(jsonData)
   } catch (error) {
     console.error('Failed to load spendings via invoke, falling back to fetch:', error)
-    return fetchSpendingsFromFile()
+    // Fallback to fetching from local file in development mode
+    if (import.meta.env.DEV) {
+      return fetchSpendingsFromFile()
+    }
   }
 }
 
