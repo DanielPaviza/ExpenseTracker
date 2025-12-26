@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
+  import SummaryCard from '@components/spendingsDashboard/summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { formatDateShort } from '@utils/formatUtils'
   import { NButton, NButtonGroup, NInputNumber } from 'naive-ui'

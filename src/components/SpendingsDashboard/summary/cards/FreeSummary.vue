@@ -1,19 +1,34 @@
 <script setup lang="ts">
-  import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
+  import SummaryCard from '@components/spendingsDashboard/summary/SummaryCard.vue'
   import { useItemsLimit } from '@composables/useItemsLimit'
+  import { useSpecialSpendings } from '@composables/useSpecialSpendings'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { storeToRefs } from 'pinia'
 
-  import { computed } from 'vue'
-  import { useI18n } from 'vue-i18n'
-
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
-  const { t } = useI18n()
   const store = useSpendingsStore()
   const { spendings, totalPrice } = storeToRefs(store)
 
-  const freeSpendings = computed(() => spendings.value.filter((s) => s.isFree))
+  const {
+    specialSpendings: freeSpendings,
+    priceSpecial: priceFree,
+    priceTotalWithSpecial: priceTotalWithFree,
+    chartLabels,
+    chartDatasets,
+  } = useSpecialSpendings({
+    spendings,
+    totalPrice,
+    filterFn: (s) => s.isFree,
+    labelKeys: {
+      paid: 'summary.paid',
+      special: 'summary.free',
+    },
+    colors: {
+      paid: '#06402b',
+      special: '#10b981',
+    },
+  })
 
   const {
     displayedItems: displayedFreeSpendings,
@@ -21,30 +36,6 @@
     toggleText,
     showAll,
   } = useItemsLimit(freeSpendings)
-
-  const priceFree = computed(() => freeSpendings.value.reduce((sum, s) => sum + s.totalPrice, 0))
-
-  const priceTotalWithFree = computed(() => totalPrice.value + priceFree.value)
-
-  const priceFreePercent = computed(() => {
-    const total = priceTotalWithFree.value
-    if (!total || total === 0) {
-      return 0
-    }
-    return Math.round((priceFree.value / total) * 100)
-  })
-
-  const chartLabels = computed(() => [
-    `${t('summary.paid')} (${100 - priceFreePercent.value}%)`,
-    `${t('summary.free')} (${priceFreePercent.value}%)`,
-  ])
-  const chartDatasets = computed(() => [
-    {
-      label: t('summary.savedExpenses'),
-      data: [totalPrice.value, priceFree.value],
-      backgroundColor: ['#06402b', '#10b981'],
-    },
-  ])
 </script>
 
 <template>

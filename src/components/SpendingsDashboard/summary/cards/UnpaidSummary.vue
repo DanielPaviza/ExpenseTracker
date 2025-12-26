@@ -1,19 +1,34 @@
 <script setup lang="ts">
-  import SummaryCard from '@components/SpendingsDashboard/Summary/SummaryCard.vue'
+  import SummaryCard from '@components/spendingsDashboard/summary/SummaryCard.vue'
   import { useItemsLimit } from '@composables/useItemsLimit'
+  import { useSpecialSpendings } from '@composables/useSpecialSpendings'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { storeToRefs } from 'pinia'
 
-  import { computed } from 'vue'
-  import { useI18n } from 'vue-i18n'
-
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
-  const { t } = useI18n()
   const store = useSpendingsStore()
   const { spendings, totalPrice } = storeToRefs(store)
 
-  const unpaidSpendings = computed(() => spendings.value.filter((s) => s.isToBePaid && !s.isFree))
+  const {
+    specialSpendings: unpaidSpendings,
+    priceSpecial: priceUnpaid,
+    priceTotalWithSpecial: priceTotalWithUnpaid,
+    chartLabels,
+    chartDatasets,
+  } = useSpecialSpendings({
+    spendings,
+    totalPrice,
+    filterFn: (s) => s.isToBePaid && !s.isFree,
+    labelKeys: {
+      paid: 'summary.paid',
+      special: 'summary.unpaid',
+    },
+    colors: {
+      paid: '#06402b',
+      special: '#e53e3e',
+    },
+  })
 
   const {
     displayedItems: displayedUnpaidSpendings,
@@ -21,32 +36,6 @@
     toggleText,
     showAll,
   } = useItemsLimit(unpaidSpendings)
-
-  const priceUnpaid = computed(() =>
-    unpaidSpendings.value.reduce((sum, s) => sum + s.totalPrice, 0),
-  )
-
-  const priceTotalWithUnpaid = computed(() => totalPrice.value + priceUnpaid.value)
-
-  const priceUnpaidPercent = computed(() => {
-    const total = priceTotalWithUnpaid.value
-    if (!total || total === 0) {
-      return 0
-    }
-    return Math.round((priceUnpaid.value / total) * 100)
-  })
-
-  const chartLabels = computed(() => [
-    `${t('summary.paid')} (${100 - priceUnpaidPercent.value}%)`,
-    `${t('summary.unpaid')} (${priceUnpaidPercent.value}%)`,
-  ])
-  const chartDatasets = computed(() => [
-    {
-      label: t('summary.unpaidExpenses'),
-      data: [totalPrice.value, priceUnpaid.value],
-      backgroundColor: ['#06402b', '#e53e3e'],
-    },
-  ])
 </script>
 
 <template>
