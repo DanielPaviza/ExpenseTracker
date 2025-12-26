@@ -25,7 +25,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     return current !== original
   })
 
-  async function load(): Promise<void> {
+  async function load(): Promise<boolean> {
     isLoading.value = true
     try {
       const loadedData = await loadSpendings()
@@ -35,9 +35,10 @@ export const useSpendingsStore = defineStore('spendings', () => {
       newSpendingIds.value.clear()
       editedSpendingIds.value.clear()
       deletedSpendings.value = []
+      return true
     } catch (error) {
       console.error('Failed to load spendings:', error)
-      throw error
+      return false
     } finally {
       isLoading.value = false
     }

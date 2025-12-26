@@ -8,12 +8,20 @@
     spending: Spending
   }>()
 
-  const { actionOptions, handleActionSelect } = useSpendingDataTableAction(spending)
+  const { actionOptions, handleActionSelect } = useSpendingDataTableAction()
 </script>
 
 <template>
   <div class="px-2">
-    <n-dropdown :options="actionOptions" @select="handleActionSelect($event)">
+    <n-dropdown
+      :options="
+        actionOptions.map((option) => ({
+          ...option,
+          label: option.label,
+        }))
+      "
+      @select="handleActionSelect($event, spending)"
+    >
       <n-button @click.stop>
         <div class="flex flex-col items-center justify-center font-bold text-[16px]">
           <span class="h-2 -mt-4">.</span>
