@@ -39,6 +39,7 @@
     if (event && (event.target as HTMLElement).closest('.delete-button, .spending-link')) {
       return
     }
+
     emit('row-click', row, event)
     router.push(`/edit/${row.id}`)
   }

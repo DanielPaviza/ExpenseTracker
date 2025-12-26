@@ -14,10 +14,9 @@
   const isOpen = ref<boolean>(false)
   const x = ref(0)
   const y = ref(0)
-  const { actionOptions, handleActionSelect } = useSpendingDataTableAction(spending)
+  const { actionOptions, handleActionSelect } = useSpendingDataTableAction()
 
   const openContextMenu = (event: MouseEvent): void => {
-    console.log('Opening context menu at', event.clientX, event.clientY)
     event.preventDefault()
     isOpen.value = false
     nextTick().then(() => {
@@ -37,7 +36,12 @@
 
 <template>
   <n-dropdown
-    :options="actionOptions"
+    :options="
+      actionOptions.map((option) => ({
+        ...option,
+        label: option.label,
+      }))
+    "
     trigger="manual"
     placement="bottom-start"
     :show="isOpen"
@@ -46,7 +50,7 @@
     :on-clickoutside="() => (isOpen = false)"
     @mouseleave="isOpen = false"
     @update:show="(v) => (isOpen = v)"
-    @select="handleActionSelect($event)"
+    @select="handleActionSelect($event, spending)"
   >
   </n-dropdown>
 </template>

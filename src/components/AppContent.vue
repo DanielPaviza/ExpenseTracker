@@ -6,16 +6,14 @@
   import { onMounted } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  const spendingsStore = useSpendingsStore()
-  const message = useMessage()
   const { t } = useI18n()
+
+  const message = useMessage()
+
+  const spendingsStore = useSpendingsStore()
   onMounted(async () => {
-    try {
-      await spendingsStore.load()
-    } catch (error) {
-      message.error(t('common.errorLoadingData'))
-      console.error(t('common.errorLoadingData'), error)
-    }
+    const success = await spendingsStore.load()
+    if (!success) message.error(t('messages.errorLoadingData'))
   })
 </script>
 
