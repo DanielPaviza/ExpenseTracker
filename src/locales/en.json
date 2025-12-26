@@ -20,7 +20,8 @@
     "errorRestoringItem": "Error restoring \"{name}\"",
     "allDeletedItemsRestored": "All deleted expenses have been restored",
     "errorRestoringAllItems": "Error restoring all deleted expenses",
-    "errorLoadingData": "Error loading data"
+    "errorLoadingData": "Error loading data",
+    "errorRequiredData": "Please fill in all required fields"
   },
   "dialogs": {
     "discardChangesTitle": "Discard Changes",

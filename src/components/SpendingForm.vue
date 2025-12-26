@@ -184,7 +184,13 @@
   async function handleSave(): Promise<void> {
     try {
       await formRef.value?.validate()
+    } catch (error) {
+      console.error('Spending field validation failed', error)
+      message.error(t('messages.errorRequiredData'))
+      return
+    }
 
+    try {
       // Update existing
       if (isEditMode.value && currentSpending.value) {
         const updatedSpending = {
@@ -447,7 +453,7 @@
       <template #footer>
         <div class="flex justify-between w-full gap-3">
           <div class="flex gap-3">
-            <n-button color="#60a5fa" @click="closeDrawer">
+            <n-button color="#fa5a7d" @click="closeDrawer">
               {{ t('dialogs.cancel') }}
             </n-button>
             <n-button v-if="isEditMode" color="#ef4444" @click="handleDelete">

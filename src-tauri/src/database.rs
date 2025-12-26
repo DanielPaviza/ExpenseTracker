@@ -2,7 +2,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use anyhow::{Result, Context};
 
-const DB_FILENAME: &str = "bytEvidenceDb.json";
+const DB_FILENAME: &str = "expenseTrackerDb.json";
 
 #[derive(Debug)]
 pub struct Database {
@@ -56,7 +56,6 @@ impl Database {
 
     #[inline(never)]
     pub fn save(&self, data: &str) -> Result<()> {
-        eprintln!("dbbbbb saveee"); // Debug logging
         let path = self.get_path();
         eprintln!("Saving to path: {}", path.display());
         if let Some(parent) = path.parent() {
