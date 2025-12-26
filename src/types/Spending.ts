@@ -10,7 +10,7 @@ export interface Spending {
   unitPrice: number
   dimensions?: string | null
   url?: string | null
-  document?: string | null
+  technicalDocumentUrl?: string | null
   store?: string | null
   storeCode?: string | null
   description?: string | null

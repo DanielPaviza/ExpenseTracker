@@ -17,7 +17,7 @@ export function createSpending(data?: Partial<Spending>): Spending {
     unitPrice: data?.unitPrice ?? 0,
     dimensions: data?.dimensions ?? null,
     url: data?.url ?? null,
-    document: data?.document ?? null,
+    technicalDocumentUrl: data?.technicalDocumentUrl ?? null,
     store: data?.store ?? null,
     storeCode: data?.storeCode ?? null,
     description: data?.description ?? null,

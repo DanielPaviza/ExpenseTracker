@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SpendingForm from '@components/SpendingForm.vue'
+  import SpendingForm from '@components/spendingForm/SpendingForm.vue'
 </script>
 
 <template>

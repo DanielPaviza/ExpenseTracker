@@ -11,7 +11,7 @@ export const SPENDING_FORM_DATA_DEFAULT: Partial<Spending> = {
   unitPrice: 0,
   dimensions: '',
   url: '',
-  document: '',
+  technicalDocumentUrl: '',
   store: '',
   storeCode: '',
   description: '',

@@ -2,7 +2,6 @@ BytEvidence todoList
 
 ---- TODO ----
 
-- refactor cely appky - priprava na zverejneni
 - pridat moznost evidence uctenky
     - zatim staci "prolinkovani", neresit nahravani obrazku, pouze moznost spojit zaznam s jiz nekde umistenym
         souborem (fotkou)
