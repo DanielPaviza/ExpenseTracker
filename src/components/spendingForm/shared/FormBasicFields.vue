@@ -112,9 +112,5 @@
         {{ t('form.totalPrice') }}: {{ totalPrice.toLocaleString('cs-CZ') }} Kč
       </div>
     </div>
-
-    <n-form-item :label="t('form.name')" path="name">
-      <n-input v-model:value="formData.name" :placeholder="t('form.namePlaceholder')" />
-    </n-form-item>
   </div>
 </template>

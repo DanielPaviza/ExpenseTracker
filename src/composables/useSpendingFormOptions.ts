@@ -29,7 +29,11 @@ export function useSpendingFormOptions(formData: ComputedRef<Spending>) {
 
   const tagOptions = computed(() => {
     let allTags: SelectOption[] = store.tags.map((tag) => ({ label: tag, value: tag }))
-    if (formData.value.subCategory) {
+    // Ensure current subCategory is included in tags options
+    if (
+      formData.value.subCategory &&
+      !allTags.find((tag) => tag.value === formData.value.subCategory)
+    ) {
       allTags.push({ label: formData.value.subCategory, value: formData.value.subCategory })
     }
     return allTags

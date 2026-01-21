@@ -1,4 +1,5 @@
 import { Spending } from '@/types/Spending'
+import { SpendingDocument } from '@/types/SpendingDocument'
 
 export const SPENDING_FORM_DATA_DEFAULT: Partial<Spending> = {
   category: '',
@@ -18,4 +19,5 @@ export const SPENDING_FORM_DATA_DEFAULT: Partial<Spending> = {
   subCategory: '',
   tags: [] as string[],
   createdAt: new Date(),
+  documents: [] as SpendingDocument[],
 }

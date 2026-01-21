@@ -5,11 +5,9 @@
 
   import type { Spending } from '@/types/Spending'
 
-  interface Props {
+  const { spending } = defineProps<{
     spending: Spending
-  }
-
-  defineProps<Props>()
+  }>()
   const { t } = useI18n()
 </script>
 

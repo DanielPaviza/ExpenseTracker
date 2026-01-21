@@ -1,25 +1,19 @@
 import { useSpendingsStore } from '@stores/spendingsStore'
 
-import { Ref, computed, ref, watch } from 'vue'
+import { ComputedRef, computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { createSpending } from '@/composables/useSpending'
 import { SPENDING_FORM_DATA_DEFAULT } from '@/constants/spendingFormData'
 import { Spending } from '@/types/Spending'
 
-export function useSpendingFormData(): {
-  formData: Ref<Spending>
-  currentSpending: Ref<Spending | null>
-  isEditMode: Ref<boolean>
-  totalPrice: Ref<number>
-  createdAtTimestamp: Ref<number>
-} {
+export function useSpendingFormData() {
   const store = useSpendingsStore()
   const route = useRoute()
 
   const isEditMode = computed(() => route.path.startsWith('/edit/'))
 
-  const currentSpending = computed(() => {
+  const currentSpending: ComputedRef<Spending | null> = computed(() => {
     if (isEditMode.value) {
       const id = route.params.id as string
       return store.spendings.find((s) => s.id === id) || null
@@ -56,6 +50,7 @@ export function useSpendingFormData(): {
         id: '',
         createdAt: new Date(),
         editedAt: null,
+        documents: [],
       }
       formData.value = createSpending(sanitizedTemplate)
     },

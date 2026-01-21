@@ -1,17 +1,23 @@
 import { useSpendingsStore } from '@stores/spendingsStore'
 
-import { onBeforeUnmount, onMounted } from 'vue'
+import type { Window } from '@tauri-apps/api/window'
+
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 export function useUnsavedChangesDialog(): void {
   const { t } = useI18n()
   const store = useSpendingsStore()
+  const appWindow = ref<Window | null>(null)
 
   onMounted(async () => {
     const { getCurrentWindow } = await import('@tauri-apps/api/window')
-    const appWindow = getCurrentWindow()
+    appWindow.value = getCurrentWindow()
+  })
 
-    const unlisten = await appWindow.onCloseRequested(async (event) => {
+  // Cleanup on unmount
+  onBeforeUnmount(async () => {
+    const unlisten = await appWindow.value?.onCloseRequested(async (event) => {
       if (store.pendingChanges) {
         event.preventDefault()
 
@@ -25,7 +31,7 @@ export function useUnsavedChangesDialog(): void {
 
         if (shouldClose) {
           try {
-            await appWindow.destroy()
+            await appWindow.value?.destroy()
           } catch (e) {
             console.error('Error closing window:', e)
           }
@@ -33,9 +39,6 @@ export function useUnsavedChangesDialog(): void {
       }
     })
 
-    // Cleanup on unmount
-    onBeforeUnmount(() => {
-      unlisten()
-    })
+    unlisten?.()
   })
 }
