@@ -1,16 +1,7 @@
 <script setup lang="ts">
   import Tooltip from '@components/Tooltip.vue'
   import FormUrlInput from '@components/spendingForm/shared/FormUrlInput.vue'
-  import { OpenOutline } from '@vicons/ionicons5'
-  import {
-    NButton,
-    NCheckbox,
-    NFormItem,
-    NIcon,
-    NInput,
-    NSelect,
-    type SelectOption,
-  } from 'naive-ui'
+  import { NCheckbox, NFormItem, NInput, NSelect, type SelectOption } from 'naive-ui'
 
   import { useI18n } from 'vue-i18n'
 
@@ -22,39 +13,19 @@
   }>()
 
   const { t } = useI18n()
-  const formData = defineModel<Spending>('formData')
+  const formData = defineModel<Spending>('formData', { required: true })
+
+  const handleSetSubcategory = (value: string | null): void => {
+    formData.value.subCategory = value
+    // If the tags are empty, add the selected subcategory as a tag
+    if (formData.value.tags.length <= 0 && value) {
+      formData.value.tags.push(value)
+    }
+  }
 </script>
 
 <template>
-  <div class="flex-1" v-if="formData">
-    <div class="flex justify-center">
-      <div class="flex gap-20">
-        <n-form-item :label="t('form.toBePaid')">
-          <template #label>
-            <div class="flex items-center gap-1">
-              {{ t('form.toBePaid') }}
-              <Tooltip :text="t('form.toBePaidTooltip')" />
-            </div>
-          </template>
-          <n-checkbox v-model:checked="formData.isToBePaid">
-            {{ formData.isToBePaid ? t('form.yes') : t('form.no') }}
-          </n-checkbox>
-        </n-form-item>
-
-        <n-form-item :label="t('form.free')">
-          <template #label>
-            <div class="flex items-center gap-1">
-              {{ t('form.free') }}
-              <Tooltip :text="t('form.freeTooltip')" />
-            </div>
-          </template>
-          <n-checkbox v-model:checked="formData.isFree">
-            {{ formData.isFree ? t('form.yes') : t('form.no') }}
-          </n-checkbox>
-        </n-form-item>
-      </div>
-    </div>
-
+  <div class="flex-1">
     <n-form-item path="subCategory">
       <template #label>
         <div class="flex items-center gap-1">
@@ -63,7 +34,8 @@
         </div>
       </template>
       <n-select
-        v-model:value="formData.subCategory"
+        @update:value="handleSetSubcategory"
+        :value="formData.subCategory"
         :options="subCategoryOptions"
         :placeholder="t('form.selectGroup')"
         filterable
@@ -116,5 +88,33 @@
         clearable
       />
     </n-form-item>
+
+    <div class="flex justify-center">
+      <div class="flex gap-20">
+        <n-form-item :label="t('form.toBePaid')">
+          <template #label>
+            <div class="flex items-center gap-1">
+              {{ t('form.toBePaid') }}
+              <Tooltip :text="t('form.toBePaidTooltip')" />
+            </div>
+          </template>
+          <n-checkbox v-model:checked="formData.isToBePaid">
+            {{ formData.isToBePaid ? t('form.yes') : t('form.no') }}
+          </n-checkbox>
+        </n-form-item>
+
+        <n-form-item :label="t('form.free')">
+          <template #label>
+            <div class="flex items-center gap-1">
+              {{ t('form.free') }}
+              <Tooltip :text="t('form.freeTooltip')" />
+            </div>
+          </template>
+          <n-checkbox v-model:checked="formData.isFree">
+            {{ formData.isFree ? t('form.yes') : t('form.no') }}
+          </n-checkbox>
+        </n-form-item>
+      </div>
+    </div>
   </div>
 </template>

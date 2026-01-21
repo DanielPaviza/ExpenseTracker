@@ -91,12 +91,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   async function updateSpending(id: string, updatedSpending: Spending): Promise<void> {
     const index = spendings.value.findIndex((s) => s.id === id)
-    if (index !== -1) {
-      spendings.value[index] = updatedSpending
-      // Track as edited only if not already new
-      if (!newSpendingIds.value.has(id)) {
-        editedSpendingIds.value.add(id)
-      }
+    if (index < 0) return
+
+    spendings.value[index] = updatedSpending
+    // Track as edited only if not already new
+    if (!newSpendingIds.value.has(id)) {
+      editedSpendingIds.value.add(id)
     }
   }
 

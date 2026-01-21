@@ -13,6 +13,7 @@ export function useSpendingDialogAction() {
   const deleteDialog = async (
     data: { name: string; id: string },
     event: Event | null,
+    onPositiveAction?: () => void,
   ): Promise<void> => {
     event?.stopPropagation()
 
@@ -24,6 +25,7 @@ export function useSpendingDialogAction() {
       onPositiveClick: async () => {
         await store.removeSpending(data.id)
         message.success(t('messages.purchaseDeletedSuccessfully'))
+        onPositiveAction?.()
       },
     })
   }

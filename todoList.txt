@@ -1,28 +1,23 @@
 BytEvidence todoList
 
 ---- TODO ----
-
-- pridat moznost evidence uctenky
-    - zatim staci "prolinkovani", neresit nahravani obrazku, pouze moznost spojit zaznam s jiz nekde umistenym
-        souborem (fotkou)
         
+- presunout vse do %appdata% (documents uz jsou, jeste celou db)
+    - zjistit rozdíl mezi appdata a applocaldata
+
 - pridat nastaveni
     - persistentni nastaveni v settings.json (novy file, stejne misto jako db.json)
     - nastaveni jazyka, defaulni razeni datatables, defaultni zalozka summaries a spendingsTable
     - novy endpoint v rustu, na stejny brdo (nastaveni, default hodnoty ve vue)
     - default rozbaleny/zabaleny subgroup 
+    - currency symbol (moznost pridat vlastniho?)
 
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
-    - nebo vytvořit flag něco jako isZahrnutVJinýPoložce :D
-
 - Zapsat "zapomenutý" výdaje
     - projit bank vypis
-
     - kari varna deska + pojisteni
     - kari zásuvky
-    
-    
-    
+
 
 ---- DONE ----
 - new spending form - jednotková cena default val pouze jako placeholder aby šlo kliknout a hned psát
@@ -61,3 +56,6 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - prejmenovat z bytEvidence na neco ANG a vice generickeho - ExpenseTracker?
 - kdyz nejsou zadne zaznamy, zobrazit hlasku v summaries, takhle to vypada divne
 - refactor summaries
+- Smazat button ve formu zavre form drawer hned po zobrazení dialogu
+- Form - skupina a tagy - pri vyplneni skupiny vyplnit rovnou stejny tag
+- pridat moznost evidence dokumentů

@@ -1,3 +1,5 @@
+import { SpendingDocument } from '@/types/SpendingDocument'
+
 export interface Spending {
   id: string
   category: string
@@ -18,5 +20,6 @@ export interface Spending {
   tags: string[]
   createdAt: Date
   editedAt: Date | null
+  documents: SpendingDocument[]
   readonly totalPrice: number // Computed property
 }

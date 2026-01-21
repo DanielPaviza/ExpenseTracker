@@ -28,5 +28,10 @@ export function createSpending(data?: Partial<Spending>): Spending {
     get totalPrice() {
       return this.unitPrice * this.quantity
     },
+    documents: data?.documents
+      ? data.documents.map((doc) => ({
+          ...doc,
+        }))
+      : [],
   }) as Spending
 }

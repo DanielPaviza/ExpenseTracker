@@ -28,16 +28,17 @@ async function fetchSpendingsFromFile(): Promise<Spending[]> {
  * Loads spending data from the backend or falls back to a local JSON file.
  * @returns Array of Spending objects, or empty array if parsing fails
  */
-export async function loadSpendings(): Promise<Spending[] | void> {
+export async function loadSpendings(): Promise<Spending[]> {
   try {
     const jsonData = await invoke<string>('load_data')
     return parseSpendings(jsonData)
   } catch (error) {
-    console.error('Failed to load spendings via invoke, falling back to fetch:', error)
     // Fallback to fetching from local file in development mode
     if (import.meta.env.DEV) {
+      console.error('Failed to load spendings via invoke, falling back to fetch:', error)
       return fetchSpendingsFromFile()
     }
+    throw error
   }
 }
 
