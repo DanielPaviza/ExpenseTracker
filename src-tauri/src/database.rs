@@ -10,39 +10,25 @@ pub struct Database {
 }
 
 impl Database {
-    pub fn new() -> Self {
-        let path = Self::get_db_path()
-            .expect("Failed to determine database path");
-        
+    pub fn new(base_path: PathBuf) -> Self {
+        let path = Self::get_db_path(base_path);
+
         Database {
             file_path: path,
         }
     }
 
-    pub fn new_safe() -> Result<Self> {
-        let path = Self::get_db_path()?;
+    pub fn new_safe(base_path: PathBuf) -> Result<Self> {
+        let path = Self::get_db_path(base_path);
         eprintln!("Database path will be: {}", path.display());
         Ok(Database {
             file_path: path,
         })
     }
 
-    fn get_db_path() -> Result<PathBuf> {
-        let mut path = if cfg!(debug_assertions) {
-            // Development: use project root
-            std::env::current_dir()
-                .with_context(|| "Failed to get current directory")?
-        } else {
-            // Production: use executable directory
-            std::env::current_exe()
-                .with_context(|| "Failed to get executable path")?
-                .parent()
-                .with_context(|| "Failed to get executable directory")?
-                .to_path_buf()
-        };
-        
-        path.push(DB_FILENAME);
-        Ok(path)
+    fn get_db_path(mut base_path: PathBuf) -> PathBuf {
+        base_path.push(DB_FILENAME);
+        base_path
     }
 
     pub fn load(&self) -> Result<String> {

@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api/core'
 import { createSpending } from '@/composables/useSpending'
 import { Spending } from '@/types/Spending'
 
+// Read only path for development fallback when invoke fails (testing in browser)
 const DEV_DB_PATH = './../src-tauri/expenseTrackerDb.json'
 
 /**

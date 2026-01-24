@@ -1,16 +1,16 @@
 import { useMessage } from 'naive-ui'
 
+import { invoke } from '@tauri-apps/api/core'
 import { convertFileSrc } from '@tauri-apps/api/core'
-import { appDataDir, join } from '@tauri-apps/api/path'
+import { join } from '@tauri-apps/api/path'
 import { mkdir, remove, writeFile } from '@tauri-apps/plugin-fs'
 
 import { ref } from 'vue'
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+import { DOCUMENTS_FOLDER_NAME } from '@/constants/documentFolder'
 import { SpendingDocument } from '@/types/SpendingDocument'
-
-const DOCUMENTS_FOLDER_NAME = 'Documents'
 
 /**
  * Composable for managing file uploads to the Documents folder
@@ -124,7 +124,7 @@ export function useFileUpload() {
    */
   async function getDocumentsFolderPath(): Promise<string | null> {
     try {
-      const baseDir = await appDataDir()
+      const baseDir = await invoke<string>('get_app_data_dir')
       return await join(baseDir, DOCUMENTS_FOLDER_NAME)
     } catch (error) {
       console.error('Failed to get Documents folder path:', error)

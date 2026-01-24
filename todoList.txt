@@ -2,9 +2,6 @@ BytEvidence todoList
 
 ---- TODO ----
         
-- presunout vse do %appdata% (documents uz jsou, jeste celou db)
-    - zjistit rozdíl mezi appdata a applocaldata
-
 - pridat nastaveni
     - persistentni nastaveni v settings.json (novy file, stejne misto jako db.json)
     - nastaveni jazyka, defaulni razeni datatables, defaultni zalozka summaries a spendingsTable
@@ -59,3 +56,4 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - Smazat button ve formu zavre form drawer hned po zobrazení dialogu
 - Form - skupina a tagy - pri vyplneni skupiny vyplnit rovnou stejny tag
 - pridat moznost evidence dokumentů
+- presunout vse do %appdata% (documents uz jsou, jeste celou db)
