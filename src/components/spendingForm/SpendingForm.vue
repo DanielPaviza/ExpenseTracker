@@ -1,9 +1,4 @@
 <script setup lang="ts">
-  import FormActions from '@components/spendingForm/shared/FormActions.vue'
-  import FormAdditionalFields from '@components/spendingForm/shared/FormAdditionalFields.vue'
-  import FormBasicFields from '@components/spendingForm/shared/FormBasicFields.vue'
-  import FormDocuments from '@components/spendingForm/shared/FormDocuments.vue'
-  import FormTimestamps from '@components/spendingForm/shared/FormTimestamps.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { type FormInst, NDrawer, NDrawerContent, NForm, useMessage } from 'naive-ui'
 
@@ -11,6 +6,11 @@
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
+  import FormActions from '@/components/spendingForm/components/SpendingFormActions.vue'
+  import FormAdditionalFields from '@/components/spendingForm/components/SpendingFormAdditionalFields.vue'
+  import FormBasicFields from '@/components/spendingForm/components/SpendingFormBasicFields.vue'
+  import FormDocuments from '@/components/spendingForm/components/SpendingFormDocuments.vue'
+  import FormTimestamps from '@/components/spendingForm/components/SpendingFormTimestamps.vue'
   import { useFileUpload } from '@/composables/useFileUpload'
   import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
   import { useSpendingFormData } from '@/composables/useSpendingFormData'
