@@ -17,11 +17,24 @@ impl JsonStore {
         JsonStore { file_path }
     }
 
-    pub fn load(&self) -> Result<String> {
+
+    /// Ensures the file exists, creating it with '{}' if missing
+    pub fn ensure_exists_with_empty_object(&self) -> Result<()> {
         let path = self.path();
         if !self.exists() {
-            return Err(anyhow::anyhow!("Data file does not exist"));
+            if let Some(parent) = path.parent() {
+                fs::create_dir_all(parent)
+                    .with_context(|| format!("Failed to create directories for: {}", path.display()))?;
+            }
+            fs::write(path, "{}")
+                .with_context(|| format!("Failed to create file with empty object: {}", path.display()))?;
         }
+        Ok(())
+    }
+
+    pub fn load(&self) -> Result<String> {
+        self.ensure_exists_with_empty_object()?;
+        let path = self.path();
         let content = fs::read_to_string(path)
             .with_context(|| format!("Failed to read file: {}", path.display()))?;
         Ok(content)
@@ -29,6 +42,7 @@ impl JsonStore {
 
     #[inline(never)]
     pub fn save(&self, data: &str) -> Result<()> {
+        self.ensure_exists_with_empty_object()?;
         let path = self.path();
         eprintln!("Saving to path: {}", path.display());
         if let Some(parent) = path.parent() {
