@@ -1,48 +1,35 @@
 use std::fs;
 use std::path::{Path, PathBuf};
-use anyhow::{Result, Context};
 
-const DB_FILENAME: &str = "expenseTrackerDb.json";
+use anyhow::{Context, Result};
+
+pub const DATA_FILE_NAME: &str = "expenseTrackerDb.json";
+pub const SETTINGS_FILE_NAME: &str = "settings.json";
 
 #[derive(Debug)]
-pub struct Database {
+pub struct JsonStore {
     file_path: PathBuf,
 }
 
-impl Database {
-    pub fn new(base_path: PathBuf) -> Self {
-        let path = Self::get_db_path(base_path);
-
-        Database {
-            file_path: path,
-        }
-    }
-
-    pub fn new_safe(base_path: PathBuf) -> Result<Self> {
-        let path = Self::get_db_path(base_path);
-        eprintln!("Database path will be: {}", path.display());
-        Ok(Database {
-            file_path: path,
-        })
-    }
-
-    fn get_db_path(mut base_path: PathBuf) -> PathBuf {
-        base_path.push(DB_FILENAME);
-        base_path
+impl JsonStore {
+    pub fn new(base_path: PathBuf, file_name: impl AsRef<Path>) -> Self {
+        let file_path = base_path.join(file_name);
+        JsonStore { file_path }
     }
 
     pub fn load(&self) -> Result<String> {
+        let path = self.path();
         if !self.exists() {
-            return Err(anyhow::anyhow!("Database file does not exist"));
+            return Err(anyhow::anyhow!("Data file does not exist"));
         }
-        let content = fs::read_to_string(self.get_path())
-            .with_context(|| format!("Failed to read file: {}", self.get_path().display()))?;
+        let content = fs::read_to_string(path)
+            .with_context(|| format!("Failed to read file: {}", path.display()))?;
         Ok(content)
     }
 
     #[inline(never)]
     pub fn save(&self, data: &str) -> Result<()> {
-        let path = self.get_path();
+        let path = self.path();
         eprintln!("Saving to path: {}", path.display());
         if let Some(parent) = path.parent() {
             eprintln!("Ensuring parent dir exists: {}", parent.display());
@@ -59,8 +46,8 @@ impl Database {
     pub fn exists(&self) -> bool {
         self.file_path.exists()
     }
-    
-    pub fn get_path(&self) -> &Path {
+
+    pub fn path(&self) -> &Path {
         &self.file_path
     }
 }

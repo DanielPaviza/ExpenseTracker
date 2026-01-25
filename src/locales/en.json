@@ -53,7 +53,6 @@
     "createPurchaseButton": "Create Purchase",
     "creationDate": "Creation Date",
     "deleteDocument": "Delete document",
-    "downloadDocument": "Download document",
     "description": "Description",
     "descriptionPlaceholder": "Detailed description...",
     "dimensions": "Dimensions",
@@ -63,6 +62,7 @@
     "documentPath": "Document path",
     "documents": "Documents",
     "documentsDropZone": "Drop files here or click 'Add Document'",
+    "downloadDocument": "Download document",
     "editDocumentName": "Edit document name",
     "edited": "Edited",
     "editPurchase": "Edit Purchase",
@@ -80,6 +80,7 @@
     "save": "Save",
     "saveChangesButton": "Save Changes",
     "saveDocumentName": "Save document name",
+    "saveSettings": "Save Settings",
     "selectCategory": "Select category",
     "selectDateTime": "Select date and time",
     "selectGroup": "Select group",
@@ -109,16 +110,16 @@
     "unsavedChanges": "Unsaved Changes"
   },
   "messages": {
-    "documentDownloadSuccess": "Document \"{name}\" downloaded successfully. You can find it in your downloads folder.",
     "allDeletedItemsRestored": "All deleted expenses have been restored",
     "changesDiscarded": "Changes discarded",
     "changesSavedSuccessfully": "Changes saved successfully",
     "documentDeletedSuccess": "Document \"{name}\" deleted successfully",
     "documentDeleteError": "Error deleting document \"{name}\"",
     "documentDownloadError": "Error downloading document \"{name}\"",
+    "documentDownloadSuccess": "Document \"{name}\" downloaded successfully. You can find it in your downloads folder.",
+    "documentUnavailable": "Document is not available or was removed",
     "documentUploadError": "Error uploading document \"{name}\"",
     "documentUploadSuccess": "Document \"{name}\" uploaded successfully",
-    "documentUnavailable": "Document is not available or was removed",
     "errorLoadingData": "Error loading data",
     "errorRequiredData": "Please fill in all required fields",
     "errorRestoringAllItems": "Error restoring all deleted expenses",
@@ -129,6 +130,12 @@
     "purchaseCreatedSuccessfully": "Purchase created successfully",
     "purchaseDeletedSuccessfully": "Purchase deleted successfully",
     "purchaseEditedSuccessfully": "Purchase edited successfully"
+  },
+  "settings": {
+    "currencySymbol": "Currency Symbol",
+    "currencySymbolPlaceholder": "CZK, $, €...",
+    "language": "Language",
+    "title": "Settings"
   },
   "summary": {
     "allExpensesPaid": "All expenses are paid.",
@@ -236,6 +243,7 @@
   },
   "validation": {
     "categoryRequired": "Category is required",
+    "currencyRequired": "Currency symbol cannot be empty",
     "nameRequired": "Name is required",
     "payerRequired": "Payer is required",
     "priceCannotBeNegative": "Price cannot be negative",

@@ -3,6 +3,8 @@ import SpendingForm from '@views/SpendingForm.vue'
 
 import { createRouter, createWebHistory } from 'vue-router'
 
+import Settings from '@/views/Settings.vue'
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -20,6 +22,11 @@ const router = createRouter({
           path: 'edit/:id',
           name: 'edit-spending',
           component: SpendingForm,
+        },
+        {
+          path: 'settings',
+          name: 'settings',
+          component: Settings,
         },
       ],
     },

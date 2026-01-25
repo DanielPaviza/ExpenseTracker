@@ -81,6 +81,7 @@
     "save": "Uložit",
     "saveChangesButton": "Uložit změny",
     "saveDocumentName": "Uložit název dokumentu",
+    "saveSettings": "Uložit nastavení",
     "selectCategory": "Vyberte kategorii",
     "selectDateTime": "Vyberte datum a čas",
     "selectGroup": "Vyberte skupinu",
@@ -131,6 +132,12 @@
     "purchaseCreatedSuccessfully": "Nákup byl úspěšně vytvořen",
     "purchaseDeletedSuccessfully": "Nákup byl úspěšně smazán",
     "purchaseEditedSuccessfully": "Nákup byl úspěšně upraven"
+  },
+  "settings": {
+    "currencySymbol": "Symbol měny",
+    "currencySymbolPlaceholder": "Kč, $, €...",
+    "language": "Jazyk",
+    "title": "Nastavení"
   },
   "summary": {
     "allExpensesPaid": "Všechny výdaje jsou zaplaceny.",
@@ -238,6 +245,7 @@
   },
   "validation": {
     "categoryRequired": "Kategorie je povinná",
+    "currencyRequired": "Symbol měny nesmí být prázdný",
     "nameRequired": "Název je povinný",
     "payerRequired": "Plátce je povinný",
     "priceCannotBeNegative": "Cena nemůže být záporná",

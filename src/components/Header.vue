@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import MarginContainer from '@components/MarginContainer.vue'
+  import MarginContainer from '@components/shared/MarginContainer.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { AddOutline } from '@vicons/ionicons5'
+  import { AddOutline, SettingsOutline } from '@vicons/ionicons5'
   import { NButton, NIcon, useMessage } from 'naive-ui'
 
   import { computed } from 'vue'
@@ -19,6 +19,10 @@
 
   function openNewSpendingForm(): void {
     router.push('/new')
+  }
+
+  function openSettings(): void {
+    router.push('/settings')
   }
 
   const pendingChanges = computed(() => store.pendingChanges)
@@ -75,10 +79,11 @@
           <div class="text-blue flex items-center font-semibold text-lg">
             {{ $t('header.totalExpenses') }}: {{ formatCurrency(store.totalPrice) }}
           </div>
-          <select v-model="$i18n.locale" class="ms-2 p-1 border border-gray-300 rounded">
-            <option value="en">English</option>
-            <option value="cs">Čeština</option>
-          </select>
+          <n-button color="#3b82f6" @click="openSettings">
+            <n-icon size="24">
+              <SettingsOutline />
+            </n-icon>
+          </n-button>
         </div>
       </div>
     </MarginContainer>

@@ -65,7 +65,7 @@
           {{ formatCurrency(s.price) }}
         </div>
         <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
-          ({{ s.visits }}×, {{ formatCurrency(s.avgPerVisit) }}/{{ $t('summary.visit') }})
+          ({{ s.visits }}×, {{ formatCurrency(s.avgPerVisit || 0) }}/{{ $t('summary.visit') }})
         </div>
       </div>
     </div>
