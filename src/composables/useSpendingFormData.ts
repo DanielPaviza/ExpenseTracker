@@ -3,9 +3,9 @@ import { useSpendingsStore } from '@stores/spendingsStore'
 import { ComputedRef, computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { createSpending } from '@/composables/useSpending'
 import { SPENDING_FORM_DATA_DEFAULT } from '@/constants/spendingFormData'
 import { Spending } from '@/types/Spending'
+import { createSpending } from '@/utils/spendingFactory'
 
 export function useSpendingFormData() {
   const store = useSpendingsStore()

@@ -1,23 +1,25 @@
 <script setup lang="ts">
   import Header from '@components/Header.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { useMessage } from 'naive-ui'
 
   import { onMounted } from 'vue'
-  import { useI18n } from 'vue-i18n'
 
-  const { t } = useI18n()
-
-  const message = useMessage()
+  import Loading from '@/components/shared/Loading.vue'
+  import { useSettingsStore } from '@/stores/settingsStore'
 
   const spendingsStore = useSpendingsStore()
+  const settingsStore = useSettingsStore()
+
   onMounted(async () => {
-    const success = await spendingsStore.load()
-    if (!success) message.error(t('messages.errorLoadingData'))
+    await spendingsStore.load()
+    await settingsStore.load()
   })
 </script>
 
 <template>
-  <Header />
-  <router-view />
+  <Loading v-if="spendingsStore.isLoading || settingsStore.isLoading" />
+  <template v-else>
+    <Header />
+    <router-view />
+  </template>
 </template>
