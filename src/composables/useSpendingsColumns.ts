@@ -1,10 +1,9 @@
-import { formatDateShort } from '@utils/formatUtils'
-
 import { Ref, ref } from 'vue'
 import { h, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { formatCurrency } from '@/composables/useCurrencyFormat'
+import { formatDateLocalized } from '@/composables/useDateFormat'
 import { SpendingColumn } from '@/types/SpendingColumn'
 
 export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
@@ -88,8 +87,8 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         selectFilterEnabled: true,
         tooltip: t('form.toBePaidTooltip'),
         sortFn: (a, b) => Number(a.isToBePaid) - Number(b.isToBePaid),
-        filterVal: (row) => (row.isToBePaid ? t('form.no') : t('form.yes')),
-        render: (row) => (row.isToBePaid ? t('form.no') : t('form.yes')),
+        filterVal: (row) => (row.isToBePaid ? t('common.no') : t('common.yes')),
+        render: (row) => (row.isToBePaid ? t('common.no') : t('common.yes')),
       },
       {
         title: t('columns.free'),
@@ -99,8 +98,8 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         selectFilterEnabled: true,
         tooltip: t('form.freeTooltip'),
         sortFn: (a, b) => Number(a.isFree) - Number(b.isFree),
-        filterVal: (row) => (row.isFree ? t('form.yes') : t('form.no')),
-        render: (row) => (row.isFree ? t('form.yes') : t('form.no')),
+        filterVal: (row) => (row.isFree ? t('common.yes') : t('common.no')),
+        render: (row) => (row.isFree ? t('common.yes') : t('common.no')),
       },
       {
         title: t('columns.payer'),
@@ -121,12 +120,12 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         selectFilterEnabled: false,
         tooltip: null,
         sortFn: (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-        filterVal: (row) => formatDateShort(new Date(row.createdAt)),
+        filterVal: (row) => formatDateLocalized(new Date(row.createdAt)),
         render: (row) =>
           h(
             'div',
             { style: { 'font-size': '14px', color: '#666' } },
-            formatDateShort(new Date(row.createdAt)),
+            formatDateLocalized(new Date(row.createdAt)),
           ),
       },
       {

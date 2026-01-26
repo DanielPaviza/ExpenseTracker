@@ -21,7 +21,11 @@
     "loadingData": "Načítání dat...",
     "noRecordsFound": "Nebyly nalezeny žádné záznamy",
     "showAll": "▼ Zobrazit všechny ({count})",
-    "showLess": "▲ Zobrazit méně"
+    "showLess": "▲ Zobrazit méně",
+    "cancel": "Zrušit",
+    "reset": "Resetovat",
+    "yes": "Ano",
+    "no": "Ne"
   },
   "dashboard": {
     "overviewAndCategories": "Přehled a kategorie",
@@ -30,7 +34,6 @@
     "storesAndTags": "Obchody a tagy"
   },
   "dialogs": {
-    "cancel": "Zrušit",
     "closeWithoutSaving": "Ukončit bez uložení",
     "delete": "Smazat",
     "deleteDocument": "Opravdu chcete smazat dokument \"{name}\"?",
@@ -100,8 +103,7 @@
     "typePlaceholder": "Typ nákupu",
     "unitPrice": "Jednotková cena (Kč)",
     "url": "URL",
-    "urlPlaceholder": "https://...",
-    "yes": "Ano"
+    "urlPlaceholder": "https://..."
   },
   "header": {
     "addNewPurchase": "Přidat nový nákup",
@@ -137,7 +139,11 @@
     "currencySymbol": "Symbol měny",
     "currencySymbolPlaceholder": "Kč, $, €...",
     "language": "Jazyk",
-    "title": "Nastavení"
+    "title": "Nastavení",
+    "subGroupDefaultState": "Rozbalené podskupiny ve výchozím stavu",
+    "subGroupDefaultStateTooltip": "Zda jsou podskupiny v tabulkách ve výchozím stavu rozbalené nebo sbalené",
+    "summaryCardDefault": "Výchozí karta přehledu",
+    "summaryCardDefaultTooltip": "Karta, která se zobrazí jako první v přehledu statistik"
   },
   "summary": {
     "allExpensesPaid": "Všechny výdaje jsou zaplaceny.",

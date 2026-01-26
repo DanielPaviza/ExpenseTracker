@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { formatDateShort } from '@utils/formatUtils'
   import { NButton, NButtonGroup, NInputNumber } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
@@ -8,6 +7,7 @@
 
   import SummaryCard from '@/components/home/spendingsDashboard/summary/SummaryCard.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
+  import { formatDateLocalized } from '@/composables/useDateFormat'
   import { Spending } from '@/types/Spending'
 
   const store = useSpendingsStore()
@@ -82,7 +82,7 @@
         class="flex items-center gap-2 text-sm mb-1"
       >
         <div class="font-semibold text-blue text-xs w-[65px] shrink-0">
-          {{ formatDateShort(spending.createdAt) }}
+          {{ formatDateLocalized(spending.createdAt) }}
         </div>
         <div class="font-bold w-full truncate" :title="spending.name">
           {{ spending.name }}

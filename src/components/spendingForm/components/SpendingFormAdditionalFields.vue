@@ -99,7 +99,7 @@
             </div>
           </template>
           <n-checkbox v-model:checked="formData.isToBePaid">
-            {{ formData.isToBePaid ? t('form.yes') : t('form.no') }}
+            {{ formData.isToBePaid ? t('common.yes') : t('common.no') }}
           </n-checkbox>
         </n-form-item>
 
@@ -111,7 +111,7 @@
             </div>
           </template>
           <n-checkbox v-model:checked="formData.isFree">
-            {{ formData.isFree ? t('form.yes') : t('form.no') }}
+            {{ formData.isFree ? t('common.yes') : t('common.no') }}
           </n-checkbox>
         </n-form-item>
       </div>

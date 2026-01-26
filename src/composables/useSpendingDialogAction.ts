@@ -21,7 +21,7 @@ export function useSpendingDialogAction() {
       title: t('dialogs.deletePurchaseTitle'),
       content: t('dialogs.deletePurchaseContent', { name: data.name }),
       positiveText: t('dialogs.delete'),
-      negativeText: t('dialogs.cancel'),
+      negativeText: t('common.cancel'),
       onPositiveClick: async () => {
         await store.removeSpending(data.id)
         message.success(t('messages.purchaseDeletedSuccessfully'))
@@ -35,7 +35,7 @@ export function useSpendingDialogAction() {
       title: t('dialogs.discardChangesTitle'),
       content: t('dialogs.discardChangesContent'),
       positiveText: t('dialogs.discard'),
-      negativeText: t('dialogs.cancel'),
+      negativeText: t('common.cancel'),
       onPositiveClick: () => {
         store.discardChanges()
         message.info(t('messages.changesDiscarded'))
@@ -48,7 +48,7 @@ export function useSpendingDialogAction() {
       title: t('dialogs.restoreAllTitle'),
       content: t('dialogs.restoreAllContent', { count: totalCount }),
       positiveText: t('dialogs.restore'),
-      negativeText: t('dialogs.cancel'),
+      negativeText: t('common.cancel'),
       onPositiveClick: async () => {
         try {
           await store.restoreAllDeletedSpendings()

@@ -2,11 +2,14 @@
   import ButtonNavigation from '@components/shared/ButtonNavigation.vue'
   import { NCarousel } from 'naive-ui'
 
-  const { slides } = defineProps<{
+  import { ref } from 'vue'
+
+  const { slides, defaultSlideIndex } = defineProps<{
     slides: { id: number; label: string }[]
+    defaultSlideIndex: number
   }>()
 
-  const currentSlide = defineModel<number>('currentSlide', { default: 0 })
+  const currentSlide = ref<number>(defaultSlideIndex)
 </script>
 
 <template>

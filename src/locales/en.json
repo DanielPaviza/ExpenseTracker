@@ -21,7 +21,11 @@
     "loadingData": "Loading data...",
     "noRecordsFound": "No records found",
     "showAll": "▼ Show all ({count})",
-    "showLess": "▲ Show less"
+    "showLess": "▲ Show less",
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "yes": "Yes",
+    "no": "No"
   },
   "dashboard": {
     "overviewAndCategories": "Overview and Categories",
@@ -30,7 +34,6 @@
     "storesAndTags": "Stores and Tags"
   },
   "dialogs": {
-    "cancel": "Cancel",
     "closeWithoutSaving": "Exit without saving",
     "delete": "Delete",
     "deletePurchaseContent": "Do you really want to delete \"{name}\"?",
@@ -46,7 +49,6 @@
   },
   "form": {
     "addDocument": "Add Document",
-    "cancel": "Cancel",
     "cancelEditDocumentName": "Cancel editting document name",
     "category": "Category",
     "created": "Created",
@@ -98,8 +100,7 @@
     "typePlaceholder": "Purchase type",
     "unitPrice": "Unit Price (CZK)",
     "url": "URL",
-    "urlPlaceholder": "https://...",
-    "yes": "Yes"
+    "urlPlaceholder": "https://..."
   },
   "header": {
     "addNewPurchase": "Add New Purchase",
@@ -135,7 +136,11 @@
     "currencySymbol": "Currency Symbol",
     "currencySymbolPlaceholder": "CZK, $, €...",
     "language": "Language",
-    "title": "Settings"
+    "title": "Settings",
+    "subGroupDefaultState": "Subgroups opened by default",
+    "subGroupDefaultStateTooltip": "Sets whether subgroups in tables are expanded or collapsed by default",
+    "summaryCardDefault": "Default summary card",
+    "summaryCardDefaultTooltip": "The card that is shown first in the statistics summary"
   },
   "summary": {
     "allExpensesPaid": "All expenses are paid.",

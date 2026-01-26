@@ -6,6 +6,7 @@
   import { computed, ref } from 'vue'
 
   import { formatCurrency } from '@/composables/useCurrencyFormat'
+  import { useSettingsStore } from '@/stores/settingsStore'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
   import { calculateTotalPrice } from '@/utils/tableUtils'
@@ -17,7 +18,8 @@
     isShownDefault?: boolean
   }>()
 
-  const isExpanded = ref(items.length <= 1 || isShownDefault)
+  const { settings } = useSettingsStore()
+  const isExpanded = ref(items.length <= 1 || isShownDefault || settings.subGroupDefaultOpen)
 
   const totalPrice = computed(() => calculateTotalPrice(items))
 
@@ -53,7 +55,7 @@
     <td />
   </tr>
 
-  <template v-if="isExpanded" class="">
+  <template v-if="isExpanded">
     <TableRow
       v-for="(row, index) in items"
       :key="row.id"
