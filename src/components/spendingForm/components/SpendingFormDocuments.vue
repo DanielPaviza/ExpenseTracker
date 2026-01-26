@@ -68,7 +68,7 @@
   >
     <div class="flex items-center justify-between mb-3">
       <span class="text-lg font-medium text-gray-700">{{ t('form.documents') }}</span>
-      <NButton size="small" type="primary" @click.stop="openFilePicker">
+      <NButton color="#3b82f6" size="small" type="primary" @click.stop="openFilePicker">
         <template #icon>
           <NIcon>
             <AddOutline />

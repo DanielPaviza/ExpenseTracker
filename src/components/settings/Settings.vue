@@ -8,9 +8,13 @@
   import { useRouter } from 'vue-router'
 
   import FormActions from '@/components/settings/components/SettingsFormActions.vue'
+  import SelectBool from '@/components/shared/SelectBool.vue'
+  import tooltip from '@/components/shared/Tooltip.vue'
   import { useSettingsFormValidation } from '@/composables/useSettingsFormValidation'
   import { CURRENCY_SYMBOL_PRESETS } from '@/constants/currency'
+  import { DEFAULT_SETTINGS } from '@/constants/defaultSettings'
   import { LANGUAGES } from '@/constants/languages'
+  import { SUMMARY_CARDS } from '@/constants/summaryCards'
   import { Settings } from '@/types/Settings'
 
   const { t } = useI18n()
@@ -33,6 +37,10 @@
     } else {
       message.error(t('messages.errorSavingChanges'))
     }
+  }
+
+  const handleReset = (): void => {
+    tempSettings.value = { ...DEFAULT_SETTINGS }
   }
 </script>
 
@@ -64,10 +72,33 @@
             tag
           />
         </n-form-item>
+
+        <n-form-item class="flex items-center">
+          <template #label>
+            <div class="flex items-center">
+              <span>{{ t('settings.subGroupDefaultState') }}</span>
+              <div class="ms-2"><tooltip :text="t('settings.subGroupDefaultStateTooltip')" /></div>
+            </div>
+          </template>
+          <SelectBool v-model:value="tempSettings.subGroupDefaultOpen" />
+        </n-form-item>
+
+        <n-form-item path="defaultSummaryCard">
+          <template #label>
+            <div class="flex items-center">
+              <span>{{ t('settings.summaryCardDefault') }}</span>
+              <div class="ms-2"><tooltip :text="t('settings.summaryCardDefaultTooltip')" /></div>
+            </div>
+          </template>
+          <n-select
+            v-model:value="tempSettings.defaultSummaryCard"
+            :options="SUMMARY_CARDS.map((card) => ({ label: t(card.title), value: card.id }))"
+          />
+        </n-form-item>
       </n-form>
 
       <template #footer>
-        <FormActions @save="handleSave" @cancel="closeDrawer" />
+        <FormActions @save="handleSave" @cancel="closeDrawer" @reset="handleReset" />
       </template>
     </n-drawer-content>
   </n-drawer>

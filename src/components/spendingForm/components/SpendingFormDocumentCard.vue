@@ -75,7 +75,7 @@
       title: t('dialogs.deleteDocumentTitle'),
       content: t('dialogs.deleteDocument', { name: document.value.name }),
       positiveText: t('dialogs.delete'),
-      negativeText: t('dialogs.cancel'),
+      negativeText: t('common.cancel'),
       onPositiveClick: async () => {
         emit('deleteDocument')
       },

@@ -52,11 +52,11 @@
 
 <template>
   <tr
-    class="bg-white hover:bg-blue-50 cursor-pointer row"
+    class="hover:bg-blue-50 cursor-pointer row"
     style="position: relative"
     @click="handleRowClick($event)"
     @contextmenu="handleContextMenu"
-    :class="{ 'border-l-2 border-blue-300': isSubgroup }"
+    :class="isSubgroup ? 'border-l-2 border-blue-300 bg-[#fcfdff]' : 'bg-white'"
   >
     <td
       v-for="column in columns"

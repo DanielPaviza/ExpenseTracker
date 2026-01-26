@@ -7,6 +7,7 @@
   const emit = defineEmits<{
     save: []
     cancel: []
+    reset: []
   }>()
 
   const { t } = useI18n()
@@ -16,7 +17,10 @@
   <div class="flex justify-between w-full gap-3">
     <div class="flex gap-3">
       <n-button @click="emit('cancel')">
-        {{ t('dialogs.cancel') }}
+        {{ t('common.cancel') }}
+      </n-button>
+      <n-button @click="emit('reset')" type="info" secondary>
+        {{ t('common.reset') }}
       </n-button>
     </div>
     <n-button color="#3b82f6" @click="emit('save')">

@@ -21,7 +21,7 @@
   <div class="flex justify-between w-full gap-3">
     <div class="flex gap-3">
       <n-button @click="emit('cancel')">
-        {{ t('dialogs.cancel') }}
+        {{ t('common.cancel') }}
       </n-button>
       <n-button v-if="isEditMode" color="#ef4444" @click="emit('delete')">
         <template #icon>

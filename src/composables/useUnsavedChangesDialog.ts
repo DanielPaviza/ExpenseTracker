@@ -26,7 +26,7 @@ export function useUnsavedChangesDialog(): void {
           title: t('dialogs.unsavedChangesTitle'),
           kind: 'warning',
           okLabel: t('dialogs.closeWithoutSaving'),
-          cancelLabel: t('dialogs.cancel'),
+          cancelLabel: t('common.cancel'),
         })
 
         if (shouldClose) {

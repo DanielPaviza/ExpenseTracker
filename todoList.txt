@@ -2,12 +2,9 @@ BytEvidence todoList
 
 ---- TODO ----
         
-- pridat nastaveni
-    - persistentni nastaveni v settings.json (novy file, stejne misto jako db.json)
-    - nastaveni jazyka, defaulni razeni datatables, defaultni zalozka summaries a spendingsTable
-    - novy endpoint v rustu, na stejny brdo (nastaveni, default hodnoty ve vue)
-    - default rozbaleny/zabaleny subgroup 
-    - currency symbol (moznost pridat vlastniho?)
+    
+- dev data ukladat do appdata ne do applocaldata
+- grand vision
 
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - Zapsat "zapomenutý" výdaje
@@ -57,3 +54,10 @@ Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
 - Form - skupina a tagy - pri vyplneni skupiny vyplnit rovnou stejny tag
 - pridat moznost evidence dokumentů
 - presunout vse do %appdata% (documents uz jsou, jeste celou db)
+- zbavit se footeru "Celkem" v summaries
+- pridat nastaveni
+    - persistentni nastaveni v settings.json (novy file, stejne misto jako db.json)
+    - novy endpoint v rustu, na stejny brdo (nastaveni, default hodnoty ve vue)
+        - nastaveni jazyka, defaulni razeni datatables, defaultni zalozka summaries a spendingsTable
+        - default rozbaleny/zabaleny subgroup 
+        - currency symbol (moznost pridat vlastniho?)

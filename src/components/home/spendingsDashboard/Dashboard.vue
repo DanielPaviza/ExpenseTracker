@@ -13,19 +13,24 @@
   import Carousel from '@/components/home/spendingsDashboard/carousel/Carousel.vue'
   import CarouselItem from '@/components/home/spendingsDashboard/carousel/CarouselItem.vue'
   import CarouselSlide from '@/components/home/spendingsDashboard/carousel/CarouselSlide.vue'
+  import { SUMMARY_CARDS } from '@/constants/summaryCards'
+  import { useSettingsStore } from '@/stores/settingsStore'
 
   const { t } = useI18n()
+  const { settings } = useSettingsStore()
 
-  const slides = [
-    { id: 0, label: t('dashboard.overviewAndCategories') },
-    { id: 1, label: t('dashboard.storesAndTags') },
-    { id: 2, label: t('dashboard.statistics') },
-    { id: 3, label: t('dashboard.payments') },
-  ]
+  const summaryCards = SUMMARY_CARDS.map((card, index) => ({
+    id: index,
+    label: t(card.title),
+  }))
+
+  const defaultSummaryCard = SUMMARY_CARDS.findIndex(
+    (card) => card.id === settings.defaultSummaryCard,
+  )
 </script>
 <template>
   <div class="dashboard-container">
-    <Carousel :slides="slides">
+    <Carousel :slides="summaryCards" :default-slide-index="defaultSummaryCard">
       <CarouselSlide>
         <CarouselItem pc-width="49">
           <OverallPriceSummary />
