@@ -2,8 +2,6 @@ BytEvidence todoList
 
 ---- TODO ----
         
-    
-- dev data ukladat do appdata ne do applocaldata
 - grand vision
 
 Srovnat TIPOV výdaje - rozepsat ceny položek a cenu práce
