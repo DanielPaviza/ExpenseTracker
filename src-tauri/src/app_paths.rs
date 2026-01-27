@@ -10,7 +10,7 @@ pub fn app_data_dir(app_handle: &tauri::AppHandle) -> Result<PathBuf, String> {
         .map_err(|e| e.to_string())?;
 
     if tauri::is_dev() {
-        path.push("dev");
+        path.push("Development");
     }
 
     Ok(path)

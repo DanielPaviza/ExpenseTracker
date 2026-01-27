@@ -2,9 +2,9 @@
   import AppContent from '@components/AppContent.vue'
   import { NConfigProvider, NDialogProvider, NMessageProvider } from 'naive-ui'
 
-  import { useUnsavedChangesDialog } from '@/composables/useUnsavedChangesDialog'
+  import { useOnAppCloseActions } from '@/composables/useOnAppCloseActions'
 
-  useUnsavedChangesDialog()
+  useOnAppCloseActions()
 </script>
 
 <template>

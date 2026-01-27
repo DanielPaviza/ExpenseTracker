@@ -2,9 +2,11 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result};
+use chrono::Local;
 
 pub const DATA_FILE_NAME: &str = "expenseTrackerDb.json";
 pub const SETTINGS_FILE_NAME: &str = "settings.json";
+pub const BACKUPS_DIR_NAME: &str = "Backups";
 
 #[derive(Debug)]
 pub struct JsonStore {
@@ -64,4 +66,28 @@ impl JsonStore {
     pub fn path(&self) -> &Path {
         &self.file_path
     }
+}
+
+pub fn backup_data_file(base_path: PathBuf) -> Result<PathBuf> {
+    let store = JsonStore::new(base_path.clone(), DATA_FILE_NAME);
+    store.ensure_exists_with_empty_object()?;
+
+    let source_path = store.path().to_path_buf();
+    let backup_dir = base_path.join(BACKUPS_DIR_NAME);
+    fs::create_dir_all(&backup_dir)
+        .with_context(|| format!("Failed to create backup directory: {}", backup_dir.display()))?;
+
+    let timestamp = Local::now().format("%Y_%m_%d_%H_%M_%S").to_string();
+    let backup_file_name = format!("expenseTrackerDb_{}.json", timestamp);
+    let backup_path = backup_dir.join(backup_file_name);
+
+    fs::copy(&source_path, &backup_path).with_context(|| {
+        format!(
+            "Failed to copy data file from {} to {}",
+            source_path.display(),
+            backup_path.display()
+        )
+    })?;
+
+    Ok(backup_path)
 }

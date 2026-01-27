@@ -1,5 +1,5 @@
 use crate::app_paths::app_data_dir;
-use crate::database::{JsonStore, DATA_FILE_NAME, SETTINGS_FILE_NAME};
+use crate::database::{backup_data_file, JsonStore, DATA_FILE_NAME, SETTINGS_FILE_NAME};
 
 fn load_store(app_handle: tauri::AppHandle, file_name: &str, label: &str) -> Result<String, String> {
     eprintln!("{} called", label);
@@ -45,6 +45,18 @@ pub fn load_data(app_handle: tauri::AppHandle) -> Result<String, String> {
 #[tauri::command]
 pub fn save_data(app_handle: tauri::AppHandle, json_data: String) -> Result<(), String> {
     save_store(app_handle, DATA_FILE_NAME, json_data, "save_data")
+}
+
+#[tauri::command]
+pub fn save_data_backup(app_handle: tauri::AppHandle) -> Result<String, String> {
+    eprintln!("save_data_backup called");
+    let base_dir = app_data_dir(&app_handle)?;
+    let backup_path = backup_data_file(base_dir).map_err(|err| {
+        eprintln!("Backup failed: {}", err);
+        err.to_string()
+    })?;
+    eprintln!("Backup created at {}", backup_path.display());
+    Ok(backup_path.to_string_lossy().to_string())
 }
 
 #[tauri::command]
