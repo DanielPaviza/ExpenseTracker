@@ -7,17 +7,17 @@
 
   import type { Spending } from '@/types/Spending'
 
-  const { subCategoryOptions, tagOptions } = defineProps<{
-    subCategoryOptions: SelectOption[]
+  const { tableGroupOptions, tagOptions } = defineProps<{
+    tableGroupOptions: SelectOption[]
     tagOptions: SelectOption[]
   }>()
 
   const { t } = useI18n()
   const formData = defineModel<Spending>('formData', { required: true })
 
-  const handleSetSubcategory = (value: string | null): void => {
-    formData.value.subCategory = value
-    // If the tags are empty, add the selected subcategory as a tag
+  const handleSetTableGroup = (value: string | null): void => {
+    formData.value.tableGroup = value
+    // If the tags are empty, add the selected tableGroup as a tag
     if (formData.value.tags.length <= 0 && value) {
       formData.value.tags.push(value)
     }
@@ -26,7 +26,7 @@
 
 <template>
   <div class="flex-1">
-    <n-form-item path="subCategory">
+    <n-form-item path="tableGroup">
       <template #label>
         <div class="flex items-center gap-1">
           {{ t('form.group') }}
@@ -34,9 +34,9 @@
         </div>
       </template>
       <n-select
-        @update:value="handleSetSubcategory"
-        :value="formData.subCategory"
-        :options="subCategoryOptions"
+        @update:value="handleSetTableGroup"
+        :value="formData.tableGroup"
+        :options="tableGroupOptions"
         :placeholder="t('form.selectGroup')"
         filterable
         tag

@@ -3,7 +3,7 @@
 
   import { computed, ref } from 'vue'
 
-  import SubCategoryGroup from '@/components/home/spendingsList/SubCategoryGroup.vue'
+  import TableGroup from '@/components/home/spendingsList/TableGroup.vue'
   import CollapsedTableView from '@/components/home/spendingsList/dataTable/shared/CollapsedTableView.vue'
   import TableFilterRow from '@/components/home/spendingsList/dataTable/shared/TableFilterRow.vue'
   import TableFooter from '@/components/home/spendingsList/dataTable/shared/TableFooter.vue'
@@ -95,15 +95,15 @@
 
       <tbody>
         <template v-for="(group, groupIndex) in groupedData" :key="`group-${groupIndex}`">
-          <!-- Regular item without subCategory -->
+          <!-- Regular item without tableGroup -->
           <template v-if="group.type === 'item' && group.item">
             <TableRow :row="group.item" :row-index="groupIndex" :columns="columns" />
           </template>
 
-          <!-- SubCategory group -->
-          <SubCategoryGroup
-            v-else-if="group.type === 'group' && group.subCategory && group.items"
-            :sub-category="group.subCategory"
+          <!-- TableGroup group -->
+          <TableGroup
+            v-else-if="group.type === 'group' && group.tableGroup && group.items"
+            :table-group="group.tableGroup"
             :items="group.items"
             :columns="columns"
             :is-shown-default="group.items.length === data.length"

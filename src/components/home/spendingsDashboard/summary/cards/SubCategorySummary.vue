@@ -21,8 +21,8 @@
   const subCategories = computed(() => {
     const set = new Set<string>()
     for (const s of spendings.value) {
-      if (s.subCategory) {
-        set.add(s.subCategory)
+      if (s.tableGroup) {
+        set.add(s.tableGroup)
       }
     }
     return Array.from(set)
@@ -32,7 +32,7 @@
     spendings,
     entities: subCategories,
     totalPrice,
-    filterFn: (s, sub) => s.subCategory === sub,
+    filterFn: (s, sub) => s.tableGroup === sub,
     sortBy,
   })
 

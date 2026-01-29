@@ -21,7 +21,7 @@ export function createSpending(data?: Partial<Spending>): Spending {
     store: data?.store ?? null,
     storeCode: data?.storeCode ?? null,
     description: data?.description ?? null,
-    subCategory: data?.subCategory ?? null,
+    tableGroup: data?.tableGroup ?? null,
     tags: data?.tags ?? [],
     createdAt: data?.createdAt ? new Date(data.createdAt) : now,
     editedAt: data?.editedAt ? new Date(data.editedAt) : null,

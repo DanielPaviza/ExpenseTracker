@@ -140,8 +140,8 @@
     "currencySymbolPlaceholder": "Kč, $, €...",
     "language": "Jazyk",
     "title": "Nastavení",
-    "subGroupDefaultState": "Rozbalené podskupiny ve výchozím stavu",
-    "subGroupDefaultStateTooltip": "Zda jsou podskupiny v tabulkách ve výchozím stavu rozbalené nebo sbalené",
+    "tableGroupDefaultState": "Rozbalené podskupiny ve výchozím stavu",
+    "tableGroupDefaultStateTooltip": "Zda jsou podskupiny v tabulkách ve výchozím stavu rozbalené nebo sbalené",
     "summaryCardDefault": "Výchozí karta přehledu",
     "summaryCardDefaultTooltip": "Karta, která se zobrazí jako první v přehledu statistik"
   },

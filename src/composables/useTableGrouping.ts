@@ -4,7 +4,7 @@ import type { Spending } from '@/types/Spending'
 
 export interface GroupedData {
   type: 'group' | 'item'
-  subCategory?: string
+  tableGroup?: string
   items?: Spending[]
   item?: Spending
 }
@@ -12,35 +12,35 @@ export interface GroupedData {
 export function useTableGrouping(sortedData: () => Spending[]) {
   const groupedData = computed<GroupedData[]>(() => {
     const result: GroupedData[] = []
-    const subCategoryMap = new Map<string, Spending[]>()
-    const itemsWithoutSubCategory: Spending[] = []
+    const tableGroupMap = new Map<string, Spending[]>()
+    const itemsWithoutTableGroup: Spending[] = []
 
-    // Group items by subCategory
+    // Group items by tableGroup
     for (const item of sortedData()) {
-      if (item.subCategory && item.subCategory.trim() !== '') {
-        const subCat = item.subCategory
-        if (!subCategoryMap.has(subCat)) {
-          subCategoryMap.set(subCat, [])
+      if (item.tableGroup && item.tableGroup.trim() !== '') {
+        const subCat = item.tableGroup
+        if (!tableGroupMap.has(subCat)) {
+          tableGroupMap.set(subCat, [])
         }
-        subCategoryMap.get(subCat)!.push(item)
+        tableGroupMap.get(subCat)!.push(item)
       } else {
-        itemsWithoutSubCategory.push(item)
+        itemsWithoutTableGroup.push(item)
       }
     }
 
-    // Add items without subCategory first
-    for (const item of itemsWithoutSubCategory) {
+    // Add items without tableGroup first
+    for (const item of itemsWithoutTableGroup) {
       result.push({ type: 'item', item })
     }
 
     // Add grouped items (only group if more than 1 item)
-    for (const [subCategory, items] of subCategoryMap.entries()) {
+    for (const [tableGroup, items] of tableGroupMap.entries()) {
       if (items.length === 1) {
         // Single item - render as regular row
         result.push({ type: 'item', item: items[0] })
       } else {
         // Multiple items - render as collapsible group
-        result.push({ type: 'group', subCategory, items })
+        result.push({ type: 'group', tableGroup, items })
       }
     }
 

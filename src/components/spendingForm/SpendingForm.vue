@@ -37,7 +37,7 @@
 
   const { formData, currentSpending, isEditMode } = useSpendingFormData()
   const { rules } = useSpendingFormValidation()
-  const { categoryOptions, payerOptions, subCategoryOptions, storeOptions, tagOptions } =
+  const { categoryOptions, payerOptions, tableGroupOptions, storeOptions, tagOptions } =
     useSpendingFormOptions(computed(() => formData.value))
 
   function closeDrawer(): void {
@@ -142,7 +142,7 @@
           />
           <FormAdditionalFields
             v-model:form-data="formData"
-            :sub-category-options="subCategoryOptions"
+            :sub-category-options="tableGroupOptions"
             :tag-options="tagOptions"
           />
         </div>

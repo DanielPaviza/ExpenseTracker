@@ -16,7 +16,7 @@ export interface Spending {
   store?: string | null
   storeCode?: string | null
   description?: string | null
-  subCategory?: string | null
+  tableGroup?: string | null
   tags: string[]
   createdAt: Date
   editedAt: Date | null

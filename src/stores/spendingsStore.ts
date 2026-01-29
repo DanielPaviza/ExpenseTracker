@@ -131,13 +131,13 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
     const countMap = new Map<string, number>()
     for (const s of spendings.value) {
-      if (s.subCategory) {
-        countMap.set(s.subCategory, (countMap.get(s.subCategory) || 0) + 1)
+      if (s.tableGroup) {
+        countMap.set(s.tableGroup, (countMap.get(s.tableGroup) || 0) + 1)
       }
     }
     return Array.from(countMap.entries())
       .sort((a, b) => b[1] - a[1])
-      .map(([subCategory]) => subCategory)
+      .map(([tableGroup]) => tableGroup)
   })
 
   // Computed: distinct payers

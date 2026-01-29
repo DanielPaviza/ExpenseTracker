@@ -16,9 +16,9 @@ export function useSpendingFormOptions(formData: ComputedRef<Spending>) {
     return store.payers.map((payer) => ({ label: payer, value: payer }))
   })
 
-  const subCategoryOptions = computed(() => {
+  const tableGroupOptions = computed(() => {
     return [
-      ...store.subCategories.map((subCategory) => ({ label: subCategory, value: subCategory })),
+      ...store.subCategories.map((tableGroup) => ({ label: tableGroup, value: tableGroup })),
       ...formData.value.tags.map((tag) => ({ label: tag, value: tag })),
     ]
   })
@@ -29,12 +29,12 @@ export function useSpendingFormOptions(formData: ComputedRef<Spending>) {
 
   const tagOptions = computed(() => {
     let allTags: SelectOption[] = store.tags.map((tag) => ({ label: tag, value: tag }))
-    // Ensure current subCategory is included in tags options
+    // Ensure current tableGroup is included in tags options
     if (
-      formData.value.subCategory &&
-      !allTags.find((tag) => tag.value === formData.value.subCategory)
+      formData.value.tableGroup &&
+      !allTags.find((tag) => tag.value === formData.value.tableGroup)
     ) {
-      allTags.push({ label: formData.value.subCategory, value: formData.value.subCategory })
+      allTags.push({ label: formData.value.tableGroup, value: formData.value.tableGroup })
     }
     return allTags
   })
@@ -42,7 +42,7 @@ export function useSpendingFormOptions(formData: ComputedRef<Spending>) {
   return {
     categoryOptions,
     payerOptions,
-    subCategoryOptions,
+    tableGroupOptions,
     storeOptions,
     tagOptions,
   }

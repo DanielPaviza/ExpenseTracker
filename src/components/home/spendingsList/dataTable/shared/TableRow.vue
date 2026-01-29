@@ -16,13 +16,13 @@
     rowIndex,
     columns,
     showActions = true,
-    isSubgroup,
+    isTableGroup,
   } = defineProps<{
     row: Spending
     rowIndex: number
     columns: SpendingColumn[]
     showActions?: boolean
-    isSubgroup?: boolean
+    isTableGroup?: boolean
   }>()
 
   const actionContextMouseEvent = ref<MouseEvent | null>(null)
@@ -56,7 +56,7 @@
     style="position: relative"
     @click="handleRowClick($event)"
     @contextmenu="handleContextMenu"
-    :class="isSubgroup ? 'border-l-2 border-blue-300 bg-[#fcfdff]' : 'bg-white'"
+    :class="isTableGroup ? 'border-l-2 border-blue-300 bg-[#fcfdff]' : 'bg-white'"
   >
     <td
       v-for="column in columns"
