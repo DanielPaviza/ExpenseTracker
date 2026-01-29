@@ -4,10 +4,12 @@ import { useI18n } from 'vue-i18n'
 
 import { formatCurrency } from '@/composables/useCurrencyFormat'
 import { formatDateLocalized } from '@/composables/useDateFormat'
+import { useSpendingsStore } from '@/stores/spendingsStore'
 import { SpendingColumn } from '@/types/SpendingColumn'
 
 export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
   const { t, locale } = useI18n()
+  const spendingStore = useSpendingsStore()
   const columns = ref<SpendingColumn[]>(getColumns())
 
   // Trigger re-computation of columns when locale changes
@@ -17,9 +19,16 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
       columns.value = getColumns()
     },
   )
+  // Trigger re-computation of columns when category view changes
+  watch(
+    () => spendingStore.categoryView,
+    () => {
+      columns.value = getColumns()
+    },
+  )
 
   function getColumns(): SpendingColumn[] {
-    return [
+    const cols: SpendingColumn[] = [
       {
         title: t('columns.category'),
         key: 'category',
@@ -30,6 +39,17 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         sortFn: (a, b) => a.category.localeCompare(b.category),
         filterVal: (row) => row.category,
         render: (row) => row.category,
+      },
+      {
+        title: t('columns.subCategory'),
+        key: 'subCategory',
+        isHidden: false,
+        filterEnabled: true,
+        selectFilterEnabled: true,
+        tooltip: null,
+        sortFn: (a, b) => a.subCategory.localeCompare(b.subCategory),
+        filterVal: (row) => row.subCategory,
+        render: (row) => row.subCategory,
       },
       {
         title: t('columns.type'),
@@ -174,6 +194,11 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
           h('div', { style: { 'font-weight': 'bolder' } }, formatCurrency(row.totalPrice)),
       },
     ]
+
+    // Dont hide category column when in all-categories view
+    if (spendingStore.categoryView == null) return cols
+
+    return cols.filter((col) => col.key !== 'category')
   }
 
   return {

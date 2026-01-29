@@ -3,6 +3,7 @@ import { SpendingDocument } from '@/types/SpendingDocument'
 export interface Spending {
   id: string
   category: string
+  subCategory: string
   type: string
   name: string
   isToBePaid: boolean

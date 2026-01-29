@@ -12,13 +12,17 @@ export function useSpendingFormOptions(formData: ComputedRef<Spending>) {
     return store.categories.map((cat) => ({ label: cat, value: cat }))
   })
 
+  const subCategoryOptions = computed(() => {
+    return store.subCategories.map((subCat) => ({ label: subCat, value: subCat }))
+  })
+
   const payerOptions = computed(() => {
     return store.payers.map((payer) => ({ label: payer, value: payer }))
   })
 
   const tableGroupOptions = computed(() => {
     return [
-      ...store.subCategories.map((tableGroup) => ({ label: tableGroup, value: tableGroup })),
+      ...store.tableGroups.map((tableGroup) => ({ label: tableGroup, value: tableGroup })),
       ...formData.value.tags.map((tag) => ({ label: tag, value: tag })),
     ]
   })
@@ -41,6 +45,7 @@ export function useSpendingFormOptions(formData: ComputedRef<Spending>) {
 
   return {
     categoryOptions,
+    subCategoryOptions,
     payerOptions,
     tableGroupOptions,
     storeOptions,

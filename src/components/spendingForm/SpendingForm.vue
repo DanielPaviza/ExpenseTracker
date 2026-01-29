@@ -37,8 +37,14 @@
 
   const { formData, currentSpending, isEditMode } = useSpendingFormData()
   const { rules } = useSpendingFormValidation()
-  const { categoryOptions, payerOptions, tableGroupOptions, storeOptions, tagOptions } =
-    useSpendingFormOptions(computed(() => formData.value))
+  const {
+    categoryOptions,
+    subCategoryOptions,
+    payerOptions,
+    tableGroupOptions,
+    storeOptions,
+    tagOptions,
+  } = useSpendingFormOptions(computed(() => formData.value))
 
   function closeDrawer(): void {
     router.push('/')
@@ -136,13 +142,14 @@
           <FormBasicFields
             v-model:form-data="formData"
             :category-options="categoryOptions"
+            :sub-category-options="subCategoryOptions"
             :payer-options="payerOptions"
             :store-options="storeOptions"
             :is-edit-mode="isEditMode"
           />
           <FormAdditionalFields
             v-model:form-data="formData"
-            :sub-category-options="tableGroupOptions"
+            :table-group-options="tableGroupOptions"
             :tag-options="tagOptions"
           />
         </div>
