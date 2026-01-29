@@ -76,11 +76,13 @@
         <n-form-item class="flex items-center">
           <template #label>
             <div class="flex items-center">
-              <span>{{ t('settings.subGroupDefaultState') }}</span>
-              <div class="ms-2"><tooltip :text="t('settings.subGroupDefaultStateTooltip')" /></div>
+              <span>{{ t('settings.tableGroupDefaultState') }}</span>
+              <div class="ms-2">
+                <tooltip :text="t('settings.tableGroupDefaultStateTooltip')" />
+              </div>
             </div>
           </template>
-          <SelectBool v-model:value="tempSettings.subGroupDefaultOpen" />
+          <SelectBool v-model:value="tempSettings.tableGroupDefaultOpen" />
         </n-form-item>
 
         <n-form-item path="defaultSummaryCard">

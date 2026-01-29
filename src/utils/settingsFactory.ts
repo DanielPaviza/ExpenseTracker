@@ -7,7 +7,7 @@ export function createSettings(data?: Partial<Settings>): Settings {
   return reactive({
     languageCode: data?.languageCode ?? DEFAULT_SETTINGS.languageCode,
     currencySymbol: data?.currencySymbol ?? DEFAULT_SETTINGS.currencySymbol,
-    subGroupDefaultOpen: data?.subGroupDefaultOpen ?? DEFAULT_SETTINGS.subGroupDefaultOpen,
+    tableGroupDefaultOpen: data?.tableGroupDefaultOpen ?? DEFAULT_SETTINGS.tableGroupDefaultOpen,
     defaultSummaryCard: data?.defaultSummaryCard ?? DEFAULT_SETTINGS.defaultSummaryCard,
   }) as Settings
 }

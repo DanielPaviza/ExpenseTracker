@@ -16,7 +16,7 @@ export const SPENDING_FORM_DATA_DEFAULT: Partial<Spending> = {
   store: '',
   storeCode: '',
   description: '',
-  subCategory: '',
+  tableGroup: '',
   tags: [] as string[],
   createdAt: new Date(),
   documents: [] as SpendingDocument[],

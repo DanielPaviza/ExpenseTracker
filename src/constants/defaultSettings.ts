@@ -5,6 +5,6 @@ import { Settings } from '@/types/Settings'
 export const DEFAULT_SETTINGS: Settings = {
   languageCode: ENGLISH_LANGUAGE.code,
   currencySymbol: CURRENCY_SYMBOL_EURO,
-  subGroupDefaultOpen: false,
+  tableGroupDefaultOpen: false,
   defaultSummaryCard: 'overviewAndCategories',
 }

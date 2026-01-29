@@ -11,15 +11,15 @@
   import type { SpendingColumn } from '@/types/SpendingColumn'
   import { calculateTotalPrice } from '@/utils/tableUtils'
 
-  const { subCategory, items, columns, isShownDefault } = defineProps<{
-    subCategory: string
+  const { tableGroup, items, columns, isShownDefault } = defineProps<{
+    tableGroup: string
     items: Spending[]
     columns: SpendingColumn[]
     isShownDefault?: boolean
   }>()
 
   const { settings } = useSettingsStore()
-  const isExpanded = ref(items.length <= 1 || isShownDefault || settings.subGroupDefaultOpen)
+  const isExpanded = ref(items.length <= 1 || isShownDefault || settings.tableGroupDefaultOpen)
 
   const totalPrice = computed(() => calculateTotalPrice(items))
 
@@ -43,7 +43,7 @@
         >
           <ChevronForwardOutline />
         </n-icon>
-        <span class="font-semibold text-blue-500">{{ subCategory }}</span>
+        <span class="font-semibold text-blue-500">{{ tableGroup }}</span>
         <span class="text-sm text-gray-600">({{ items.length }} {{ $t('table.items') }})</span>
       </div>
     </td>
@@ -62,7 +62,7 @@
       :row="row"
       :row-index="index"
       :columns="columns"
-      is-subgroup
+      is-table-group
     />
   </template>
 </template>
