@@ -14,18 +14,24 @@
     "payer": "Plátce",
     "price": "Cena",
     "store": "Obchod",
+    "subCategory": "Podkategorie",
     "tags": "Tagy",
     "type": "Typ"
   },
   "common": {
+    "cancel": "Zrušit",
     "loadingData": "Načítání dat...",
+    "no": "Ne",
     "noRecordsFound": "Nebyly nalezeny žádné záznamy",
+    "reset": "Resetovat",
     "showAll": "▼ Zobrazit všechny ({count})",
     "showLess": "▲ Zobrazit méně",
-    "cancel": "Zrušit",
-    "reset": "Resetovat",
     "yes": "Ano",
-    "no": "Ne"
+    "close": "Zavřít"
+  },
+  "categoryPanel": {
+    "purchases": "nákupů",
+    "month": "měs."
   },
   "dashboard": {
     "overviewAndCategories": "Přehled a kategorie",
@@ -90,10 +96,12 @@
     "selectGroup": "Vyberte skupinu",
     "selectPayer": "Vyberte plátce",
     "selectStore": "Vyberte obchod",
+    "selectSubCategory": "Vyberte podkategorii",
     "selectTags": "Vyberte tagy",
     "store": "Obchod",
     "storeCode": "Kód zboží",
     "storeCodePlaceholder": "Kód zboží",
+    "subCategory": "Podkategorie",
     "tags": "Tagy",
     "technicalDocument": "Technický list",
     "toBePaid": "Prozatím nezaplaceno",
@@ -111,7 +119,10 @@
     "saveChanges": "Uložit změny",
     "title": "Evidence nákupů",
     "totalExpenses": "Celkové výdaje",
-    "unsavedChanges": "Neuložené změny"
+    "unsavedChanges": "Neuložené změny",
+    "allCategories": "Všechny kategorie",
+    "selectedCategory": "Vybraná kategorie",
+    "selectCategory": "Vyberte kategorii"
   },
   "messages": {
     "allDeletedItemsRestored": "Všechny smazané výdaje byly obnoveny",
@@ -139,11 +150,11 @@
     "currencySymbol": "Symbol měny",
     "currencySymbolPlaceholder": "Kč, $, €...",
     "language": "Jazyk",
-    "title": "Nastavení",
+    "summaryCardDefault": "Výchozí karta přehledu",
+    "summaryCardDefaultTooltip": "Karta, která se zobrazí jako první v přehledu statistik",
     "tableGroupDefaultState": "Rozbalené podskupiny ve výchozím stavu",
     "tableGroupDefaultStateTooltip": "Zda jsou podskupiny v tabulkách ve výchozím stavu rozbalené nebo sbalené",
-    "summaryCardDefault": "Výchozí karta přehledu",
-    "summaryCardDefaultTooltip": "Karta, která se zobrazí jako první v přehledu statistik"
+    "title": "Nastavení"
   },
   "summary": {
     "allExpensesPaid": "Všechny výdaje jsou zaplaceny.",
@@ -189,6 +200,7 @@
     "mostExpensive": "Nejdražší",
     "mostExpensivePerUnit": "Nejdražší/ks",
     "mostExpensivePurchase": "Nejdražší nákup",
+    "noSubCategories": "V této kategorii nejsou žádné podkategorie.",
     "noSavedExpenses": "Žádné ušetřené výdaje.",
     "paid": "Zaplaceno",
     "perVisit": "/návštěva",
@@ -230,6 +242,7 @@
     "allInOneTable": "Vše v jedné tabulce",
     "byCategories": "Dle kategorií",
     "byStores": "Dle obchodů",
+    "bySubCategories": "Dle podkategorií",
     "byTags": "Dle tagů",
     "clearFiltersAndSorting": "Vymazat filtry a řazení",
     "collapseTable": "Zabalit tabulku",
@@ -257,6 +270,7 @@
     "priceCannotBeNegative": "Cena nemůže být záporná",
     "quantityMinZero": "Množství musí být alespoň 0",
     "quantityRequired": "Množství je povinné",
+    "subCategoryRequired": "Podkategorie je povinná",
     "typeRequired": "Typ je povinný",
     "unitPriceRequired": "Jednotková cena je povinná"
   }

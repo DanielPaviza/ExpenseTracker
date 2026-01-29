@@ -13,12 +13,14 @@
 
   import type { Spending } from '@/types/Spending'
 
-  const { categoryOptions, payerOptions, storeOptions, isEditMode } = defineProps<{
-    categoryOptions: SelectOption[]
-    payerOptions: SelectOption[]
-    storeOptions: SelectOption[]
-    isEditMode: boolean
-  }>()
+  const { categoryOptions, subCategoryOptions, payerOptions, storeOptions, isEditMode } =
+    defineProps<{
+      categoryOptions: SelectOption[]
+      subCategoryOptions: SelectOption[]
+      payerOptions: SelectOption[]
+      storeOptions: SelectOption[]
+      isEditMode: boolean
+    }>()
 
   const { t } = useI18n()
 
@@ -46,6 +48,16 @@
         v-model:value="formData.category"
         :options="categoryOptions"
         :placeholder="t('form.selectCategory')"
+        filterable
+        tag
+      />
+    </n-form-item>
+
+    <n-form-item :label="t('form.subCategory')" path="subCategory">
+      <n-select
+        v-model:value="formData.subCategory"
+        :options="subCategoryOptions"
+        :placeholder="t('form.selectSubCategory')"
         filterable
         tag
       />

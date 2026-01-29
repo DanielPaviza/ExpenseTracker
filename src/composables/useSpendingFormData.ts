@@ -38,9 +38,14 @@ export function useSpendingFormData() {
         (s) => s.id === (route.query.template as string),
       )
 
-      // If no template found, use default new spending
+      // If no template found, use default new spending with selected category
       if (!templateSpending) {
-        formData.value = createSpending(SPENDING_FORM_DATA_DEFAULT)
+        const defaultData: Partial<Spending> = {
+          ...SPENDING_FORM_DATA_DEFAULT,
+          // Set category to selected category view if one is selected
+          category: store.categoryView ?? '',
+        }
+        formData.value = createSpending(defaultData)
         return
       }
 

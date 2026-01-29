@@ -5,9 +5,12 @@
   import OverallPriceSummary from '@components/home/spendingsDashboard/summary/cards/OverallPriceSummary.vue'
   import StatisticsSummary from '@components/home/spendingsDashboard/summary/cards/StatisticsSummary.vue'
   import StoreSummary from '@components/home/spendingsDashboard/summary/cards/StoreSummary.vue'
+  import SubCategorySummary from '@components/home/spendingsDashboard/summary/cards/SubCategorySummary.vue'
   import TagSummary from '@components/home/spendingsDashboard/summary/cards/TagSummary.vue'
   import UnpaidSummary from '@components/home/spendingsDashboard/summary/cards/UnpaidSummary.vue'
+  import { storeToRefs } from 'pinia'
 
+  import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import Carousel from '@/components/home/spendingsDashboard/carousel/Carousel.vue'
@@ -15,9 +18,15 @@
   import CarouselSlide from '@/components/home/spendingsDashboard/carousel/CarouselSlide.vue'
   import { SUMMARY_CARDS } from '@/constants/summaryCards'
   import { useSettingsStore } from '@/stores/settingsStore'
+  import { useSpendingsStore } from '@/stores/spendingsStore'
 
   const { t } = useI18n()
   const { settings } = useSettingsStore()
+  const spendingsStore = useSpendingsStore()
+  const { categoryView } = storeToRefs(spendingsStore)
+
+  // Check if a specific category is selected (not "All")
+  const isCategorySelected = computed(() => categoryView.value !== null)
 
   const summaryCards = SUMMARY_CARDS.map((card, index) => ({
     id: index,
@@ -36,7 +45,9 @@
           <OverallPriceSummary />
         </CarouselItem>
         <CarouselItem pc-width="49">
-          <CategorySummary />
+          <!-- Show SubCategorySummary when a category is selected, otherwise CategorySummary -->
+          <SubCategorySummary v-if="isCategorySelected" />
+          <CategorySummary v-else />
         </CarouselItem>
       </CarouselSlide>
 

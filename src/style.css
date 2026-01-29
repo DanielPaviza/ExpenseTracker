@@ -17,6 +17,7 @@ body {
   --color-green: #06402b;
   --color-blue: #3b82f6;
   --color-blueLight: #60a5fa;
+  --color-blueLightTransparent: rgba(245, 249, 255, 0.7);
   --color-red: #c62828;
   --color-pink: #ff4551;
 }

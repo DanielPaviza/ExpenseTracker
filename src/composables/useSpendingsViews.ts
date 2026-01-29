@@ -9,6 +9,9 @@ export function useSpendingsViews() {
   const { t } = useI18n()
   const spendingsStore = useSpendingsStore()
 
+  // Check if a specific category is selected
+  const isCategorySelected = computed(() => spendingsStore.categoryView !== null)
+
   // Memoized maps for categories, stores, and tags
   const stores = computed(() => {
     const storeSet = new Set(
@@ -34,6 +37,18 @@ export function useSpendingsViews() {
         map.set(s.category, [])
       }
       map.get(s.category)!.push(s)
+    })
+    return map
+  })
+
+  const spendingsBySubCategory = computed(() => {
+    const map = new Map<string, Spending[]>()
+    spendingsStore.spendings.forEach((s: Spending) => {
+      const subCategory = s.subCategory || t('table.unknown')
+      if (!map.has(subCategory)) {
+        map.set(subCategory, [])
+      }
+      map.get(subCategory)!.push(s)
     })
     return map
   })
@@ -71,6 +86,8 @@ export function useSpendingsViews() {
 
   const getSpendingsByCategory = (category: string): Spending[] =>
     spendingsByCategory.value.get(category) || []
+  const getSpendingsBySubCategory = (subCategory: string): Spending[] =>
+    spendingsBySubCategory.value.get(subCategory) || []
   const getSpendingsByStore = (store: string): Spending[] => spendingsByStore.value.get(store) || []
   const getSpendingsByTag = (tag: string): Spending[] => spendingsByTag.value.get(tag) || []
 
@@ -111,15 +128,30 @@ export function useSpendingsViews() {
       getSpendings: (_: string): Spending[] =>
         getSortedSpendings(spendingsStore.spendings, nameSortState, priceSortState),
     },
-    byCategories: {
-      id: 'byCategories',
-      label: t('table.byCategories'),
-      categories: spendingsStore.categories,
-      hiddenColumnKeys: ['category'],
-      enableSorting: true,
-      getSpendings: (category: string): Spending[] =>
-        getSortedSpendings(getSpendingsByCategory(category), nameSortState, priceSortState),
-    },
+    // Show bySubCategories when a category is selected, otherwise byCategories
+    byCategories: isCategorySelected.value
+      ? {
+          id: 'byCategories',
+          label: t('table.bySubCategories'),
+          categories: spendingsStore.subCategories,
+          hiddenColumnKeys: ['subCategory'],
+          enableSorting: true,
+          getSpendings: (subCategory: string): Spending[] =>
+            getSortedSpendings(
+              getSpendingsBySubCategory(subCategory),
+              nameSortState,
+              priceSortState,
+            ),
+        }
+      : {
+          id: 'byCategories',
+          label: t('table.byCategories'),
+          categories: spendingsStore.categories,
+          hiddenColumnKeys: ['category'],
+          enableSorting: true,
+          getSpendings: (category: string): Spending[] =>
+            getSortedSpendings(getSpendingsByCategory(category), nameSortState, priceSortState),
+        },
     byStores: {
       id: 'byStores',
       label: t('table.byStores'),
@@ -144,5 +176,6 @@ export function useSpendingsViews() {
     stores,
     allTags,
     createViews,
+    isCategorySelected,
   }
 }

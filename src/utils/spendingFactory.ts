@@ -6,8 +6,9 @@ export function createSpending(data?: Partial<Spending>): Spending {
   const now = new Date()
 
   return reactive({
-    id: data?.id ?? crypto.randomUUID(),
+    id: !!data?.id ? data.id : crypto.randomUUID(),
     category: data?.category ?? '',
+    subCategory: data?.subCategory ?? '',
     type: data?.type ?? '',
     name: data?.name ?? '',
     isToBePaid: data?.isToBePaid ?? false,

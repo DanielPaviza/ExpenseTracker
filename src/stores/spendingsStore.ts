@@ -10,6 +10,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
   const originalSpendings = ref<Spending[]>([])
   const isLoading = ref(false)
 
+  // App view state - null means no filtering by category
+  const categoryView = ref<string | null>(null)
+
   // Track changes
   const newSpendingIds = ref<Set<string>>(new Set())
   const editedSpendingIds = ref<Set<string>>(new Set())
@@ -23,6 +26,13 @@ export const useSpendingsStore = defineStore('spendings', () => {
       originalSpendings.value.map((s) => ({ ...s })).sort((a, b) => a.id.localeCompare(b.id)),
     )
     return current !== original
+  })
+
+  const spendingsInCategoryView = computed(() => {
+    if (categoryView.value) {
+      return spendings.value.filter((s) => s.category === categoryView.value)
+    }
+    return spendings.value
   })
 
   async function load(): Promise<boolean> {
@@ -125,12 +135,28 @@ export const useSpendingsStore = defineStore('spendings', () => {
   })
 
   const subCategories = computed(() => {
-    if (spendings.value.length === 0) {
+    if (spendingsInCategoryView.value.length === 0) {
       return []
     }
 
     const countMap = new Map<string, number>()
-    for (const s of spendings.value) {
+    for (const s of spendingsInCategoryView.value) {
+      if (s.subCategory) {
+        countMap.set(s.subCategory, (countMap.get(s.subCategory) || 0) + 1)
+      }
+    }
+    return Array.from(countMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map(([subCategory]) => subCategory)
+  })
+
+  const tableGroups = computed(() => {
+    if (spendingsInCategoryView.value.length === 0) {
+      return []
+    }
+
+    const countMap = new Map<string, number>()
+    for (const s of spendingsInCategoryView.value) {
       if (s.tableGroup) {
         countMap.set(s.tableGroup, (countMap.get(s.tableGroup) || 0) + 1)
       }
@@ -142,12 +168,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct payers
   const payers = computed(() => {
-    if (spendings.value.length === 0) {
+    if (spendingsInCategoryView.value.length === 0) {
       return []
     }
 
     const countMap = new Map<string, number>()
-    for (const s of spendings.value) {
+    for (const s of spendingsInCategoryView.value) {
       if (s.payer) {
         countMap.set(s.payer, (countMap.get(s.payer) || 0) + 1)
       }
@@ -159,12 +185,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct stores
   const stores = computed(() => {
-    if (spendings.value.length === 0) {
+    if (spendingsInCategoryView.value.length === 0) {
       return []
     }
 
     const countMap = new Map<string, number>()
-    for (const s of spendings.value) {
+    for (const s of spendingsInCategoryView.value) {
       const key = s.store || 'Neznámé'
       countMap.set(key, (countMap.get(key) || 0) + 1)
     }
@@ -174,25 +200,25 @@ export const useSpendingsStore = defineStore('spendings', () => {
   })
 
   const totalPrice = computed(() => {
-    return spendings.value
+    return spendingsInCategoryView.value
       .filter((s) => !s.isFree && !s.isToBePaid)
       .reduce((sum, spending) => sum + spending.totalPrice, 0)
   })
 
   const totalUnpaid = computed(() => {
-    return spendings.value
+    return spendingsInCategoryView.value
       .filter((s) => !s.isFree && s.isToBePaid)
       .reduce((sum, spending) => sum + spending.totalPrice, 0)
   })
 
   // Computed: distinct tags
   const tags = computed(() => {
-    if (spendings.value.length === 0) {
+    if (spendingsInCategoryView.value.length === 0) {
       return []
     }
 
     const countMap = new Map<string, number>()
-    for (const s of spendings.value) {
+    for (const s of spendingsInCategoryView.value) {
       if (s.tags && s.tags.length > 0) {
         for (const tag of s.tags) {
           countMap.set(tag, (countMap.get(tag) || 0) + 1)
@@ -204,9 +230,22 @@ export const useSpendingsStore = defineStore('spendings', () => {
       .map(([tag]) => tag)
   })
 
+  // Unfiltered spendings for global statistics
+  const allSpendings = computed(() => spendings.value)
+
+  // Total price across all categories (unfiltered)
+  const totalPriceAll = computed(() => {
+    return spendings.value
+      .filter((s) => !s.isFree && !s.isToBePaid)
+      .reduce((sum, spending) => sum + spending.totalPrice, 0)
+  })
+
   return {
-    spendings,
+    categoryView,
+    spendings: spendingsInCategoryView,
+    allSpendings,
     totalPrice,
+    totalPriceAll,
     totalUnpaid,
     pendingChanges,
     isLoading,
@@ -220,6 +259,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     discardChanges,
     categories,
     subCategories,
+    tableGroups,
     payers,
     stores,
     tags,

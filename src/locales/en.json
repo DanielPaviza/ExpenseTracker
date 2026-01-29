@@ -14,18 +14,24 @@
     "payer": "Payer",
     "price": "Price",
     "store": "Store",
+    "subCategory": "Subcategory",
     "tags": "Tags",
     "type": "Type"
   },
   "common": {
+    "cancel": "Cancel",
     "loadingData": "Loading data...",
+    "no": "No",
     "noRecordsFound": "No records found",
+    "reset": "Reset",
     "showAll": "▼ Show all ({count})",
     "showLess": "▲ Show less",
-    "cancel": "Cancel",
-    "reset": "Reset",
     "yes": "Yes",
-    "no": "No"
+    "close": "Close"
+  },
+  "categoryPanel": {
+    "purchases": "purchases",
+    "month": "mo."
   },
   "dashboard": {
     "overviewAndCategories": "Overview and Categories",
@@ -88,10 +94,12 @@
     "selectGroup": "Select group",
     "selectPayer": "Select payer",
     "selectStore": "Select store",
+    "selectSubCategory": "Select subcategory",
     "selectTags": "Select tags",
     "store": "Store",
     "storeCode": "Product Code",
     "storeCodePlaceholder": "Product code",
+    "subCategory": "Subcategory",
     "tags": "Tags",
     "toBePaid": "Not Yet Paid",
     "toBePaidTooltip": "Item has not been paid yet and is awaiting payment",
@@ -108,7 +116,10 @@
     "saveChanges": "Save Changes",
     "title": "Purchase Records",
     "totalExpenses": "Total Expenses",
-    "unsavedChanges": "Unsaved Changes"
+    "unsavedChanges": "Unsaved Changes",
+    "allCategories": "All categories",
+    "selectedCategory": "Selected category",
+    "selectCategory": "Select a category"
   },
   "messages": {
     "allDeletedItemsRestored": "All deleted expenses have been restored",
@@ -136,11 +147,11 @@
     "currencySymbol": "Currency Symbol",
     "currencySymbolPlaceholder": "CZK, $, €...",
     "language": "Language",
-    "title": "Settings",
+    "summaryCardDefault": "Default summary card",
+    "summaryCardDefaultTooltip": "The card that is shown first in the statistics summary",
     "tableGroupDefaultState": "Subtables opened by default",
     "tableGroupDefaultStateTooltip": "Sets whether subtables in tables are expanded or collapsed by default",
-    "summaryCardDefault": "Default summary card",
-    "summaryCardDefaultTooltip": "The card that is shown first in the statistics summary"
+    "title": "Settings"
   },
   "summary": {
     "allExpensesPaid": "All expenses are paid.",
@@ -186,6 +197,7 @@
     "mostExpensive": "Most Expensive",
     "mostExpensivePerUnit": "Most Expensive/unit",
     "mostExpensivePurchase": "Most Expensive Purchase",
+    "noSubCategories": "No subcategories in this category.",
     "noSavedExpenses": "No saved expenses.",
     "paid": "Paid",
     "perVisit": "/visit",
@@ -225,8 +237,9 @@
   "table": {
     "allExpenses": "All Expenses",
     "allInOneTable": "All in One Table",
-    "byCategories": "By Categories",
+    "byCategories": "By categories",
     "byStores": "By Stores",
+    "bySubCategories": "By subcategories",
     "byTags": "By Tags",
     "clearFiltersAndSorting": "Clear filters and sorting",
     "collapseTable": "Collapse table",
@@ -254,6 +267,7 @@
     "priceCannotBeNegative": "Price cannot be negative",
     "quantityMinZero": "Quantity must be at least 0",
     "quantityRequired": "Quantity is required",
+    "subCategoryRequired": "Subcategory is required",
     "typeRequired": "Type is required",
     "unitPriceRequired": "Unit price is required"
   }
