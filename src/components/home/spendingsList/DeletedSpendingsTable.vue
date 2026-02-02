@@ -50,10 +50,10 @@
     // Don't navigate for deleted items
   }
 
-  async function handleRestore(row: Spending, event: Event): Promise<void> {
+  function handleRestore(row: Spending, event: Event): void {
     event.stopPropagation()
     try {
-      await store.restoreSpending(row.id)
+      store.restoreSpending(row.id)
       message.success(t('messages.itemRestored', { name: row.name }))
     } catch {
       message.error(t('messages.errorRestoringItem', { name: row.name }))

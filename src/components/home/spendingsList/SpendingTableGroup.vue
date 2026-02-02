@@ -3,7 +3,7 @@
   import { ChevronForwardOutline } from '@vicons/ionicons5'
   import { NIcon } from 'naive-ui'
 
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import { formatCurrency } from '@/composables/useCurrencyFormat'
   import { useSettingsStore } from '@/stores/settingsStore'
@@ -18,8 +18,10 @@
     isShownDefault?: boolean
   }>()
 
-  const { settings } = useSettingsStore()
-  const isExpanded = ref(items.length <= 1 || isShownDefault || settings.tableGroupDefaultOpen)
+  const settingsStore = useSettingsStore()
+  const isExpanded = ref(
+    items.length <= 1 || isShownDefault || settingsStore.settings.tableGroupDefaultOpen,
+  )
 
   const totalPrice = computed(() => calculateTotalPrice(items))
 
@@ -27,6 +29,15 @@
     event.stopPropagation()
     isExpanded.value = !isExpanded.value
   }
+
+  watch(
+    () => settingsStore.settings.tableGroupDefaultOpen,
+    (newValue) => {
+      isExpanded.value = newValue
+      if (items.length > 1) {
+      }
+    },
+  )
 </script>
 
 <template>

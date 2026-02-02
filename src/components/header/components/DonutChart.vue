@@ -37,6 +37,6 @@
         class="transition-all duration-300"
       />
     </svg>
-    <div class="mt-1 text-sm font-medium text-gray-700">{{ clampedPercent }}%</div>
+    <div class="mt-2 ms-2 text-sm font-medium text-gray-700">{{ clampedPercent }}%</div>
   </div>
 </template>

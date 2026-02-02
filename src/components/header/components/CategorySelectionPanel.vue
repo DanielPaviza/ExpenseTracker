@@ -32,6 +32,7 @@
     percent: number
     color: string
     selected: boolean
+    canBeEdited: boolean
   }
 
   const purchasesLabel = computed(() => t('categoryPanel.purchases'))
@@ -50,6 +51,7 @@
       percent: 100,
       color: all.color,
       selected: isSelected(null),
+      canBeEdited: false,
     }
 
     const categoryCards: CategoryCardVm[] = categoryStats.value.map((stat) => ({
@@ -62,6 +64,7 @@
       percent: stat.percent,
       color: stat.color,
       selected: isSelected(stat.name),
+      canBeEdited: true,
     }))
 
     return [allCard, ...categoryCards]
@@ -105,7 +108,7 @@
     </div>
 
     <div
-      class="grid flex-1 min-h-0 overflow-y-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      class="grid min-h-0 overflow-y-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
       <CategoryStatCard
         v-for="card in cards"
@@ -119,6 +122,7 @@
         :percent="card.percent"
         :color="card.color"
         :selected="card.selected"
+        :can-be-edited="card.canBeEdited"
         @click="handleSelectCategory(card.category)"
       />
     </div>

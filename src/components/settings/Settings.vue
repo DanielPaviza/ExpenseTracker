@@ -7,7 +7,7 @@
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
-  import FormActions from '@/components/settings/components/SettingsFormActions.vue'
+  import FormActions from '@/components/shared/FormActions.vue'
   import SelectBool from '@/components/shared/SelectBool.vue'
   import SelectTextNull from '@/components/shared/SelectTextNull.vue'
   import tooltip from '@/components/shared/Tooltip.vue'
@@ -117,7 +117,13 @@
       </n-form>
 
       <template #footer>
-        <FormActions @save="handleSave" @cancel="closeDrawer" @reset="handleReset" />
+        <FormActions
+          @save="handleSave"
+          @cancel="closeDrawer"
+          show-reset
+          @reset="handleReset"
+          :save-text="t('form.saveChangesButton')"
+        />
       </template>
     </n-drawer-content>
   </n-drawer>

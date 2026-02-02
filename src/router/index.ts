@@ -1,3 +1,4 @@
+import EditCategoryForm from '@views/EditCategoryForm.vue'
 import Home from '@views/Home.vue'
 import SpendingForm from '@views/SpendingForm.vue'
 
@@ -27,6 +28,11 @@ const router = createRouter({
           path: 'settings',
           name: 'settings',
           component: Settings,
+        },
+        {
+          path: 'editCategory/:name',
+          name: 'edit-category',
+          component: EditCategoryForm,
         },
       ],
     },

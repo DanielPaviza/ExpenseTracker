@@ -2,7 +2,7 @@
   import MarginContainer from '@components/shared/MarginContainer.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { AddOutline, SettingsOutline } from '@vicons/ionicons5'
-  import { NButton, NIcon } from 'naive-ui'
+  import { NButton, NCollapseTransition, NIcon } from 'naive-ui'
 
   import { onBeforeUnmount, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
@@ -93,14 +93,12 @@
       </div>
       <CategorySelect v-model:is-open="isCategorySelectionOpen" />
       <!-- Category Selection Panel with animation -->
-      <transition name="expand-down">
-        <div v-if="isCategorySelectionOpen" class="mt-5 flex-1 min-h-0 overflow-hidden">
-          <CategorySelectionPanel
-            @select="handleCategorySelect"
-            @close="isCategorySelectionOpen = false"
-          />
-        </div>
-      </transition>
+      <n-collapse-transition :show="isCategorySelectionOpen" name="expand-down">
+        <CategorySelectionPanel
+          @select="handleCategorySelect"
+          @close="isCategorySelectionOpen = false"
+        />
+      </n-collapse-transition>
     </MarginContainer>
   </header>
 </template>

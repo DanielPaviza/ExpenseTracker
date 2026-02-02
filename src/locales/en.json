@@ -44,6 +44,10 @@
   "dialogs": {
     "closeWithoutSaving": "Exit without saving",
     "delete": "Delete",
+    "deleteCategoryContent": "Do you really want to delete category \"{name}\"? This action will also delete all its subcategories and all purchases contained within them.",
+    "deleteCategoryError": "Error deleting category \"{name}\"",
+    "deleteCategorySuccess": "Category \"{name}\" and all its records have been successfully deleted",
+    "deleteCategoryTitle": "Delete category",
     "deletePurchaseContent": "Do you really want to delete \"{name}\"?",
     "deletePurchaseTitle": "Delete Purchase",
     "discard": "Discard",
@@ -54,6 +58,14 @@
     "restoreAllTitle": "Restore All Deleted Expenses",
     "unsavedChangesContent": "You have unsaved changes. Do you really want to exit the application without saving?",
     "unsavedChangesTitle": "Unsaved Changes"
+  },
+  "editCategoryForm": {
+    "categoryNameChangeError": "Error renaming category \"{name}\"",
+    "categoryNameChangeSuccess": "Category and all its records have been successfully renamed",
+    "editNameTooltip": "Edit the category name of all records in this category",
+    "name": "Category name",
+    "renamingCategory": "Renaming category",
+    "title": "Edit category"
   },
   "form": {
     "addDocument": "Add Document",
@@ -125,7 +137,7 @@
   "messages": {
     "allDeletedItemsRestored": "All deleted expenses have been restored",
     "changesDiscarded": "Changes discarded",
-    "changesSavedSuccessfully": "Changes saved successfully",
+    "changesSavedSuccessfully": "Changes were successfully saved permanently",
     "documentDeletedSuccess": "Document \"{name}\" deleted successfully",
     "documentDeleteError": "Error deleting document \"{name}\"",
     "documentDownloadError": "Error downloading document \"{name}\"",

@@ -3,7 +3,6 @@ import { useDialog, useMessage } from 'naive-ui'
 
 import { useI18n } from 'vue-i18n'
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useSpendingDialogAction() {
   const { t } = useI18n()
   const dialog = useDialog()
@@ -22,8 +21,8 @@ export function useSpendingDialogAction() {
       content: t('dialogs.deletePurchaseContent', { name: data.name }),
       positiveText: t('dialogs.delete'),
       negativeText: t('common.cancel'),
-      onPositiveClick: async () => {
-        await store.removeSpending(data.id)
+      onPositiveClick: () => {
+        store.removeSpending(data.id)
         message.success(t('messages.purchaseDeletedSuccessfully'))
         onPositiveAction?.()
       },
@@ -49,9 +48,9 @@ export function useSpendingDialogAction() {
       content: t('dialogs.restoreAllContent', { count: totalCount }),
       positiveText: t('dialogs.restore'),
       negativeText: t('common.cancel'),
-      onPositiveClick: async () => {
+      onPositiveClick: () => {
         try {
-          await store.restoreAllDeletedSpendings()
+          store.restoreAllDeletedSpendings()
           message.success(t('messages.allDeletedItemsRestored'))
         } catch {
           message.error(t('messages.errorRestoringAllItems'))

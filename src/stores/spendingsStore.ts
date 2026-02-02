@@ -15,10 +15,25 @@ export const useSpendingsStore = defineStore('spendings', () => {
   // App view state - null means no filtering by category
   const categoryView = ref<string | null>(null)
 
+  const setCategoryViewSettings = (category: string | null): void => {
+    const newSettings = { ...settingsStore.settings, defaultCategoryView: category }
+    settingsStore.save(newSettings)
+  }
+
   // Initialize the default category view from settings, when settings are loaded
   watch(
     () => settingsStore.isLoading,
     () => {
+      // Default category does not exist anymore
+      if (
+        settingsStore.settings.defaultCategoryView != null &&
+        !categories.value.includes(settingsStore.settings.defaultCategoryView)
+      ) {
+        categoryView.value = null
+        setCategoryViewSettings(null)
+        return
+      }
+
       categoryView.value = settingsStore.settings.defaultCategoryView
     },
   )
@@ -77,12 +92,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  async function addSpending(spending: Spending): Promise<void> {
+  function addSpending(spending: Spending): void {
     spendings.value.push(spending)
     newSpendingIds.value.add(spending.id)
   }
 
-  async function removeSpending(id: string): Promise<void> {
+  function removeSpending(id: string): void {
     const index = spendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       const spending = spendings.value[index]
@@ -94,7 +109,43 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  async function restoreSpending(id: string): Promise<void> {
+  function removeSpendingCategory(category: string): void {
+    const toDelete = spendings.value.filter((s) => s.category === category)
+    for (const spending of toDelete) {
+      removeSpending(spending.id)
+    }
+
+    // Switch the view if currently viewing the deleted category
+    if (categoryView.value === category) {
+      categoryView.value = null
+    }
+
+    // Update settings if default category view was the deleted category
+    if (settingsStore.settings.defaultCategoryView === category) {
+      setCategoryViewSettings(null)
+    }
+  }
+
+  function renameSpendingCategory(oldCategory: string, newCategory: string): void {
+    for (const spending of spendings.value) {
+      if (spending.category === oldCategory) {
+        const updatedSpending = { ...spending, category: newCategory }
+        updateSpending(spending.id, updatedSpending)
+      }
+    }
+
+    // Switch the view if currently viewing the renamed category
+    if (categoryView.value === oldCategory) {
+      categoryView.value = newCategory
+    }
+
+    // Update settings if default category view was the renamed category
+    if (settingsStore.settings.defaultCategoryView === oldCategory) {
+      setCategoryViewSettings(newCategory)
+    }
+  }
+
+  function restoreSpending(id: string): void {
     const index = deletedSpendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
       const spending = deletedSpendings.value[index]
@@ -103,13 +154,13 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
-  async function restoreAllDeletedSpendings(): Promise<void> {
+  function restoreAllDeletedSpendings(): void {
     spendings.value.push(...deletedSpendings.value)
     console.log('Restoring all deleted spendings:', deletedSpendings.value)
     deletedSpendings.value = []
   }
 
-  async function updateSpending(id: string, updatedSpending: Spending): Promise<void> {
+  function updateSpending(id: string, updatedSpending: Spending): void {
     const index = spendings.value.findIndex((s) => s.id === id)
     if (index < 0) return
 
@@ -266,6 +317,8 @@ export const useSpendingsStore = defineStore('spendings', () => {
     updateSpending,
     restoreSpending,
     restoreAllDeletedSpendings,
+    removeSpendingCategory,
+    renameSpendingCategory,
     discardChanges,
     categories,
     subCategories,

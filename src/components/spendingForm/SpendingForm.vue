@@ -6,7 +6,7 @@
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
-  import FormActions from '@/components/spendingForm/components/SpendingFormActions.vue'
+  import FormActions from '@/components/shared/FormActions.vue'
   import FormAdditionalFields from '@/components/spendingForm/components/SpendingFormAdditionalFields.vue'
   import FormBasicFields from '@/components/spendingForm/components/SpendingFormBasicFields.vue'
   import FormDocuments from '@/components/spendingForm/components/SpendingFormDocuments.vue'
@@ -100,11 +100,11 @@
           editedAt: new Date(),
         }
 
-        await store.updateSpending(currentSpending.value.id, updatedSpending)
+        store.updateSpending(currentSpending.value.id, updatedSpending)
         message.success(t('messages.purchaseEditedSuccessfully'))
       } else {
         // Create new
-        await store.addSpending(formData.value)
+        store.addSpending(formData.value)
         message.success(t('messages.purchaseCreatedSuccessfully'))
       }
 
@@ -163,10 +163,11 @@
 
       <template #footer>
         <FormActions
-          :is-edit-mode="isEditMode"
           @save="handleSave"
+          show-delete
           @delete="handleDelete"
           @cancel="closeDrawer"
+          :save-text="isEditMode ? t('form.saveChangesButton') : t('form.createPurchaseButton')"
       /></template>
     </n-drawer-content>
   </n-drawer>

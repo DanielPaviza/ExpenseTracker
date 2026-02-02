@@ -4,12 +4,15 @@
 
   import { useI18n } from 'vue-i18n'
 
-  const { isEditMode } = defineProps<{
-    isEditMode: boolean
+  const { showDelete, showReset, saveText } = defineProps<{
+    showDelete?: boolean
+    showReset?: boolean
+    saveText: string
   }>()
 
   const emit = defineEmits<{
     save: []
+    reset: []
     delete: []
     cancel: []
   }>()
@@ -23,7 +26,10 @@
       <n-button @click="emit('cancel')">
         {{ t('common.cancel') }}
       </n-button>
-      <n-button v-if="isEditMode" color="#ef4444" @click="emit('delete')">
+      <n-button v-if="showReset" @click="emit('reset')" type="info" secondary>
+        {{ t('common.reset') }}
+      </n-button>
+      <n-button v-if="showDelete" color="#ef4444" @click="emit('delete')">
         <template #icon>
           <n-icon>
             <TrashOutline />
@@ -38,7 +44,7 @@
           <SaveOutline />
         </n-icon>
       </template>
-      {{ isEditMode ? t('form.saveChangesButton') : t('form.createPurchaseButton') }}
+      {{ saveText }}
     </n-button>
   </div>
 </template>

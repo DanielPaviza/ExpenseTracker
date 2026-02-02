@@ -44,6 +44,10 @@
   "dialogs": {
     "closeWithoutSaving": "Ukončit bez uložení",
     "delete": "Smazat",
+    "deleteCategoryContent": "Opravdu chcete smazat kategorii \"{name}\"? Tato akce smaže také všechny její podkategorie a všechny nákupy v nich obsažené.",
+    "deleteCategoryError": "Chyba při mazání kategorie \"{name}\"",
+    "deleteCategorySuccess": "Kategorie \"{name}\" a všechny její záznamy byly úspěšně smazány",
+    "deleteCategoryTitle": "Smazat kategorii",
     "deleteDocument": "Opravdu chcete smazat dokument \"{name}\"?",
     "deleteDocumentTitle": "Smazat dokument",
     "deletePurchaseContent": "Opravdu chcete smazat \"{name}\"?",
@@ -56,6 +60,14 @@
     "restoreAllTitle": "Obnovit všechny smazané výdaje",
     "unsavedChangesContent": "Máte neuložené změny. Opravdu chcete ukončit aplikaci bez uložení?",
     "unsavedChangesTitle": "Neuložené změny"
+  },
+  "editCategoryForm": {
+    "categoryNameChangeError": "Chyba při přejmenovávání kategorie \"{name}\"",
+    "categoryNameChangeSuccess": "Kategorie a všechny její záznamy byly úspěšně přejmenovány",
+    "editNameTooltip": "Upravit název kategorie všech záznamů v této kategorii",
+    "name": "Název kategorie",
+    "renamingCategory": "Přejmenovávání kategorie",
+    "title": "Upravit kategorii"
   },
   "form": {
     "addDocument": "Přidat dokument",
@@ -128,7 +140,7 @@
   "messages": {
     "allDeletedItemsRestored": "Všechny smazané výdaje byly obnoveny",
     "changesDiscarded": "Změny byly zahozeny",
-    "changesSavedSuccessfully": "Změny byly úspěšně uloženy",
+    "changesSavedSuccessfully": "Změny byly úspěšně permanentně uloženy",
     "documentDeleteError": "Chyba při mazání dokumentu \"{name}\"",
     "documentDeleteSuccess": "Dokument \"{name}\" byl úspěšně smazán",
     "documentDownloadError": "Chyba při stahování dokumentu \"{name}\"",

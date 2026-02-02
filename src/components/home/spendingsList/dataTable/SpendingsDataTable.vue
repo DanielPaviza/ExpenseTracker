@@ -3,7 +3,7 @@
 
   import { computed, ref } from 'vue'
 
-  import TableGroup from '@/components/home/spendingsList/TableGroup.vue'
+  import SpendingTableGroup from '@/components/home/spendingsList/SpendingTableGroup.vue'
   import CollapsedTableView from '@/components/home/spendingsList/dataTable/shared/CollapsedTableView.vue'
   import TableFilterRow from '@/components/home/spendingsList/dataTable/shared/TableFilterRow.vue'
   import TableFooter from '@/components/home/spendingsList/dataTable/shared/TableFooter.vue'
@@ -101,7 +101,7 @@
           </template>
 
           <!-- TableGroup group -->
-          <TableGroup
+          <SpendingTableGroup
             v-else-if="group.type === 'group' && group.tableGroup && group.items"
             :table-group="group.tableGroup"
             :items="group.items"
