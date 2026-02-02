@@ -9,16 +9,19 @@
 
   import FormActions from '@/components/settings/components/SettingsFormActions.vue'
   import SelectBool from '@/components/shared/SelectBool.vue'
+  import SelectTextNull from '@/components/shared/SelectTextNull.vue'
   import tooltip from '@/components/shared/Tooltip.vue'
   import { useSettingsFormValidation } from '@/composables/useSettingsFormValidation'
   import { CURRENCY_SYMBOL_PRESETS } from '@/constants/currency'
   import { DEFAULT_SETTINGS } from '@/constants/defaultSettings'
   import { LANGUAGES } from '@/constants/languages'
   import { SUMMARY_CARDS } from '@/constants/summaryCards'
+  import { useSpendingsStore } from '@/stores/spendingsStore'
   import { Settings } from '@/types/Settings'
 
   const { t } = useI18n()
   const { settings, save: saveSettings } = useSettingsStore()
+  const { categories } = useSpendingsStore()
   const tempSettings = ref<Settings>({ ...settings })
 
   const router = useRouter()
@@ -32,10 +35,10 @@
   const handleSave = async (): Promise<void> => {
     const success = await saveSettings(tempSettings.value)
     if (success) {
-      message.success(t('messages.changesSavedSuccessfully'))
+      message.success(t('messages.settingsSavedSuccessfully'))
       closeDrawer()
     } else {
-      message.error(t('messages.errorSavingChanges'))
+      message.error(t('messages.errorSavingSettings'))
     }
   }
 
@@ -95,6 +98,20 @@
           <n-select
             v-model:value="tempSettings.defaultSummaryCard"
             :options="SUMMARY_CARDS.map((card) => ({ label: t(card.title), value: card.id }))"
+          />
+        </n-form-item>
+
+        <n-form-item path="defaultCategoryView">
+          <template #label>
+            <div class="flex items-center">
+              <span>{{ t('settings.categoryViewDefault') }}</span>
+              <div class="ms-2"><tooltip :text="t('settings.categoryViewDefaultTooltip')" /></div>
+            </div>
+          </template>
+          <SelectTextNull
+            v-model:value="tempSettings.defaultCategoryView"
+            :options="categories"
+            :null-item-label="$t('common.allCategories')"
           />
         </n-form-item>
       </n-form>

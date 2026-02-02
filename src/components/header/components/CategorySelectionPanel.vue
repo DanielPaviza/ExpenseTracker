@@ -43,7 +43,7 @@
     const allCard: CategoryCardVm = {
       key: '__all__',
       category: null,
-      title: t('header.allCategories'),
+      title: t('common.allCategories'),
       totalPriceText: formatCurrency(all.totalPrice),
       count: all.count,
       monthlyAverageText: formatCurrency(all.monthlyAverage),

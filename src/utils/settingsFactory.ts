@@ -9,5 +9,6 @@ export function createSettings(data?: Partial<Settings>): Settings {
     currencySymbol: data?.currencySymbol ?? DEFAULT_SETTINGS.currencySymbol,
     tableGroupDefaultOpen: data?.tableGroupDefaultOpen ?? DEFAULT_SETTINGS.tableGroupDefaultOpen,
     defaultSummaryCard: data?.defaultSummaryCard ?? DEFAULT_SETTINGS.defaultSummaryCard,
+    defaultCategoryView: data?.defaultCategoryView ?? DEFAULT_SETTINGS.defaultCategoryView,
   }) as Settings
 }

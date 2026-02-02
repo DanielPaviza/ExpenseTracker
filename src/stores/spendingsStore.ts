@@ -1,17 +1,27 @@
 import { loadSpendings, saveSpendings } from '@utils/spendingStorage'
 import { defineStore } from 'pinia'
 
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
+import { useSettingsStore } from '@/stores/settingsStore'
 import { Spending } from '@/types/Spending'
 
 export const useSpendingsStore = defineStore('spendings', () => {
   const spendings = ref<Spending[]>([])
   const originalSpendings = ref<Spending[]>([])
   const isLoading = ref(false)
+  const settingsStore = useSettingsStore()
 
   // App view state - null means no filtering by category
   const categoryView = ref<string | null>(null)
+
+  // Initialize the default category view from settings, when settings are loaded
+  watch(
+    () => settingsStore.isLoading,
+    () => {
+      categoryView.value = settingsStore.settings.defaultCategoryView
+    },
+  )
 
   // Track changes
   const newSpendingIds = ref<Set<string>>(new Set())

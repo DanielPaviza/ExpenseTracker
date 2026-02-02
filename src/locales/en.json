@@ -5,6 +5,10 @@
     "edit": "Edit"
   },
   "appTitle": "Expense Tracker",
+  "categoryPanel": {
+    "month": "mo.",
+    "purchases": "purchases"
+  },
   "columns": {
     "category": "Category",
     "created": "Created",
@@ -19,19 +23,17 @@
     "type": "Type"
   },
   "common": {
+    "all": "All",
+    "allCategories": "All categories",
     "cancel": "Cancel",
+    "close": "Close",
     "loadingData": "Loading data...",
     "no": "No",
     "noRecordsFound": "No records found",
     "reset": "Reset",
-    "showAll": "▼ Show all ({count})",
-    "showLess": "▲ Show less",
-    "yes": "Yes",
-    "close": "Close"
-  },
-  "categoryPanel": {
-    "purchases": "purchases",
-    "month": "mo."
+    "showAllArrowCount": "▼ Show all ({count})",
+    "showLessArrowCount": "▲ Show less",
+    "yes": "Yes"
   },
   "dashboard": {
     "overviewAndCategories": "Overview and Categories",
@@ -114,12 +116,11 @@
     "addNewPurchase": "Add New Purchase",
     "discardChanges": "Discard Changes",
     "saveChanges": "Save Changes",
+    "selectCategory": "Select a category",
+    "selectedCategory": "Selected category",
     "title": "Purchase Records",
     "totalExpenses": "Total Expenses",
-    "unsavedChanges": "Unsaved Changes",
-    "allCategories": "All categories",
-    "selectedCategory": "Selected category",
-    "selectCategory": "Select a category"
+    "unsavedChanges": "Unsaved Changes"
   },
   "messages": {
     "allDeletedItemsRestored": "All deleted expenses have been restored",
@@ -138,12 +139,16 @@
     "errorRestoringItem": "Error restoring \"{name}\"",
     "errorSavingChanges": "Error saving changes",
     "errorSavingPurchase": "Error saving purchase",
+    "errorSavingSettings": "Error saving settings",
     "itemRestored": "\"{name}\" has been restored",
     "purchaseCreatedSuccessfully": "Purchase created successfully",
     "purchaseDeletedSuccessfully": "Purchase deleted successfully",
-    "purchaseEditedSuccessfully": "Purchase edited successfully"
+    "purchaseEditedSuccessfully": "Purchase edited successfully",
+    "settingsSavedSuccessfully": "Settings saved successfully"
   },
   "settings": {
+    "categoryViewDefault": "Default category view",
+    "categoryViewDefaultTooltip": "The category view that is shown by default when opening the application",
     "currencySymbol": "Currency Symbol",
     "currencySymbolPlaceholder": "CZK, $, €...",
     "language": "Language",
@@ -197,8 +202,8 @@
     "mostExpensive": "Most Expensive",
     "mostExpensivePerUnit": "Most Expensive/unit",
     "mostExpensivePurchase": "Most Expensive Purchase",
-    "noSubCategories": "No subcategories in this category.",
     "noSavedExpenses": "No saved expenses.",
+    "noSubCategories": "No subcategories in this category.",
     "paid": "Paid",
     "perVisit": "/visit",
     "pricePerUnit": "at",

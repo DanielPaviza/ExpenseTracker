@@ -69,8 +69,8 @@
         <n-button size="tiny" @click="showAll = !showAll">
           {{
             showAll
-              ? $t('common.showLess')
-              : $t('common.showAll', { count: recentSpendings.length })
+              ? $t('common.showLessArrowCount')
+              : $t('common.showAllArrowCount', { count: recentSpendings.length })
           }}
         </n-button>
       </div>

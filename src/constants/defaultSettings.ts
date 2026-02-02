@@ -7,4 +7,5 @@ export const DEFAULT_SETTINGS: Settings = {
   currencySymbol: CURRENCY_SYMBOL_EURO,
   tableGroupDefaultOpen: false,
   defaultSummaryCard: 'overviewAndCategories',
+  defaultCategoryView: null,
 }

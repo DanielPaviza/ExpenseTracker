@@ -81,7 +81,11 @@
       class="mt-1 text-blueLight text-xs cursor-pointer"
       @click="showAll = !showAll"
     >
-      {{ showAll ? $t('common.showLess') : $t('common.showAll', { count: payerStats.length }) }}
+      {{
+        showAll
+          ? $t('common.showLessArrowCount')
+          : $t('common.showAllArrowCount', { count: payerStats.length })
+      }}
     </div>
 
     <hr class="my-2 text-blue" />

@@ -29,7 +29,7 @@
   }
 
   const displayedCategory = computed(() => {
-    return categoryView.value ? categoryView.value : t('header.allCategories')
+    return categoryView.value ? categoryView.value : t('common.allCategories')
   })
 </script>
 

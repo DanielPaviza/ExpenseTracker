@@ -5,6 +5,10 @@
     "edit": "Upravit"
   },
   "appTitle": "Evidence výdajů",
+  "categoryPanel": {
+    "month": "měs.",
+    "purchases": "nákupů"
+  },
   "columns": {
     "category": "Kategorie",
     "created": "Vytvořeno",
@@ -19,19 +23,17 @@
     "type": "Typ"
   },
   "common": {
+    "all": "Vše",
+    "allCategories": "Všechny kategorie",
     "cancel": "Zrušit",
+    "close": "Zavřít",
     "loadingData": "Načítání dat...",
     "no": "Ne",
     "noRecordsFound": "Nebyly nalezeny žádné záznamy",
     "reset": "Resetovat",
-    "showAll": "▼ Zobrazit všechny ({count})",
-    "showLess": "▲ Zobrazit méně",
-    "yes": "Ano",
-    "close": "Zavřít"
-  },
-  "categoryPanel": {
-    "purchases": "nákupů",
-    "month": "měs."
+    "showAllArrowCount": "▼ Zobrazit všechny ({count})",
+    "showLessArrowCount": "▲ Zobrazit méně",
+    "yes": "Ano"
   },
   "dashboard": {
     "overviewAndCategories": "Přehled a kategorie",
@@ -117,12 +119,11 @@
     "addNewPurchase": "Přidat nový nákup",
     "discardChanges": "Zahodit změny",
     "saveChanges": "Uložit změny",
+    "selectCategory": "Vyberte kategorii",
+    "selectedCategory": "Vybraná kategorie",
     "title": "Evidence nákupů",
     "totalExpenses": "Celkové výdaje",
-    "unsavedChanges": "Neuložené změny",
-    "allCategories": "Všechny kategorie",
-    "selectedCategory": "Vybraná kategorie",
-    "selectCategory": "Vyberte kategorii"
+    "unsavedChanges": "Neuložené změny"
   },
   "messages": {
     "allDeletedItemsRestored": "Všechny smazané výdaje byly obnoveny",
@@ -141,12 +142,16 @@
     "errorRestoringItem": "Chyba při obnovování \"{name}\"",
     "errorSavingChanges": "Chyba při ukládání změn",
     "errorSavingPurchase": "Chyba při ukládání nákupu",
+    "errorSavingSettings": "Chyba při ukládání nastavení",
     "itemRestored": "\"{name}\" byl obnoven",
     "purchaseCreatedSuccessfully": "Nákup byl úspěšně vytvořen",
     "purchaseDeletedSuccessfully": "Nákup byl úspěšně smazán",
-    "purchaseEditedSuccessfully": "Nákup byl úspěšně upraven"
+    "purchaseEditedSuccessfully": "Nákup byl úspěšně upraven",
+    "settingsSavedSuccessfully": "Nastavení bylo úspěšně uloženo"
   },
   "settings": {
+    "categoryViewDefault": "Výchozí kategorie",
+    "categoryViewDefaultTooltip": "Kategorie, která se zobrazí při otevření aplikace",
     "currencySymbol": "Symbol měny",
     "currencySymbolPlaceholder": "Kč, $, €...",
     "language": "Jazyk",
@@ -200,8 +205,8 @@
     "mostExpensive": "Nejdražší",
     "mostExpensivePerUnit": "Nejdražší/ks",
     "mostExpensivePurchase": "Nejdražší nákup",
-    "noSubCategories": "V této kategorii nejsou žádné podkategorie.",
     "noSavedExpenses": "Žádné ušetřené výdaje.",
+    "noSubCategories": "V této kategorii nejsou žádné podkategorie.",
     "paid": "Zaplaceno",
     "perVisit": "/návštěva",
     "pricePerUnit": "po",

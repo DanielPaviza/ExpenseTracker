@@ -20,7 +20,9 @@ export function useItemsLimit<T>(
   const hasMore = computed(() => items.value.length > maxItems)
 
   const toggleText = computed(() => {
-    return showAll.value ? t('common.showLess') : t('common.showAll', { count: items.value.length })
+    return showAll.value
+      ? t('common.showLessArrowCount')
+      : t('common.showAllArrowCount', { count: items.value.length })
   })
 
   return {

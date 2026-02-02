@@ -3,4 +3,5 @@ export type Settings = {
   tableGroupDefaultOpen: boolean
   languageCode: string
   defaultSummaryCard: string
+  defaultCategoryView: string | null
 }
