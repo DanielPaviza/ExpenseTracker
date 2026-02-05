@@ -48,42 +48,47 @@
   }
 </script>
 <template>
+  <div
+    v-if="isCategorySelectionOpen"
+    @click="isCategorySelectionOpen = false"
+    class="backdrop-blur-lg fixed w-screen h-screen border z-40"
+  >
+    fdefdefdefdefdefdefdefde
+  </div>
+
   <header
-    class="z-50 flex flex-col border-b-2 pt-4 pb-4 border-blue bg-blueLightTransparent backdrop-blur-md"
+    id="header"
+    class="sticky z-50 h-fit flex flex-col border-b-2 pt-4 pb-4 border-blue bg-blueLightTransparent backdrop-blur-md"
     :class="{
-      'fixed inset-0 h-screen overflow-hidden bg-white backdrop-blur-none': isCategorySelectionOpen,
-      'sticky top-0 mb-8': !isCategorySelectionOpen,
+      'inset-0 overflow-hidden bg-white backdrop-blur-[10px]': isCategorySelectionOpen,
+      'top-0 mb-8': !isCategorySelectionOpen,
     }"
   >
-    <MarginContainer class="h-full flex flex-col min-h-0">
+    <MarginContainer class="h-full flex flex-col min-h-0 z-50">
       <div class="flex items-center justify-between">
         <div class="flex items-center">
           <h1 class="text-4xl font-extrabold tracking-tight text-blue me-5">
-            {{ $t('header.title') }}
+            {{ $t('appTitle') }}
           </h1>
-          <template v-if="!isCategorySelectionOpen">
-            <div class="mt-2">
-              <n-button type="primary" color="#3b82f6" @click="openNewSpendingForm">
-                <n-icon size="32">
-                  <AddOutline />
-                </n-icon>
-                <div class="font-bold">
-                  {{ $t('header.addNewPurchase') }}
-                </div>
-              </n-button>
-            </div>
-            <h1 class="text-4xl text-red font-bold ms-10">
-              {{ isDev ? 'TEST' : '' }}
-            </h1>
-          </template>
+          <div class="mt-2">
+            <n-button type="primary" color="#3b82f6" @click="openNewSpendingForm">
+              <n-icon size="32">
+                <AddOutline />
+              </n-icon>
+              <div class="font-bold">
+                {{ $t('header.addNewPurchase') }}
+              </div>
+            </n-button>
+          </div>
+          <h1 class="text-4xl text-red font-bold ms-10">
+            {{ isDev ? 'TEST' : '' }}
+          </h1>
         </div>
         <div class="flex items-center gap-4">
           <PendingChanges v-if="store.pendingChanges" />
-          <template v-if="!isCategorySelectionOpen">
-            <div class="text-blue flex items-center font-semibold text-lg">
-              {{ $t('header.totalExpenses') }}: {{ formatCurrency(store.totalPrice) }}
-            </div>
-          </template>
+          <div class="text-blue flex items-center font-semibold text-lg">
+            {{ $t('header.totalExpenses') }}: {{ formatCurrency(store.totalPrice) }}
+          </div>
           <n-button color="#3b82f6" @click="openSettings">
             <n-icon size="24">
               <SettingsOutline />
@@ -102,44 +107,3 @@
     </MarginContainer>
   </header>
 </template>
-<style scoped>
-  @keyframes breathing {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.9;
-      transform: scale(0.98);
-    }
-  }
-
-  .animate-breathing {
-    animation: breathing 2s ease-in-out infinite;
-  }
-  .animate-breathing:hover {
-    animation-play-state: paused;
-  }
-
-  .expand-down-enter-active,
-  .expand-down-leave-active {
-    transition:
-      transform 180ms ease,
-      opacity 180ms ease;
-    transform-origin: top;
-    will-change: transform, opacity;
-  }
-
-  .expand-down-enter-from,
-  .expand-down-leave-to {
-    transform: translateY(-6px) scaleY(0.98);
-    opacity: 0;
-  }
-
-  .expand-down-enter-to,
-  .expand-down-leave-from {
-    transform: translateY(0) scaleY(1);
-    opacity: 1;
-  }
-</style>

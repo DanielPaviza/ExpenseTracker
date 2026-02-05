@@ -133,7 +133,6 @@
     "saveChanges": "Uložit změny",
     "selectCategory": "Vyberte kategorii",
     "selectedCategory": "Vybraná kategorie",
-    "title": "Evidence nákupů",
     "totalExpenses": "Celkové výdaje",
     "unsavedChanges": "Neuložené změny"
   },
@@ -242,7 +241,7 @@
     "totalFor": "Celkem za",
     "totalPaid": "Celkem zaplaceno",
     "totalWithSaved": "Celkem s ušetřenými",
-    "totalWithUnpaid": "(Celkem s nezaplacenými)",
+    "totalWithUnpaid": "Celkem s nezaplacenými",
     "types": "typů",
     "unpaid": "nezaplaceno",
     "unpaidExpenses": "Nezaplacené výdaje",

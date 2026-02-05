@@ -6,6 +6,7 @@ import { formatCurrency } from '@/composables/useCurrencyFormat'
 import { formatDateLocalized } from '@/composables/useDateFormat'
 import { useSpendingsStore } from '@/stores/spendingsStore'
 import { SpendingColumn } from '@/types/SpendingColumn'
+import { truncateText } from '@/utils/formatUtils'
 
 export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
   const { t, locale } = useI18n()
@@ -49,7 +50,7 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         tooltip: null,
         sortFn: (a, b) => a.subCategory.localeCompare(b.subCategory),
         filterVal: (row) => row.subCategory,
-        render: (row) => row.subCategory,
+        render: (row) => truncateText(row.subCategory, 30),
       },
       {
         title: t('columns.type'),
@@ -84,9 +85,9 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
                   title: t('form.openLink'),
                   href: row.url,
                 },
-                row.name,
+                truncateText(row.name, 40),
               )
-            : row.name,
+            : truncateText(row.name, 40),
       },
       {
         title: t('columns.store'),
@@ -97,7 +98,7 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         tooltip: null,
         sortFn: (a, b) => (a.store || '').localeCompare(b.store || ''),
         filterVal: (row) => row.store || '',
-        render: (row) => row.store || '-',
+        render: (row) => truncateText(row.store || '-', 30),
       },
       {
         title: t('columns.paid'),
