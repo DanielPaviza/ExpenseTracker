@@ -49,7 +49,7 @@
 
 <template>
   <div class="flex h-full">
-    <n-card class="shadow-lg w-full pb-5 mb-5">
+    <n-card class="w-full pb-5">
       <div class="flex justify-between items-center mb-2">
         <div>
           <div class="text-2xl font-bold text-blue">

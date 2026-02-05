@@ -1,38 +1,94 @@
 <script setup lang="ts">
-  import ButtonNavigation from '@components/shared/ButtonNavigation.vue'
+  import AverageSummary from '@components/home/spendingsDashboard/summary/cards/AverageSummary.vue'
+  import CategorySummary from '@components/home/spendingsDashboard/summary/cards/CategorySummary.vue'
+  import FreeSummary from '@components/home/spendingsDashboard/summary/cards/FreeSummary.vue'
+  import OverallPriceSummary from '@components/home/spendingsDashboard/summary/cards/OverallPriceSummary.vue'
+  import StatisticsSummary from '@components/home/spendingsDashboard/summary/cards/StatisticsSummary.vue'
+  import StoreSummary from '@components/home/spendingsDashboard/summary/cards/StoreSummary.vue'
+  import SubCategorySummary from '@components/home/spendingsDashboard/summary/cards/SubCategorySummary.vue'
+  import TagSummary from '@components/home/spendingsDashboard/summary/cards/TagSummary.vue'
+  import UnpaidSummary from '@components/home/spendingsDashboard/summary/cards/UnpaidSummary.vue'
   import { NCarousel } from 'naive-ui'
 
-  import { ref } from 'vue'
+  import { computed } from 'vue'
 
-  const { slides, defaultSlideIndex } = defineProps<{
-    slides: { id: number; label: string }[]
-    defaultSlideIndex: number
+  import CarouselItem from '@/components/home/spendingsDashboard/carousel/CarouselItem.vue'
+  import CarouselSlide from '@/components/home/spendingsDashboard/carousel/CarouselSlide.vue'
+  import { useSpendingsStore } from '@/stores/spendingsStore'
+
+  const { categoryView } = useSpendingsStore()
+
+  const { slideCount } = defineProps<{
+    slideCount: number
   }>()
 
-  const currentSlide = ref<number>(defaultSlideIndex)
+  const currentSlideId = defineModel<number>('current-slide-id', {
+    required: false,
+    default: 0,
+  })
+
+  const isCategorySelected = computed(() => categoryView !== null)
+
+  const nextSlide = () => {
+    currentSlideId.value = (currentSlideId.value + 1) % slideCount
+  }
+
+  const prevSlide = () => {
+    currentSlideId.value = (currentSlideId.value - 1 + slideCount) % slideCount
+  }
 </script>
+;
 
 <template>
-  <div class="carouselContainer w-full">
-    <ButtonNavigation v-model:selected-id="currentSlide" :buttons="slides" class="mb-4" />
+  <div class="carouselContainer relative w-full">
     <n-carousel
-      v-model:current-index="currentSlide"
-      :show-dots="true"
-      :show-arrow="true"
+      v-model:current-index="currentSlideId"
+      :show-dots="false"
       draggable
       :slides-per-view="1"
     >
-      <slot />
+      <CarouselSlide>
+        <CarouselItem navigate-dir="prev" @navigation-action="prevSlide">
+          <OverallPriceSummary />
+        </CarouselItem>
+        <CarouselItem navigate-dir="next" @navigation-action="nextSlide">
+          <!-- Show SubCategorySummary when a category is selected, otherwise CategorySummary -->
+          <SubCategorySummary v-if="isCategorySelected" />
+          <CategorySummary v-else />
+        </CarouselItem>
+      </CarouselSlide>
+
+      <CarouselSlide>
+        <CarouselItem navigate-dir="prev" @navigation-action="prevSlide">
+          <StoreSummary />
+        </CarouselItem>
+        <CarouselItem navigate-dir="next" @navigation-action="nextSlide">
+          <TagSummary />
+        </CarouselItem>
+      </CarouselSlide>
+
+      <CarouselSlide>
+        <CarouselItem navigate-dir="prev" @navigation-action="prevSlide">
+          <StatisticsSummary />
+        </CarouselItem>
+        <CarouselItem navigate-dir="next" @navigation-action="nextSlide">
+          <AverageSummary />
+        </CarouselItem>
+      </CarouselSlide>
+
+      <CarouselSlide>
+        <CarouselItem navigate-dir="prev" @navigation-action="prevSlide">
+          <FreeSummary />
+        </CarouselItem>
+        <CarouselItem navigate-dir="next" @navigation-action="nextSlide">
+          <UnpaidSummary />
+        </CarouselItem>
+      </CarouselSlide>
     </n-carousel>
   </div>
 </template>
 
 <style scoped>
-  .carouselContainer {
-    position: relative;
-    padding-bottom: 50px;
-  }
-
   :deep(.n-carousel) {
     position: static;
   }
@@ -41,9 +97,10 @@
     height: auto !important;
   }
 
-  :deep(.n-carousel__dots) {
-    position: absolute;
-    bottom: 10px;
+  :deep(.n-carousel.n-carousel--bottom .n-carousel__dots) {
+    transform: translateX(0%);
+    bottom: -24px;
+    left: 20px;
   }
 
   :deep(.n-carousel__dot) {
@@ -52,15 +109,6 @@
 
   :deep(.n-carousel__dot--active) {
     background-color: #3b82f6 !important;
-  }
-
-  :deep(.n-carousel__arrow) {
-    background-color: rgba(59, 130, 246, 0.8);
-    width: 32px !important;
-    height: 32px !important;
-    opacity: 0.8;
-    bottom: 10px !important;
-    top: auto !important;
   }
 
   :deep(.n-carousel__arrow:hover) {

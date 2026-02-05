@@ -119,7 +119,7 @@
     "tags": "Tagy",
     "technicalDocument": "Technický list",
     "toBePaid": "Prozatím nezaplaceno",
-    "toBePaidTooltip": "Položka ještě nebyla zaplacena a čeká na úhradu",
+    "toBePaidTooltip": "Položka bylo již uhrazena",
     "totalPrice": "Celková cena",
     "type": "Typ",
     "typePlaceholder": "Typ nákupu",

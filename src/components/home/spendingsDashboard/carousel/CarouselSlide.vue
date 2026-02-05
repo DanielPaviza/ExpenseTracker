@@ -1,6 +1,6 @@
 <script setup lang="ts"></script>
 <template>
-  <div class="flex flex-wrap gap-5 justify-between px-1">
+  <div class="flex px-1 gap-4 h-full">
     <slot />
   </div>
 </template>

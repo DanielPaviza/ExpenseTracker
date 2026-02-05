@@ -22,7 +22,7 @@
 <style scoped>
   .nav-button {
     padding: 6px 60px;
-    background-color: rgba(166, 162, 182, 0.2);
+    background-color: rgb(240, 240, 240);
     border: 2px solid rgba(166, 162, 182, 0.3);
     color: #a6a2b6;
     font-size: 14px;
@@ -72,8 +72,8 @@
 
   .nav-button.active {
     background-color: rgba(59, 130, 246, 0.15);
-    border-color: #3b82f6;
-    color: #3b82f6;
+    border-color: #78acff;
+    color: #78acff;
     font-weight: 600;
     box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
   }

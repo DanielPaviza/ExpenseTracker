@@ -7,6 +7,7 @@
 <template>
   <MarginContainer>
     <SpendingsDashboard />
+    <hr class="mt-8 mb-6 border-blueLight/40" />
     <SpendingsList />
   </MarginContainer>
   <router-view />

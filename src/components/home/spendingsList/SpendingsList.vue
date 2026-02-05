@@ -62,56 +62,59 @@
   )
 </script>
 <template>
-  <hr class="my-8 border-blue" />
-  <h1 class="font-bold text-2xl text-blue mb-6">
-    {{ $t('table.viewTitle') }}
-  </h1>
+  <div>
+    <h2 class="font-bold text-2xl text-blue mb-2">
+      {{ $t('table.viewTitle') }}
+    </h2>
 
-  <div class="flex items-end justify-between mb-4">
-    <ButtonNavigation v-model:selected-id="currentViewKey" :buttons="Object.values(VIEWS)" />
-    <div class="flex items-end gap-2">
-      <div class="">
-        <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
-          {{ $t('table.hiddenColumns') }}
+    <div class="flex items-end justify-between mb-4">
+      <ButtonNavigation v-model:selected-id="currentViewKey" :buttons="Object.values(VIEWS)" />
+      <div class="flex items-end gap-2">
+        <div class="">
+          <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
+            {{ $t('table.hiddenColumns') }}
+          </div>
+          <n-select
+            v-model:value="hiddenColumnKeys"
+            class="min-w-[140px] hideColumnsSelect"
+            :placeholder="$t('table.hiddenPlaceholder')"
+            multiple
+            :options="hideColumnSelectHeaders"
+            clearable
+          />
         </div>
-        <n-select
-          v-model:value="hiddenColumnKeys"
-          class="min-w-[140px] hideColumnsSelect"
-          :placeholder="$t('table.hiddenPlaceholder')"
-          multiple
-          :options="hideColumnSelectHeaders"
-          clearable
-        />
-      </div>
-      <div v-if="currentView?.enableSorting">
-        <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
-          {{ $t('table.sorting') }}
-        </div>
-        <div class="flex gap-2">
-          <button
-            class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
-            :class="{
-              'border-blue bg-blue text-white': nameSortState !== 'none',
-              'border-gray-300 bg-white text-gray-700 hover:border-blue': nameSortState === 'none',
-            }"
-            @click="toggleNameSort"
-          >
-            ABC
-            <span v-if="nameSortState === 'asc'"> ↑</span>
-            <span v-if="nameSortState === 'desc'"> ↓</span>
-          </button>
-          <button
-            class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
-            :class="{
-              'border-blue bg-blue text-white': priceSortState !== 'none',
-              'border-gray-300 bg-white text-gray-700 hover:border-blue': priceSortState === 'none',
-            }"
-            @click="togglePriceSort"
-          >
-            {{ $t('table.price') }}
-            <span v-if="priceSortState === 'asc'"> ↑</span>
-            <span v-if="priceSortState === 'desc'"> ↓</span>
-          </button>
+        <div v-if="currentView?.enableSorting">
+          <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
+            {{ $t('table.sorting') }}
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
+              :class="{
+                'border-blue bg-blue text-white': nameSortState !== 'none',
+                'border-gray-300 bg-white text-gray-700 hover:border-blue':
+                  nameSortState === 'none',
+              }"
+              @click="toggleNameSort"
+            >
+              ABC
+              <span v-if="nameSortState === 'asc'"> ↑</span>
+              <span v-if="nameSortState === 'desc'"> ↓</span>
+            </button>
+            <button
+              class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
+              :class="{
+                'border-blue bg-blue text-white': priceSortState !== 'none',
+                'border-gray-300 bg-white text-gray-700 hover:border-blue':
+                  priceSortState === 'none',
+              }"
+              @click="togglePriceSort"
+            >
+              {{ $t('table.price') }}
+              <span v-if="priceSortState === 'asc'"> ↑</span>
+              <span v-if="priceSortState === 'desc'"> ↓</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
