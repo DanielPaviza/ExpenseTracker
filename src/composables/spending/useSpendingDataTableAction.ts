@@ -3,7 +3,7 @@ import { BuildOutline, Copy, RemoveCircleOutline } from '@vicons/ionicons5'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
-import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
+import { useSpendingDialogAction } from '@/composables/spending/useSpendingDialogAction'
 import { type ActionContextItem } from '@/types/ActionContextItem'
 import { Spending } from '@/types/Spending'
 import { renderIcon } from '@/utils/iconUtils'

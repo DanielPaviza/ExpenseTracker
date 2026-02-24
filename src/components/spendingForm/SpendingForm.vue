@@ -11,11 +11,11 @@
   import FormBasicFields from '@/components/spendingForm/components/SpendingFormBasicFields.vue'
   import FormDocuments from '@/components/spendingForm/components/SpendingFormDocuments.vue'
   import FormTimestamps from '@/components/spendingForm/components/SpendingFormTimestamps.vue'
+  import { useSpendingDialogAction } from '@/composables/spending/useSpendingDialogAction'
+  import { useSpendingFormData } from '@/composables/spending/useSpendingFormData'
+  import { useSpendingFormOptions } from '@/composables/spending/useSpendingFormOptions'
+  import { useSpendingFormValidation } from '@/composables/spending/useSpendingFormValidation'
   import { useFileUpload } from '@/composables/useFileUpload'
-  import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
-  import { useSpendingFormData } from '@/composables/useSpendingFormData'
-  import { useSpendingFormOptions } from '@/composables/useSpendingFormOptions'
-  import { useSpendingFormValidation } from '@/composables/useSpendingFormValidation'
   import { SpendingDocument } from '@/types/SpendingDocument'
 
   const { deleteDialog } = useSpendingDialogAction()

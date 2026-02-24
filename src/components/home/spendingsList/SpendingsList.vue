@@ -7,8 +7,8 @@
 
   import { computed, ref, watch } from 'vue'
 
-  import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
-  import { useSpendingsViews } from '@/composables/useSpendingsViews'
+  import { useSpendingsColumns } from '@/composables/spending/useSpendingsColumns'
+  import { useSpendingsViews } from '@/composables/spending/useSpendingsViews'
   import { useViewSort } from '@/composables/useViewSort'
   import { SpendingList, SpendingListKey } from '@/types/SpendingList'
 

@@ -6,7 +6,7 @@
 
   import SpendingsDataTableAction from '@/components/home/spendingsList/SpendingsDataTableAction.vue'
   import SpendingsDataTableActionContext from '@/components/home/spendingsList/SpendingsDataTableActionContext.vue'
-  import { useSpendingStatus } from '@/composables/useSpendingStatus'
+  import { useSpendingStatus } from '@/composables/spending/useSpendingStatus'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
   import { getCellContent } from '@/utils/tableUtils'

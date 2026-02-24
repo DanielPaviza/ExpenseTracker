@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { NButton, NDropdown } from 'naive-ui'
 
-  import { useSpendingDataTableAction } from '@/composables/useSpendingDataTableAction'
+  import { useSpendingDataTableAction } from '@/composables/spending/useSpendingDataTableAction'
   import type { Spending } from '@/types/Spending'
 
   const { spending } = defineProps<{

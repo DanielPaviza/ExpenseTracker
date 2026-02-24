@@ -4,7 +4,7 @@
 
   import { useI18n } from 'vue-i18n'
 
-  import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
+  import { useSpendingDialogAction } from '@/composables/spending/useSpendingDialogAction'
 
   const { discardChangesDialog } = useSpendingDialogAction()
   const { t } = useI18n()

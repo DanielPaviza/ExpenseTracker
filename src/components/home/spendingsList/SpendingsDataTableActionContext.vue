@@ -3,7 +3,7 @@
 
   import { nextTick, ref, watch } from 'vue'
 
-  import { useSpendingDataTableAction } from '@/composables/useSpendingDataTableAction'
+  import { useSpendingDataTableAction } from '@/composables/spending/useSpendingDataTableAction'
   import type { Spending } from '@/types/Spending'
 
   const { spending, mouseEvent } = defineProps<{

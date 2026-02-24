@@ -9,9 +9,9 @@
   import { type VNode, computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  import { useSpendingDialogAction } from '@/composables/useSpendingDialogAction'
-  import { useSpendingsColumns } from '@/composables/useSpendingsColumns'
-  import { useTableSort } from '@/composables/useTableSort'
+  import { useSpendingDialogAction } from '@/composables/spending/useSpendingDialogAction'
+  import { useSpendingsColumns } from '@/composables/spending/useSpendingsColumns'
+  import { useTableSort } from '@/composables/table/useTableSort'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
   import { calculateTotalPrice, getCellContent } from '@/utils/tableUtils'
