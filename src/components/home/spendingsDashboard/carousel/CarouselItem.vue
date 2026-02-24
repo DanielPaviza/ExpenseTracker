@@ -21,7 +21,7 @@
       <slot />
       <div
         v-if="navigateDir"
-        class="bg-blueLight/40 hover:bg-blueLight/60 p-1 flex cursor-pointer rounded-b"
+        class="bg-blueLight/60 hover:bg-blueLight/90 p-1 flex cursor-pointer rounded-b"
         :class="isNavNext ? 'justify-end' : 'justify-start'"
         @click="$emit('navigation-action')"
       >

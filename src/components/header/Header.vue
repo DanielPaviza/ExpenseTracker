@@ -52,9 +52,7 @@
     v-if="isCategorySelectionOpen"
     @click="isCategorySelectionOpen = false"
     class="backdrop-blur-lg fixed w-screen h-screen border z-40"
-  >
-    fdefdefdefdefdefdefdefde
-  </div>
+  ></div>
 
   <header
     id="header"

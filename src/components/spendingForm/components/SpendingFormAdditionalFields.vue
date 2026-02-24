@@ -30,7 +30,7 @@
       <template #label>
         <div class="flex items-center gap-1">
           {{ t('form.group') }}
-          <Tooltip :text="t('form.groupTooltip')" />
+          <Tooltip :text="t('form.groupTooltip')" small />
         </div>
       </template>
       <n-select
