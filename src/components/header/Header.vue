@@ -25,9 +25,7 @@
     if (isOpen) {
       previousBodyOverflow = document.body.style.overflow
       document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = previousBodyOverflow
-    }
+    } else document.body.style.overflow = previousBodyOverflow
   })
 
   onBeforeUnmount(() => {
@@ -50,8 +48,8 @@
 <template>
   <div
     v-if="isCategorySelectionOpen"
-    @click="isCategorySelectionOpen = false"
     class="backdrop-blur-lg fixed w-screen h-screen border z-40"
+    @click="isCategorySelectionOpen = false"
   ></div>
 
   <header

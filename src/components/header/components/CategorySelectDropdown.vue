@@ -35,12 +35,12 @@
 
 <template>
   <div
-    @click="toggleOpen"
     :class="[
       'flex items-center justify-between px-4 py-3 mt-3 bg-white border border-blue-500 rounded-[10px] cursor-pointer transition-all duration-200',
       isOpen ? 'bg-blue-50 border-blue-700' : '',
       'hover:bg-slate-50 hover:shadow-[0_2px_8px_rgba(59,130,246,0.15)]',
     ]"
+    @click="toggleOpen"
   >
     <div class="flex items-center gap-3 flex-1 min-w-0">
       <div class="text-sm text-slate-500 whitespace-nowrap">

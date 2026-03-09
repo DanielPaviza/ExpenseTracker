@@ -12,7 +12,6 @@
     <button
       v-for="(button, idx) in buttons"
       :key="button.id"
-      @click="selectedId = button.id"
       :class="[
         'relative overflow-hidden px-14 py-1.5 bg-gray-100 border-2 border-[rgba(166,162,182,0.3)] text-[#a6a2b6] text-sm font-medium cursor-pointer transition-all duration-300',
         idx === 0 ? 'rounded-l-lg' : '',
@@ -23,6 +22,7 @@
           : '',
         'hover:border-blue-400 hover:text-blue-500 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0',
       ]"
+      @click="selectedId = button.id"
     >
       <span class="relative z-10">{{ button.label }}</span>
       <span

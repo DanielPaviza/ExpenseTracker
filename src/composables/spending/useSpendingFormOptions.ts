@@ -32,14 +32,14 @@ export function useSpendingFormOptions(formData: ComputedRef<Spending>) {
   })
 
   const tagOptions = computed(() => {
-    let allTags: SelectOption[] = store.tags.map((tag) => ({ label: tag, value: tag }))
+    const allTags: SelectOption[] = store.tags.map((tag) => ({ label: tag, value: tag }))
     // Ensure current tableGroup is included in tags options
     if (
       formData.value.tableGroup &&
       !allTags.find((tag) => tag.value === formData.value.tableGroup)
-    ) {
+    )
       allTags.push({ label: formData.value.tableGroup, value: formData.value.tableGroup })
-    }
+
     return allTags
   })
 

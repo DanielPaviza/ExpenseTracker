@@ -197,7 +197,7 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
     ]
 
     // Dont hide category column when in all-categories view
-    if (spendingStore.categoryView == null) return cols
+    if (spendingStore.categoryView === null) return cols
 
     return cols.filter((col) => col.key !== 'category')
   }

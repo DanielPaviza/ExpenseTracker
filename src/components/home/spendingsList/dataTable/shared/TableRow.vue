@@ -36,9 +36,7 @@
 
   function handleRowClick(event?: MouseEvent): void {
     // Don't navigate if clicking on action buttons
-    if (event && (event.target as HTMLElement).closest('.delete-button, .spending-link')) {
-      return
-    }
+    if (event && (event.target as HTMLElement).closest('.delete-button, .spending-link')) return
 
     emit('row-click', row, event)
     router.push(`/edit/${row.id}`)
@@ -54,9 +52,9 @@
   <tr
     class="hover:bg-blue-50 cursor-pointer row"
     style="position: relative"
+    :class="isTableGroup ? 'border-l-2 border-blue-300 bg-[#fcfdff]' : 'bg-white'"
     @click="handleRowClick($event)"
     @contextmenu="handleContextMenu"
-    :class="isTableGroup ? 'border-l-2 border-blue-300 bg-[#fcfdff]' : 'bg-white'"
   >
     <td
       v-for="column in columns"

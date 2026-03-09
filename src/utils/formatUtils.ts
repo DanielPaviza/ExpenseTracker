@@ -30,18 +30,13 @@ export function generateColorPalette(colorsCount: number, preselected: string[] 
       const normalized =
         c.length === 4 ? '#' + c[1] + c[1] + c[2] + c[2] + c[3] + c[3] : c.toLowerCase()
 
-      if (!result.includes(normalized)) {
-        result.push(normalized)
-      }
+      if (!result.includes(normalized)) result.push(normalized)
     }
   }
 
   // Add default preselected colors after user preselected colors
-  for (const color of defaultPreselectedColors) {
-    if (result.length < colorsCount && !result.includes(color)) {
-      result.push(color)
-    }
-  }
+  for (const color of defaultPreselectedColors)
+    if (result.length < colorsCount && !result.includes(color)) result.push(color)
 
   // Helper: convert h,s,l to hex
   function hslToHex(h: number, s: number, l: number): string {
@@ -65,9 +60,7 @@ export function generateColorPalette(colorsCount: number, preselected: string[] 
     const lightness = 45 + Math.floor(Math.random() * 15) // 45-60%
     const hex = hslToHex(hue, saturation, lightness)
     // avoid duplicates
-    if (!result.includes(hex)) {
-      result.push(hex)
-    }
+    if (!result.includes(hex)) result.push(hex)
   }
 
   return result.slice(0, colorsCount)
@@ -75,8 +68,7 @@ export function generateColorPalette(colorsCount: number, preselected: string[] 
 
 // Truncates text to a maximum length, adding "..." if truncated.
 export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) {
-    return text
-  }
+  if (text.length <= maxLength) return text
+
   return text.slice(0, maxLength - 3) + '...'
 }

@@ -26,7 +26,7 @@
       <n-button @click="emit('cancel')">
         {{ t('common.cancel') }}
       </n-button>
-      <n-button v-if="showReset" @click="emit('reset')" type="info" secondary>
+      <n-button v-if="showReset" type="info" secondary @click="emit('reset')">
         {{ t('common.reset') }}
       </n-button>
       <n-button v-if="showDelete" color="#ef4444" @click="emit('delete')">

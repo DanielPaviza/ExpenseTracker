@@ -58,14 +58,13 @@
       documentsToUpload.value.map(async (document) => {
         const copyName = crypto.randomUUID()
         const copySuccess = await uploadFile(document, copyName)
-        if (copySuccess) {
+        if (copySuccess)
           // Update document path to the copied name and remove File object before saving
           formData.value.documents.push({
             name: document.name,
             extension: document.extension,
             path: `${copyName}.${document.extension}`,
           })
-        }
       }),
     )
     documentsToUpload.value = []

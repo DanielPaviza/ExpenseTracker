@@ -60,9 +60,7 @@ export function useEntityStats(options: EntityStatsOptions) {
         itemCount,
       }
 
-      if (includeAverage) {
-        stat.avgPrice = count > 0 ? price / count : 0
-      }
+      if (includeAverage) stat.avgPrice = count > 0 ? price / count : 0
 
       if (includeVisits) {
         stat.visits = count

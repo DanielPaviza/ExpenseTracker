@@ -108,9 +108,8 @@ export function useFileUpload() {
   }
 
   async function getDocumentFullPath(documentName: string): Promise<string> {
-    if (!documentsFolderPath.value) {
-      throw new Error('Documents folder path is not set.')
-    }
+    if (!documentsFolderPath.value) throw new Error('Documents folder path is not set.')
+
     try {
       return await join(documentsFolderPath.value, documentName)
     } catch (error) {

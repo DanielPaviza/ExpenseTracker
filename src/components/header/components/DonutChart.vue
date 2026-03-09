@@ -1,19 +1,13 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
-  const props = withDefaults(
-    defineProps<{
-      percent: number
-      color: string
-    }>(),
-    {
-      percent: 0,
-      color: '#3b82f6',
-    },
-  )
+  const { percent = 0, color = '#3b82f6' } = defineProps<{
+    percent?: number
+    color?: string
+  }>()
 
   const clampedPercent = computed(() => {
-    const value = Number.isFinite(props.percent) ? props.percent : 0
+    const value = Number.isFinite(percent) ? percent : 0
     return Math.min(100, Math.max(0, Math.round(value)))
   })
 

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import SummaryCard from '@/components/home/spendingsDashboard/summary/SummaryCard.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { storeToRefs } from 'pinia'
 
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import SummaryCard from '@/components/home/spendingsDashboard/summary/SummaryCard.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { t } = useI18n()
@@ -14,7 +14,7 @@
 
   const dateStats = computed(() => {
     const paidSpendings = spendings.value.filter((s) => !s.isFree && !s.isToBePaid)
-    if (paidSpendings.length === 0) {
+    if (paidSpendings.length === 0)
       return {
         firstDate: null,
         lastDate: null,
@@ -22,7 +22,6 @@
         totalWeeks: 0,
         totalMonths: 0,
       }
-    }
 
     const sortedByDate = [...paidSpendings].sort(
       (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),

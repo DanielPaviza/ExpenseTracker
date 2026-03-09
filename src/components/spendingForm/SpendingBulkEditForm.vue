@@ -97,7 +97,7 @@
         </div>
       </template>
       <n-form label-placement="top" require-mark-placement="right-hanging">
-        <n-form-item path="scope" v-if="props.canSelectScope">
+        <n-form-item v-if="props.canSelectScope" path="scope">
           <template #label>
             <div class="flex items-center">
               <span>{{ $t('spendingBulkEditForm.scopeLabel') }}</span>
@@ -107,7 +107,7 @@
             </div>
           </template>
           <div class="flex justify-center w-full">
-            <ButtonNavigation full :buttons="scopeChoices" v-model:selectedId="selectedScope" />
+            <ButtonNavigation v-model:selected-id="selectedScope" full :buttons="scopeChoices" />
           </div>
         </n-form-item>
         <n-form-item path="name">
@@ -137,11 +137,11 @@
 
       <template #footer>
         <FormActions
+          show-delete
+          :save-text="t('form.saveChangesButton')"
           @save="handleSave"
           @delete="deleteDialog"
           @cancel="closeDrawer"
-          showDelete
-          :saveText="t('form.saveChangesButton')"
         />
       </template>
     </n-drawer-content>

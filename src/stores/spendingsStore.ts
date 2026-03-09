@@ -26,7 +26,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     () => {
       // Default category does not exist anymore
       if (
-        settingsStore.settings.defaultCategoryView != null &&
+        settingsStore.settings.defaultCategoryView !== null &&
         !categories.value.includes(settingsStore.settings.defaultCategoryView)
       ) {
         categoryView.value = null
@@ -54,9 +54,8 @@ export const useSpendingsStore = defineStore('spendings', () => {
   })
 
   const spendingsInCategoryView = computed(() => {
-    if (categoryView.value) {
-      return spendings.value.filter((s) => s.category === categoryView.value)
-    }
+    if (categoryView.value) return spendings.value.filter((s) => s.category === categoryView.value)
+
     return spendings.value
   })
 
@@ -111,47 +110,35 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   function removeSpendingCategory(category: string): void {
     const toDelete = spendings.value.filter((s) => s.category === category)
-    for (const spending of toDelete) {
-      removeSpending(spending.id)
-    }
+    for (const spending of toDelete) removeSpending(spending.id)
 
     // Switch the view if currently viewing the deleted category
-    if (categoryView.value === category) {
-      categoryView.value = null
-    }
+    if (categoryView.value === category) categoryView.value = null
 
     // Update settings if default category view was the deleted category
-    if (settingsStore.settings.defaultCategoryView === category) {
-      setCategoryViewSettings(null)
-    }
+    if (settingsStore.settings.defaultCategoryView === category) setCategoryViewSettings(null)
   }
 
   function renameSpendingCategory(oldCategory: string, newCategory: string): void {
-    for (const spending of spendings.value) {
+    for (const spending of spendings.value)
       if (spending.category === oldCategory) {
         const updatedSpending = { ...spending, category: newCategory }
         updateSpending(spending.id, updatedSpending)
       }
-    }
 
     // Switch the view if currently viewing the renamed category
-    if (categoryView.value === oldCategory) {
-      categoryView.value = newCategory
-    }
+    if (categoryView.value === oldCategory) categoryView.value = newCategory
 
     // Update settings if default category view was the renamed category
-    if (settingsStore.settings.defaultCategoryView === oldCategory) {
+    if (settingsStore.settings.defaultCategoryView === oldCategory)
       setCategoryViewSettings(newCategory)
-    }
   }
 
   function removeSpendingStore(store: string, acrossAllCategories: boolean): void {
     const toDelete = spendings.value.filter(
       (s) => s.store === store && (acrossAllCategories || s.category === categoryView.value),
     )
-    for (const spending of toDelete) {
-      removeSpending(spending.id)
-    }
+    for (const spending of toDelete) removeSpending(spending.id)
   }
 
   function renameSpendingStore(
@@ -159,7 +146,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     newStore: string,
     acrossAllCategories: boolean,
   ): void {
-    for (const spending of spendings.value) {
+    for (const spending of spendings.value)
       if (
         spending.store === oldStore &&
         (acrossAllCategories || spending.category === categoryView.value)
@@ -167,7 +154,6 @@ export const useSpendingsStore = defineStore('spendings', () => {
         const updatedSpending = { ...spending, store: newStore }
         updateSpending(spending.id, updatedSpending)
       }
-    }
   }
 
   function removeSpendingSubCategory(subCategory: string, acrossAllCategories: boolean): void {
@@ -175,9 +161,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
       (s) =>
         s.subCategory === subCategory && (acrossAllCategories || s.category === categoryView.value),
     )
-    for (const spending of toDelete) {
-      removeSpending(spending.id)
-    }
+    for (const spending of toDelete) removeSpending(spending.id)
   }
 
   function renameSpendingSubCategory(
@@ -185,7 +169,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
     newSubCategory: string,
     acrossAllCategories: boolean,
   ): void {
-    for (const spending of spendings.value) {
+    for (const spending of spendings.value)
       if (
         spending.subCategory === oldSubCategory &&
         (acrossAllCategories || spending.category === categoryView.value)
@@ -193,11 +177,10 @@ export const useSpendingsStore = defineStore('spendings', () => {
         const updatedSpending = { ...spending, subCategory: newSubCategory }
         updateSpending(spending.id, updatedSpending)
       }
-    }
   }
 
   function removeSpendingTag(tag: string, acrossAllCategories: boolean): void {
-    for (const spending of spendings.value) {
+    for (const spending of spendings.value)
       if (
         spending.tags &&
         spending.tags.includes(tag) &&
@@ -207,11 +190,10 @@ export const useSpendingsStore = defineStore('spendings', () => {
         const updatedSpending = { ...spending, tags: updatedTags }
         updateSpending(spending.id, updatedSpending)
       }
-    }
   }
 
   function renameSpendingTag(oldTag: string, newTag: string, acrossAllCategories: boolean): void {
-    for (const spending of spendings.value) {
+    for (const spending of spendings.value)
       if (
         spending.tags &&
         spending.tags.includes(oldTag) &&
@@ -221,7 +203,6 @@ export const useSpendingsStore = defineStore('spendings', () => {
         const updatedSpending = { ...spending, tags: updatedTags }
         updateSpending(spending.id, updatedSpending)
       }
-    }
   }
 
   function restoreSpending(id: string): void {
@@ -245,9 +226,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
     spendings.value[index] = updatedSpending
     // Track as edited only if not already new
-    if (!newSpendingIds.value.has(id)) {
-      editedSpendingIds.value.add(id)
-    }
+    if (!newSpendingIds.value.has(id)) editedSpendingIds.value.add(id)
   }
 
   function discardChanges(): void {
@@ -259,48 +238,36 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct categories
   const categories = computed(() => {
-    if (spendings.value.length === 0) {
-      return []
-    }
+    if (spendings.value.length === 0) return []
 
     const countMap = new Map<string, number>()
-    for (const s of spendings.value) {
-      if (s.category) {
-        countMap.set(s.category, (countMap.get(s.category) || 0) + 1)
-      }
-    }
+    for (const s of spendings.value)
+      if (s.category) countMap.set(s.category, (countMap.get(s.category) || 0) + 1)
+
     return Array.from(countMap.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([category]) => category)
   })
 
   const subCategories = computed(() => {
-    if (spendingsInCategoryView.value.length === 0) {
-      return []
-    }
+    if (spendingsInCategoryView.value.length === 0) return []
 
     const countMap = new Map<string, number>()
-    for (const s of spendingsInCategoryView.value) {
-      if (s.subCategory) {
-        countMap.set(s.subCategory, (countMap.get(s.subCategory) || 0) + 1)
-      }
-    }
+    for (const s of spendingsInCategoryView.value)
+      if (s.subCategory) countMap.set(s.subCategory, (countMap.get(s.subCategory) || 0) + 1)
+
     return Array.from(countMap.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([subCategory]) => subCategory)
   })
 
   const tableGroups = computed(() => {
-    if (spendingsInCategoryView.value.length === 0) {
-      return []
-    }
+    if (spendingsInCategoryView.value.length === 0) return []
 
     const countMap = new Map<string, number>()
-    for (const s of spendingsInCategoryView.value) {
-      if (s.tableGroup) {
-        countMap.set(s.tableGroup, (countMap.get(s.tableGroup) || 0) + 1)
-      }
-    }
+    for (const s of spendingsInCategoryView.value)
+      if (s.tableGroup) countMap.set(s.tableGroup, (countMap.get(s.tableGroup) || 0) + 1)
+
     return Array.from(countMap.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([tableGroup]) => tableGroup)
@@ -308,16 +275,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct payers
   const payers = computed(() => {
-    if (spendingsInCategoryView.value.length === 0) {
-      return []
-    }
+    if (spendingsInCategoryView.value.length === 0) return []
 
     const countMap = new Map<string, number>()
-    for (const s of spendingsInCategoryView.value) {
-      if (s.payer) {
-        countMap.set(s.payer, (countMap.get(s.payer) || 0) + 1)
-      }
-    }
+    for (const s of spendingsInCategoryView.value)
+      if (s.payer) countMap.set(s.payer, (countMap.get(s.payer) || 0) + 1)
+
     return Array.from(countMap.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([payer]) => payer)
@@ -325,9 +288,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct stores
   const stores = computed(() => {
-    if (spendingsInCategoryView.value.length === 0) {
-      return []
-    }
+    if (spendingsInCategoryView.value.length === 0) return []
 
     const countMap = new Map<string, number>()
     for (const s of spendingsInCategoryView.value) {
@@ -353,18 +314,13 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   // Computed: distinct tags
   const tags = computed(() => {
-    if (spendingsInCategoryView.value.length === 0) {
-      return []
-    }
+    if (spendingsInCategoryView.value.length === 0) return []
 
     const countMap = new Map<string, number>()
-    for (const s of spendingsInCategoryView.value) {
-      if (s.tags && s.tags.length > 0) {
-        for (const tag of s.tags) {
-          countMap.set(tag, (countMap.get(tag) || 0) + 1)
-        }
-      }
-    }
+    for (const s of spendingsInCategoryView.value)
+      if (s.tags && s.tags.length > 0)
+        for (const tag of s.tags) countMap.set(tag, (countMap.get(tag) || 0) + 1)
+
     return Array.from(countMap.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([tag]) => tag)

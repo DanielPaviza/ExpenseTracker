@@ -14,9 +14,8 @@ const DEV_DB_PATH = './../src-tauri/expenseTrackerDb.json'
 async function fetchSpendingsFromFile(): Promise<Spending[]> {
   try {
     const response = await fetch(DEV_DB_PATH)
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
     const jsonData = await response.text()
     return parseSpendings(jsonData)
   } catch (error) {

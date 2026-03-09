@@ -25,7 +25,7 @@
 
     // Ensure no null option
     const filteredOptions: Array<{ label: string; value: string }> = objectOptions
-      .filter((option) => option.value != null)
+      .filter((option) => option.value !== null)
       .map((option) => ({
         label: option.label,
         value: option.value as string,
@@ -43,7 +43,7 @@
   <n-select
     :value="value != null ? value : nullItem.value"
     :options="allOptions"
-    @update:value="handleUpdateValue"
     clearable
+    @update:value="handleUpdateValue"
   />
 </template>

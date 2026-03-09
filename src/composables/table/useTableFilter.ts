@@ -11,15 +11,11 @@ export function useTableFilter(data: () => Spending[], columns: () => SpendingCo
 
     // Apply each column filter
     for (const [columnKey, filterValue] of Object.entries(columnFilters.value)) {
-      if (!filterValue || filterValue.trim() === '') {
-        continue
-      }
+      if (!filterValue || filterValue.trim() === '') continue
 
       const filterLower = filterValue.toLowerCase().trim()
       const column = columns().find((c) => c.key === columnKey)
-      if (!column) {
-        continue
-      }
+      if (!column) continue
 
       result = result.filter((row) => {
         const cellValue = column.filterVal(row)
@@ -38,9 +34,7 @@ export function useTableFilter(data: () => Spending[], columns: () => SpendingCo
 
       for (const row of data()) {
         const value = column.filterVal(row)
-        if (value && value.trim() !== '') {
-          uniqueValues.add(value)
-        }
+        if (value && value.trim() !== '') uniqueValues.add(value)
       }
 
       options[String(column.key)] = Array.from(uniqueValues)

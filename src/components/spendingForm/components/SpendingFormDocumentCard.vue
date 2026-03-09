@@ -109,9 +109,7 @@
       }
 
       const fsPath = resolveFsPath(documentPath.value as string)
-      if (!fsPath) {
-        throw new Error('Invalid document path')
-      }
+      if (!fsPath) throw new Error('Invalid document path')
 
       const data = await readFile(fsPath)
       triggerBlobDownload(new Blob([data]), documentFileName.value)
@@ -176,7 +174,7 @@
 
       <!-- Document info -->
       <div class="document-info">
-        <div class="flex justify-between items-center gap-2" v-if="isEditingName">
+        <div v-if="isEditingName" class="flex justify-between items-center gap-2">
           <NInput
             v-model:value="newName"
             :placeholder="t('form.documentName')"
@@ -188,8 +186,8 @@
             circle
             type="success"
             :title="t('form.saveDocumentName')"
-            @click="saveNewName"
             :disabled="isNewNameEmpty"
+            @click="saveNewName"
           >
             <template #icon>
               <NIcon>
@@ -211,10 +209,10 @@
             </template>
           </NButton>
         </div>
-        <div class="flex justify-between items-center gap-6" v-else>
-          <NText class="document-name font-semibold text-[16px]" :title="document.name">{{
-            document.name
-          }}</NText>
+        <div v-else class="flex justify-between items-center gap-6">
+          <NText class="document-name font-semibold text-[16px]" :title="document.name">
+            document.name }}
+          </NText>
           <NButton
             size="small"
             circle
@@ -230,9 +228,9 @@
           </NButton>
         </div>
 
-        <NText class="opacity-80 font-semibold" :title="document.name"
-          >.{{ document.extension }}</NText
-        >
+        <NText class="opacity-80 font-semibold" :title="document.name">
+          .{{ document.extension }}
+        </NText>
       </div>
 
       <!-- Actions -->

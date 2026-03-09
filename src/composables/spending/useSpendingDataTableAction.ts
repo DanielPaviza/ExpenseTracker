@@ -8,7 +8,6 @@ import { type ActionContextItem } from '@/types/ActionContextItem'
 import { Spending } from '@/types/Spending'
 import { renderIcon } from '@/utils/iconUtils'
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function useSpendingDataTableAction() {
   const { t } = useI18n()
   const { deleteDialog } = useSpendingDialogAction()

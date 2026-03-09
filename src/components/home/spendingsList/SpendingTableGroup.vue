@@ -34,8 +34,6 @@
     () => settingsStore.settings.tableGroupDefaultOpen,
     (newValue) => {
       isExpanded.value = newValue
-      if (items.length > 1) {
-      }
     },
   )
 </script>

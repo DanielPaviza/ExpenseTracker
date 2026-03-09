@@ -88,15 +88,15 @@
         v-for="(_doc, index) in documents"
         :key="`document-${index}`"
         v-model="documents[index]"
-        @deleteDocument="deleteDocument(index)"
         :document-path="convertDocumentPath(documents[index].path)"
+        @delete-document="deleteDocument(index)"
       />
       <FormDocumentCard
         v-for="(_doc, index) in documentsToUpload"
         :key="`new-document-${index}`"
         v-model="documentsToUpload[index]"
-        @deleteDocument="deleteNewDocument(index)"
         :document-path="documentsToUpload[index].path"
+        @delete-document="deleteNewDocument(index)"
       />
     </div>
   </div>

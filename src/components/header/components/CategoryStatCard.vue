@@ -55,19 +55,19 @@
 
 <template>
   <div
-    @click="emit('click')"
-    @contextmenu="handleContextMenu"
     class="m-2 relative flex justify-between items-center p-6 bg-white rounded-xl cursor-pointer transition-all duration-200 border-blue hover:shadow-lg hover:-translate-y-0.5"
     :class="
       selected
         ? 'border-2 bg-linear-to-br from-blue-50 to-white shadow-lg'
         : 'boxShadowCustom border border-transparent hover:border-blue'
     "
+    @click="emit('click')"
+    @contextmenu="handleContextMenu"
   >
     <div v-if="canBeEdited" class="absolute bottom-2 left-6" @click="handleGotoEditCategory">
       <n-icon color="orange" size="16" class="opacity-50 hover:opacity-100">
-        <BuildOutline
-      /></n-icon>
+        <BuildOutline />
+      </n-icon>
     </div>
     <div class="flex-1 min-w-0">
       <div class="text-xl font-semibold text-blue-800 mb-3 truncate">
@@ -92,7 +92,7 @@
   </div>
   <CategoryActionContext
     v-if="canBeEdited"
-    :mouseEvent="actionContextMouseEvent"
+    :mouse-event="actionContextMouseEvent"
     :on-edit="handleGotoEditCategory"
   />
 </template>

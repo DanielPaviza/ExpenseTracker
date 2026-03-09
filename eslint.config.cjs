@@ -57,7 +57,7 @@ module.exports = tseslint.config(
       'no-debugger': 'error',
       curly: ['error', 'multi'],
       eqeqeq: ['error', 'always'],
-      '@typescript-eslint/explicit-function-return-type': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'off',
 
       '@typescript-eslint/no-unused-vars': [
         'warn',

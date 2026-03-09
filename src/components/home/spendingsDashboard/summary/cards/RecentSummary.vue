@@ -20,17 +20,15 @@
 
   const sortedSpendings = computed(() => {
     const sorted = [...spendings.value].filter((s: Spending) => !s.isFree && !s.isToBePaid)
-    if (sortBy.value === 'price-desc') {
-      return sorted.sort((a, b) => b.totalPrice - a.totalPrice)
-    }
+    if (sortBy.value === 'price-desc') return sorted.sort((a, b) => b.totalPrice - a.totalPrice)
+
     // Default to date-desc
     return sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
   })
 
   const recentSpendings = computed(() => {
-    if (showAll.value) {
-      return sortedSpendings.value
-    }
+    if (showAll.value) return sortedSpendings.value
+
     return sortedSpendings.value.slice(0, lastSpendingCount.value)
   })
 </script>

@@ -11,23 +11,19 @@
   }>()
 
   function toggleSort(): void {
-    if (props.direction === null) {
-      emit('update:direction', 'asc')
-    } else if (props.direction === 'asc') {
-      emit('update:direction', 'desc')
-    } else {
-      emit('update:direction', null)
-    }
+    if (props.direction === null) emit('update:direction', 'asc')
+    else if (props.direction === 'asc') emit('update:direction', 'desc')
+    else emit('update:direction', null)
   }
 
   defineExpose({ toggleSort })
 
   const iconData = computed(() => {
-    if (props.direction === 'asc') {
+    if (props.direction === 'asc')
       return [{ points: '8,3 8,13' }, { points: '8,3 5,6' }, { points: '8,3 11,6' }]
-    } else if (props.direction === 'desc') {
+    else if (props.direction === 'desc')
       return [{ points: '8,13 8,3' }, { points: '8,13 5,10' }, { points: '8,13 11,10' }]
-    } else {
+    else
       return [
         { points: '8,3 8,13' },
         { points: '8,3 5,6' },
@@ -35,7 +31,6 @@
         { points: '8,13 5,10' },
         { points: '8,13 11,10' },
       ]
-    }
   })
 </script>
 <template>

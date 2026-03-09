@@ -51,9 +51,7 @@ export function useDocumentsDragDrop(pendingDocuments: Ref<SpendingDocument[]>) 
     isDragging.value = false
 
     const files = event.dataTransfer?.files
-    if (files) {
-      await addFiles(files)
-    }
+    if (files) await addFiles(files)
   }
 
   /**

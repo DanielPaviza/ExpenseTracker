@@ -21,11 +21,9 @@
   const sortIndicatorRefs = ref<(SortIndicatorInstance | null)[]>([])
 
   function setSortIndicatorRef(idx: number, el: Element | ComponentPublicInstance | null): void {
-    if (el && typeof (el as SortIndicatorInstance).toggleSort === 'function') {
+    if (el && typeof (el as SortIndicatorInstance).toggleSort === 'function')
       sortIndicatorRefs.value[idx] = el as SortIndicatorInstance
-    } else if (el === null) {
-      sortIndicatorRefs.value[idx] = null
-    }
+    else if (el === null) sortIndicatorRefs.value[idx] = null
   }
 
   onBeforeUpdate(() => {

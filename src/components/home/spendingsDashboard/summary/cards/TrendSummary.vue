@@ -23,20 +23,17 @@
       .filter((s) => !s.isFree && !s.isToBePaid)
       .forEach((s) => {
         const date = new Date(s.createdAt)
-        let key = ''
-        if (groupBy.value === 'day') {
-          key = date.toISOString().split('T')[0]
-        } else if (groupBy.value === 'week') {
+        let key
+        if (groupBy.value === 'day') key = date.toISOString().split('T')[0]
+        else if (groupBy.value === 'week') {
           const weekStart = new Date(date.setDate(date.getDate() - date.getDay()))
           key = weekStart.toISOString().split('T')[0]
-        } else {
+        } else
           // month
           key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
-        }
 
-        if (!groups[key]) {
-          groups[key] = { total: 0, count: 0 }
-        }
+        if (!groups[key]) groups[key] = { total: 0, count: 0 }
+
         groups[key].total += s.totalPrice
         groups[key].count++
       })

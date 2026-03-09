@@ -14,14 +14,14 @@
 <template>
   <n-select
     :value="value.toString()"
+    :options="[
+      { label: t('common.yes'), value: true.toString() },
+      { label: t('common.no'), value: false.toString() },
+    ]"
     @update:value="
       (v: string) => {
         value = v === 'true'
       }
     "
-    :options="[
-      { label: t('common.yes'), value: true.toString() },
-      { label: t('common.no'), value: false.toString() },
-    ]"
   />
 </template>

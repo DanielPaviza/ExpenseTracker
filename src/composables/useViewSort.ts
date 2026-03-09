@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 
+import { Spending } from '@/types/Spending'
+
 type SortState = 'none' | 'asc' | 'desc'
 
 export function useViewSort() {
@@ -13,9 +15,7 @@ export function useViewSort() {
     } else if (nameSortState.value === 'asc') {
       nameSortState.value = 'desc'
       priceSortState.value = 'none'
-    } else {
-      nameSortState.value = 'none'
-    }
+    } else nameSortState.value = 'none'
   }
 
   const togglePriceSort = (): void => {
@@ -25,24 +25,22 @@ export function useViewSort() {
     } else if (priceSortState.value === 'asc') {
       priceSortState.value = 'desc'
       nameSortState.value = 'none'
-    } else {
-      priceSortState.value = 'none'
-    }
+    } else priceSortState.value = 'none'
   }
 
   // Sort categories by name or total price
-  const getSortedCategories = <T extends { getSpendings: (category: string) => any[] }>(
+  const getSortedCategories = <T extends { getSpendings: (category: string) => Spending[] }>(
     categories: string[],
     view: T,
   ): string[] => {
     const sorted = [...categories]
 
-    if (nameSortState.value !== 'none') {
+    if (nameSortState.value !== 'none')
       sorted.sort((a, b) => {
         const comparison = a.localeCompare(b, 'cs')
         return nameSortState.value === 'asc' ? comparison : -comparison
       })
-    } else if (priceSortState.value !== 'none') {
+    else if (priceSortState.value !== 'none')
       sorted.sort((a, b) => {
         const spendingsA = view.getSpendings(a)
         const spendingsB = view.getSpendings(b)
@@ -51,7 +49,6 @@ export function useViewSort() {
         const comparison = totalA - totalB
         return priceSortState.value === 'asc' ? comparison : -comparison
       })
-    }
 
     return sorted
   }

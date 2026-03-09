@@ -45,12 +45,10 @@
   })
 
   const chartComponent = computed(() => {
-    if (type === 'Bar') {
-      return Bar
-    }
-    if (type === 'Line') {
-      return Line
-    }
+    if (type === 'Bar') return Bar
+
+    if (type === 'Line') return Line
+
     return Doughnut
   })
 </script>

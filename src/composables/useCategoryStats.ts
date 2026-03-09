@@ -26,9 +26,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 }
 
 function getCategoryColor(category: string, index: number): string {
-  if (CATEGORY_COLORS[category]) {
-    return CATEGORY_COLORS[category]
-  }
+  if (CATEGORY_COLORS[category]) return CATEGORY_COLORS[category]
 
   // Generate a color based on index if not predefined
   const hue = (index * 137.5) % 360 // Golden angle for good distribution

@@ -31,9 +31,8 @@ export function useSpecialSpendings(options: SpecialSpendingsOptions) {
 
   const priceSpecialPercent = computed(() => {
     const total = priceTotalWithSpecial.value
-    if (!total || total === 0) {
-      return 0
-    }
+    if (!total || total === 0) return 0
+
     return Math.round((priceSpecial.value / total) * 100)
   })
 

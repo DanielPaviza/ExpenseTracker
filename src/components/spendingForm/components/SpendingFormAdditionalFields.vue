@@ -18,9 +18,7 @@
   const handleSetTableGroup = (value: string | null): void => {
     formData.value.tableGroup = value
     // If the tags are empty, add the selected tableGroup as a tag
-    if (formData.value.tags.length <= 0 && value) {
-      formData.value.tags.push(value)
-    }
+    if (formData.value.tags.length <= 0 && value) formData.value.tags.push(value)
   }
 </script>
 
@@ -34,13 +32,13 @@
         </div>
       </template>
       <n-select
-        @update:value="handleSetTableGroup"
         :value="formData.tableGroup"
         :options="tableGroupOptions"
         :placeholder="t('form.selectGroup')"
         filterable
         tag
         clearable
+        @update:value="handleSetTableGroup"
       />
     </n-form-item>
 
@@ -72,11 +70,11 @@
       />
     </n-form-item>
 
-    <FormUrlInput :label="t('form.url')" v-model:url="formData.url!" />
+    <FormUrlInput v-model:url="formData.url!" :label="t('form.url')" />
 
     <FormUrlInput
-      :label="t('form.technicalDocument')"
       v-model:url="formData.technicalDocumentUrl!"
+      :label="t('form.technicalDocument')"
     />
 
     <n-form-item :label="t('form.description')" path="description">

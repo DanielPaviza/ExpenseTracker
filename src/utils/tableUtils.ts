@@ -10,9 +10,9 @@ export function getCellContent(
 ): string | VNode {
   if (column.render) {
     const result = column.render(row, rowIndex)
-    if (typeof result === 'object' && result !== null && '__v_isVNode' in result) {
+    if (typeof result === 'object' && result !== null && '__v_isVNode' in result)
       return result as VNode
-    }
+
     return String(result)
   }
   const value = row[column.key as keyof Spending]
@@ -27,9 +27,9 @@ export function calculateTotalPrice(spendings: Spending[]): number {
 
 export function sortSpendingsByDefault(spendings: Spending[]): Spending[] {
   return [...spendings].sort((a, b) => {
-    if (a.category === b.category) {
+    if (a.category === b.category)
       return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-    }
+
     return a.category.localeCompare(b.category)
   })
 }

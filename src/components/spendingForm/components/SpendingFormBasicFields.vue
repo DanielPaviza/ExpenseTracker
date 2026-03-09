@@ -13,14 +13,12 @@
 
   import type { Spending } from '@/types/Spending'
 
-  const { categoryOptions, subCategoryOptions, payerOptions, storeOptions, isEditMode } =
-    defineProps<{
-      categoryOptions: SelectOption[]
-      subCategoryOptions: SelectOption[]
-      payerOptions: SelectOption[]
-      storeOptions: SelectOption[]
-      isEditMode: boolean
-    }>()
+  const { categoryOptions, subCategoryOptions, payerOptions, storeOptions } = defineProps<{
+    categoryOptions: SelectOption[]
+    subCategoryOptions: SelectOption[]
+    payerOptions: SelectOption[]
+    storeOptions: SelectOption[]
+  }>()
 
   const { t } = useI18n()
 
@@ -33,15 +31,13 @@
   const createdAtTimestamp = computed({
     get: (): number => formData.value?.createdAt.getTime() || Date.now(),
     set: (value: number): void => {
-      if (formData.value) {
-        formData.value.createdAt = new Date(value)
-      }
+      if (formData.value) formData.value.createdAt = new Date(value)
     },
   })
 </script>
 
 <template>
-  <div class="flex-1" v-if="formData">
+  <div v-if="formData" class="flex-1">
     <!-- Required fields -->
     <n-form-item :label="t('form.category')" path="category">
       <n-select

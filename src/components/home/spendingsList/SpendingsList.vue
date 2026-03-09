@@ -60,7 +60,7 @@
     const getPath = () => {
       switch (currentViewKey.value) {
         case 'byCategories':
-          return spendingStore.categoryView == null ? 'category' : 'subCategory'
+          return spendingStore.categoryView === null ? 'category' : 'subCategory'
         case 'byStores':
           return 'store'
         case 'byTags':
@@ -155,7 +155,7 @@
           :title="title"
           :is-collapsed-default="collapsed"
           :can-open-settings="currentView.id !== defaultView.id"
-          v-on:open-settings="openSpendingBulkEdit(title)"
+          @open-settings="openSpendingBulkEdit(title)"
         />
       </template>
     </SpendingsCategoryTable>

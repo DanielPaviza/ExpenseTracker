@@ -23,9 +23,7 @@ export function useSpendingsViews() {
   const allTags = computed(() => {
     const tagSet = new Set<string>()
     spendingsStore.spendings.forEach((s: Spending) => {
-      if (s.tags && s.tags.length > 0) {
-        s.tags.forEach((tag: string) => tagSet.add(tag))
-      }
+      if (s.tags && s.tags.length > 0) s.tags.forEach((tag: string) => tagSet.add(tag))
     })
     return [...tagSet].sort()
   })
@@ -33,9 +31,8 @@ export function useSpendingsViews() {
   const spendingsByCategory = computed(() => {
     const map = new Map<string, Spending[]>()
     spendingsStore.spendings.forEach((s: Spending) => {
-      if (!map.has(s.category)) {
-        map.set(s.category, [])
-      }
+      if (!map.has(s.category)) map.set(s.category, [])
+
       map.get(s.category)!.push(s)
     })
     return map
@@ -45,9 +42,8 @@ export function useSpendingsViews() {
     const map = new Map<string, Spending[]>()
     spendingsStore.spendings.forEach((s: Spending) => {
       const subCategory = s.subCategory || t('table.unknown')
-      if (!map.has(subCategory)) {
-        map.set(subCategory, [])
-      }
+      if (!map.has(subCategory)) map.set(subCategory, [])
+
       map.get(subCategory)!.push(s)
     })
     return map
@@ -57,9 +53,8 @@ export function useSpendingsViews() {
     const map = new Map<string, Spending[]>()
     spendingsStore.spendings.forEach((s: Spending) => {
       const store = s.store || t('table.unknown')
-      if (!map.has(store)) {
-        map.set(store, [])
-      }
+      if (!map.has(store)) map.set(store, [])
+
       map.get(store)!.push(s)
     })
     return map
@@ -69,15 +64,13 @@ export function useSpendingsViews() {
     const map = new Map<string, Spending[]>()
     spendingsStore.spendings.forEach((s: Spending) => {
       if (s.tags.length === 0) {
-        if (!map.has(t('table.noTag'))) {
-          map.set(t('table.noTag'), [])
-        }
+        if (!map.has(t('table.noTag'))) map.set(t('table.noTag'), [])
+
         map.get(t('table.noTag'))!.push(s)
       }
       s.tags.forEach((tag: string) => {
-        if (!map.has(tag)) {
-          map.set(tag, [])
-        }
+        if (!map.has(tag)) map.set(tag, [])
+
         map.get(tag)!.push(s)
       })
     })
@@ -99,17 +92,16 @@ export function useSpendingsViews() {
   ): Spending[] => {
     const sorted = [...spendings]
 
-    if (nameSortState !== 'none') {
+    if (nameSortState !== 'none')
       sorted.sort((a, b) => {
         const comparison = a.name.localeCompare(b.name, 'cs')
         return nameSortState === 'asc' ? comparison : -comparison
       })
-    } else if (priceSortState !== 'none') {
+    else if (priceSortState !== 'none')
       sorted.sort((a, b) => {
         const comparison = a.totalPrice - b.totalPrice
         return priceSortState === 'asc' ? comparison : -comparison
       })
-    }
 
     return sorted
   }

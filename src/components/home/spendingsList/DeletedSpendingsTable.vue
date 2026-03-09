@@ -44,9 +44,8 @@
 
   function handleRowClick(_row: Spending, event?: MouseEvent): void {
     // Don't navigate if clicking on the restore button
-    if (event && (event.target as HTMLElement).closest('.restore-button')) {
-      return
-    }
+    if (event && (event.target as HTMLElement).closest('.restore-button')) return
+
     // Don't navigate for deleted items
   }
 

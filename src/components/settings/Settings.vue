@@ -40,9 +40,7 @@
     if (success) {
       message.success(t('messages.settingsSavedSuccessfully'))
       closeDrawer()
-    } else {
-      message.error(t('messages.errorSavingSettings'))
-    }
+    } else message.error(t('messages.errorSavingSettings'))
   }
 
   const handleReset = (): void => {
@@ -121,11 +119,11 @@
 
       <template #footer>
         <FormActions
+          show-reset
+          :save-text="t('form.saveChangesButton')"
           @save="handleSave"
           @cancel="closeDrawer"
-          show-reset
           @reset="handleReset"
-          :save-text="t('form.saveChangesButton')"
         />
       </template>
     </n-drawer-content>

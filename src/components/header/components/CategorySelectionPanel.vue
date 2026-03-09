@@ -76,9 +76,7 @@
 
   // Listen for Escape key to emit 'close'
   const handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      emit('close')
-    }
+    if (e.key === 'Escape') emit('close')
   }
 
   onMounted(() => {

@@ -31,9 +31,7 @@
 
   const handleActionSelect = (key: string): void => {
     const action = actionOptions.find((option) => option.key === key)
-    if (action && action.handleAction) {
-      action.handleAction()
-    }
+    if (action && action.handleAction) action.handleAction()
   }
 
   const openContextMenu = (event: MouseEvent): void => {

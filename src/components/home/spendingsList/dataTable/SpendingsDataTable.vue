@@ -91,7 +91,7 @@
     <CategoryActionContext
       v-if="canOpenSettings"
       :category="title"
-      :mouseEvent="actionContextMouseEvent"
+      :mouse-event="actionContextMouseEvent"
       :on-edit="() => emit('openSettings')"
     />
   </div>

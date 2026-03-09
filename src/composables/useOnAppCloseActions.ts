@@ -32,13 +32,12 @@ export function useOnAppCloseActions(): void {
       cancelLabel: t('common.cancel'),
     })
 
-    if (shouldClose) {
+    if (shouldClose)
       try {
         await appWindow.value?.destroy()
       } catch (e) {
         console.error('Error closing window:', e)
       }
-    }
   }
 
   onMounted(async () => {

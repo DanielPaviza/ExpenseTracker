@@ -20,11 +20,8 @@
 
   const types = computed(() => {
     const set = new Set<string>()
-    for (const s of spendings.value) {
-      if (s.type) {
-        set.add(s.type)
-      }
-    }
+    for (const s of spendings.value) if (s.type) set.add(s.type)
+
     return Array.from(set)
   })
 

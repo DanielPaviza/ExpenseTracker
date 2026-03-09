@@ -62,9 +62,8 @@ export function resolveFsPath(path: string): string | null {
   try {
     const url = new URL(path)
     const decodedPath = decodeURIComponent(url.pathname)
-    if (decodedPath.startsWith('/') && decodedPath[2] === ':') {
-      return decodedPath.slice(1)
-    }
+    if (decodedPath.startsWith('/') && decodedPath[2] === ':') return decodedPath.slice(1)
+
     return decodedPath
   } catch (error) {
     // If it is not a URL, assume it is already a valid path
@@ -89,7 +88,7 @@ export async function checkDocumentAvailability(path: string | null): Promise<bo
   }
 }
 
-export function triggerBlobDownload(blob: Blob, fileName: string) {
+export function triggerBlobDownload(blob: Blob, fileName: string): void {
   try {
     const url = URL.createObjectURL(blob)
     const anchor = window.document.createElement('a')
