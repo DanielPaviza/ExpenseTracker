@@ -1,6 +1,6 @@
 const globals = require('globals')
-const parser = require('vue-eslint-parser')
-const typescriptEslint = require('@typescript-eslint/eslint-plugin')
+const tseslint = require('typescript-eslint')
+const vueParser = require('vue-eslint-parser')
 const _import = require('eslint-plugin-import')
 const vue = require('eslint-plugin-vue')
 const prettier = require('eslint-plugin-prettier')
@@ -9,21 +9,23 @@ const { fixupPluginRules } = require('@eslint/compat')
 
 const js = require('@eslint/js')
 
-const { FlatCompat } = require('@eslint/eslintrc')
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-})
-
-module.exports = [
+module.exports = tseslint.config(
   {
     ignores: ['node_modules/', 'dist/', 'build/', 'src/vite-env.d.ts', 'eslint.config.cjs'],
   },
   js.configs.recommended,
   ...vue.configs['flat/recommended'],
-  ...compat.extends('plugin:@typescript-eslint/recommended'),
+  ...tseslint.configs.recommended,
+  // Override parser for .vue files: vue-eslint-parser as outer, ts-eslint as inner
+  {
+    files: ['**/*.vue'],
+    languageOptions: {
+      parser: vueParser,
+      parserOptions: {
+        parser: tseslint.parser,
+      },
+    },
+  },
   {
     files: ['**/*.{js,jsx,ts,tsx,vue}'],
     languageOptions: {
@@ -32,19 +34,12 @@ module.exports = [
         ...globals.node,
       },
 
-      parser: parser,
       ecmaVersion: 2021,
       sourceType: 'module',
-
-      parserOptions: {
-        parser: '@typescript-eslint/parser',
-      },
     },
 
     plugins: {
-      '@typescript-eslint': typescriptEslint,
       import: fixupPluginRules(_import),
-      vue,
       prettier,
     },
 
@@ -60,8 +55,8 @@ module.exports = [
       'prettier/prettier': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-debugger': 'error',
+      curly: ['error', 'multi'],
       eqeqeq: ['error', 'always'],
-      curly: ['multi'],
       '@typescript-eslint/explicit-function-return-type': 'warn',
 
       '@typescript-eslint/no-unused-vars': [
@@ -105,4 +100,4 @@ module.exports = [
       },
     },
   },
-]
+)
