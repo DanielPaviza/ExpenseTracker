@@ -3,6 +3,7 @@
 
   import { computed, ref } from 'vue'
 
+  import CategoryActionContext from '@/components/header/components/CategoryActionContext.vue'
   import SpendingTableGroup from '@/components/home/spendingsList/SpendingTableGroup.vue'
   import CollapsedTableView from '@/components/home/spendingsList/dataTable/shared/CollapsedTableView.vue'
   import TableFilterRow from '@/components/home/spendingsList/dataTable/shared/TableFilterRow.vue'
@@ -22,14 +23,26 @@
     title = '',
     columns,
     isCollapsedDefault = false,
+    canOpenSettings,
   } = defineProps<{
     data: Spending[]
     title?: string
     columns: SpendingColumn[]
     isCollapsedDefault?: boolean
+    canOpenSettings?: boolean
   }>()
 
   const isCollapsed = ref(isCollapsedDefault)
+  const actionContextMouseEvent = ref<MouseEvent | null>(null)
+
+  const emit = defineEmits<{
+    (e: 'openSettings'): void
+  }>()
+
+  function handleContextMenu(event: MouseEvent): void {
+    event.preventDefault()
+    actionContextMouseEvent.value = event
+  }
 
   // Use composables for filtering and sorting
   const { columnFilters, filteredData, columnFilterOptions, hasActiveFilters, clearFilters } =
@@ -67,14 +80,23 @@
 </script>
 
 <template>
-  <CollapsedTableView
-    v-if="isCollapsed"
-    key="collapsed"
-    :title="title"
-    :total-price="totalPrice"
-    @toggle-collapse="toggleCollapse"
-  />
-  <n-collapse-transition :show="!isCollapsed">
+  <div v-if="isCollapsed">
+    <CollapsedTableView
+      key="collapsed"
+      :title="title"
+      :total-price="totalPrice"
+      @toggle-collapse="toggleCollapse"
+      @contextmenu="handleContextMenu"
+    />
+    <CategoryActionContext
+      v-if="canOpenSettings"
+      :category="title"
+      :mouseEvent="actionContextMouseEvent"
+      :on-edit="() => emit('openSettings')"
+    />
+  </div>
+
+  <n-collapse-transition :show="!isCollapsed" name="expand-down">
     <TableToolbar
       :title="title"
       :is-collapsed="isCollapsed"

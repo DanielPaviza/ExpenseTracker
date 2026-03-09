@@ -10,8 +10,11 @@
   import { useSpendingsColumns } from '@/composables/spending/useSpendingsColumns'
   import { useSpendingsViews } from '@/composables/spending/useSpendingsViews'
   import { useViewSort } from '@/composables/useViewSort'
+  import router from '@/router'
+  import { useSpendingsStore } from '@/stores/spendingsStore'
   import { SpendingList, SpendingListKey } from '@/types/SpendingList'
 
+  const spendingStore = useSpendingsStore()
   const { columns: allColumns } = useSpendingsColumns()
 
   // Use new composables for views and sorting
@@ -51,6 +54,22 @@
       ...hiddenColumnKeys.value.filter((key) => !oldView?.hiddenColumnKeys.includes(key)),
       ...(newView?.hiddenColumnKeys || []),
     ]
+  }
+
+  const openSpendingBulkEdit = (value: string): void => {
+    const getPath = () => {
+      switch (currentViewKey.value) {
+        case 'byCategories':
+          return spendingStore.categoryView == null ? 'category' : 'subCategory'
+        case 'byStores':
+          return 'store'
+        case 'byTags':
+          return 'tag'
+      }
+    }
+
+    if (currentViewKey.value === 'allInOne') return
+    router.push(`/bulkEdit/${getPath()}/${encodeURIComponent(value)}`)
   }
 
   watch(
@@ -135,6 +154,8 @@
           :columns="cols"
           :title="title"
           :is-collapsed-default="collapsed"
+          :can-open-settings="currentView.id !== defaultView.id"
+          v-on:open-settings="openSpendingBulkEdit(title)"
         />
       </template>
     </SpendingsCategoryTable>

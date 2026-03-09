@@ -145,6 +145,85 @@ export const useSpendingsStore = defineStore('spendings', () => {
     }
   }
 
+  function removeSpendingStore(store: string, acrossAllCategories: boolean): void {
+    const toDelete = spendings.value.filter(
+      (s) => s.store === store && (acrossAllCategories || s.category === categoryView.value),
+    )
+    for (const spending of toDelete) {
+      removeSpending(spending.id)
+    }
+  }
+
+  function renameSpendingStore(
+    oldStore: string,
+    newStore: string,
+    acrossAllCategories: boolean,
+  ): void {
+    for (const spending of spendings.value) {
+      if (
+        spending.store === oldStore &&
+        (acrossAllCategories || spending.category === categoryView.value)
+      ) {
+        const updatedSpending = { ...spending, store: newStore }
+        updateSpending(spending.id, updatedSpending)
+      }
+    }
+  }
+
+  function removeSpendingSubCategory(subCategory: string, acrossAllCategories: boolean): void {
+    const toDelete = spendings.value.filter(
+      (s) =>
+        s.subCategory === subCategory && (acrossAllCategories || s.category === categoryView.value),
+    )
+    for (const spending of toDelete) {
+      removeSpending(spending.id)
+    }
+  }
+
+  function renameSpendingSubCategory(
+    oldSubCategory: string,
+    newSubCategory: string,
+    acrossAllCategories: boolean,
+  ): void {
+    for (const spending of spendings.value) {
+      if (
+        spending.subCategory === oldSubCategory &&
+        (acrossAllCategories || spending.category === categoryView.value)
+      ) {
+        const updatedSpending = { ...spending, subCategory: newSubCategory }
+        updateSpending(spending.id, updatedSpending)
+      }
+    }
+  }
+
+  function removeSpendingTag(tag: string, acrossAllCategories: boolean): void {
+    for (const spending of spendings.value) {
+      if (
+        spending.tags &&
+        spending.tags.includes(tag) &&
+        (acrossAllCategories || spending.category === categoryView.value)
+      ) {
+        const updatedTags = spending.tags.filter((t) => t !== tag)
+        const updatedSpending = { ...spending, tags: updatedTags }
+        updateSpending(spending.id, updatedSpending)
+      }
+    }
+  }
+
+  function renameSpendingTag(oldTag: string, newTag: string, acrossAllCategories: boolean): void {
+    for (const spending of spendings.value) {
+      if (
+        spending.tags &&
+        spending.tags.includes(oldTag) &&
+        (acrossAllCategories || spending.category === categoryView.value)
+      ) {
+        const updatedTags = spending.tags.map((t) => (t === oldTag ? newTag : t))
+        const updatedSpending = { ...spending, tags: updatedTags }
+        updateSpending(spending.id, updatedSpending)
+      }
+    }
+  }
+
   function restoreSpending(id: string): void {
     const index = deletedSpendings.value.findIndex((s) => s.id === id)
     if (index !== -1) {
@@ -319,6 +398,12 @@ export const useSpendingsStore = defineStore('spendings', () => {
     restoreAllDeletedSpendings,
     removeSpendingCategory,
     renameSpendingCategory,
+    removeSpendingStore,
+    renameSpendingStore,
+    removeSpendingSubCategory,
+    renameSpendingSubCategory,
+    removeSpendingTag,
+    renameSpendingTag,
     discardChanges,
     categories,
     subCategories,

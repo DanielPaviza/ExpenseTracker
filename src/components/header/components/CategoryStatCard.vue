@@ -7,6 +7,7 @@
 
   import CategoryActionContext from '@/components/header/components/CategoryActionContext.vue'
   import DonutChart from '@/components/header/components/DonutChart.vue'
+  import { BulkEdit } from '@/constants/bulkEdit'
 
   const actionContextMouseEvent = ref<MouseEvent | null>(null)
   const router = useRouter()
@@ -47,7 +48,8 @@
   const handleGotoEditCategory = (event: MouseEvent): void => {
     event.stopPropagation()
     if (!canBeEdited) return
-    router.push({ path: `/editCategory/${title}` })
+    const encodedTitle = encodeURIComponent(title)
+    router.push({ path: `/bulkEdit/${BulkEdit.category}/${encodedTitle}` })
   }
 </script>
 
@@ -90,7 +92,6 @@
   </div>
   <CategoryActionContext
     v-if="canBeEdited"
-    :category="title"
     :mouseEvent="actionContextMouseEvent"
     :on-edit="handleGotoEditCategory"
   />

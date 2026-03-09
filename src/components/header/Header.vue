@@ -7,7 +7,7 @@
   import { onBeforeUnmount, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import CategorySelect from '@/components/header/components/CategorySelect.vue'
+  import CategorySelectDropdown from '@/components/header/components/CategorySelectDropdown.vue'
   import CategorySelectionPanel from '@/components/header/components/CategorySelectionPanel.vue'
   import PendingChanges from '@/components/header/components/PendingChanges.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
@@ -94,7 +94,7 @@
           </n-button>
         </div>
       </div>
-      <CategorySelect v-model:is-open="isCategorySelectionOpen" />
+      <CategorySelectDropdown v-model:is-open="isCategorySelectionOpen" />
       <!-- Category Selection Panel with animation -->
       <n-collapse-transition :show="isCategorySelectionOpen" name="expand-down">
         <CategorySelectionPanel
