@@ -46,7 +46,7 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div class="max-w-[90%]">
+    <div class="max-w-[90%] min-w-[280px]">
       <div class="flex justify-between">
         <div class="font-bold text-blue me-3">{{ $t('summary.totalPaid') }}:</div>
         <div class="font-semibold">
