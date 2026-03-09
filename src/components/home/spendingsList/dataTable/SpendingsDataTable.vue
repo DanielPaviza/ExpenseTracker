@@ -85,6 +85,7 @@
       key="collapsed"
       :title="title"
       :total-price="totalPrice"
+      :total-count-spendings="totalCountSpendings"
       @toggle-collapse="toggleCollapse"
       @contextmenu="handleContextMenu"
     />

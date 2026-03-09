@@ -4,9 +4,10 @@
 
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
-  const { title, totalPrice } = defineProps<{
+  const { title, totalPrice, totalCountSpendings } = defineProps<{
     title: string
     totalPrice: number
+    totalCountSpendings: number
   }>()
 
   const emit = defineEmits<{
@@ -32,6 +33,7 @@
       </n-icon>
       <h2 class="text-xl font-bold text-left">
         {{ title }}
+        <small class="opacity-80">({{ totalCountSpendings }}x)</small>
       </h2>
     </div>
     <div class="text-xl font-bold text-white">
