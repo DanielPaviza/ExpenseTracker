@@ -11,7 +11,7 @@
     useMessage,
   } from 'naive-ui'
 
-  import { computed, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -65,6 +65,9 @@
     })
   }
 
+  const isOpen = ref(false)
+  onMounted(() => (isOpen.value = true))
+
   function closeDrawer(): void {
     router.push('/')
   }
@@ -86,7 +89,7 @@
 </script>
 
 <template>
-  <n-drawer show width="40%" placement="right" @update:show="closeDrawer">
+  <n-drawer :show="isOpen" width="40%" placement="right" @update:show="closeDrawer">
     <n-drawer-content closable class="p-4">
       <template #header>
         <div class="text-2xl font-bold text-blue">

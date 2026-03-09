@@ -2,7 +2,7 @@
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { type FormInst, NDrawer, NDrawerContent, NForm, useMessage } from 'naive-ui'
 
-  import { computed, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
@@ -45,6 +45,9 @@
     storeOptions,
     tagOptions,
   } = useSpendingFormOptions(computed(() => formData.value))
+
+  const isOpen = ref(false)
+  onMounted(() => (isOpen.value = true))
 
   function closeDrawer(): void {
     router.push('/')
@@ -122,7 +125,7 @@
 </script>
 
 <template>
-  <n-drawer show width="80%" placement="right" @update:show="closeDrawer">
+  <n-drawer :show="isOpen" width="80%" placement="right" @update:show="closeDrawer">
     <n-drawer-content :title="drawerTitle" closable class="p-4">
       <template #header>
         <div class="text-2xl font-bold text-blue">

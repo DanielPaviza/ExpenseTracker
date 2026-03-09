@@ -3,7 +3,7 @@
   import { useMessage } from 'naive-ui'
   import { NDrawer, NDrawerContent, NForm, NFormItem, NSelect } from 'naive-ui'
 
-  import { ref } from 'vue'
+  import { onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
@@ -28,6 +28,9 @@
   const message = useMessage()
   const { rules } = useSettingsFormValidation()
 
+  const isOpen = ref(false)
+  onMounted(() => (isOpen.value = true))
+
   function closeDrawer(): void {
     router.push('/')
   }
@@ -48,7 +51,7 @@
 </script>
 
 <template>
-  <n-drawer show width="40%" placement="right" @update:show="closeDrawer">
+  <n-drawer :show="isOpen" width="40%" placement="right" @update:show="closeDrawer">
     <n-drawer-content closable class="p-4">
       <template #header>
         <div class="text-2xl font-bold text-blue">{{ t('settings.title') }}</div>
