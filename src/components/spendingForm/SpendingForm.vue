@@ -10,11 +10,11 @@
   import FormAdditionalFields from '@/components/spendingForm/components/SpendingFormAdditionalFields.vue'
   import FormBasicFields from '@/components/spendingForm/components/SpendingFormBasicFields.vue'
   import FormDocuments from '@/components/spendingForm/components/SpendingFormDocuments.vue'
-  import FormTimestamps from '@/components/spendingForm/components/SpendingFormTimestamps.vue'
   import { useSpendingDialogAction } from '@/composables/spending/useSpendingDialogAction'
   import { useSpendingFormData } from '@/composables/spending/useSpendingFormData'
   import { useSpendingFormOptions } from '@/composables/spending/useSpendingFormOptions'
   import { useSpendingFormValidation } from '@/composables/spending/useSpendingFormValidation'
+  import { formatDateLocalized } from '@/composables/useDateFormat'
   import { useFileUpload } from '@/composables/useFileUpload'
   import { SpendingDocument } from '@/types/SpendingDocument'
 
@@ -136,7 +136,14 @@
         label-placement="top"
         require-mark-placement="right-hanging"
       >
-        <FormTimestamps v-if="currentSpending" :spending="currentSpending" />
+        <div v-if="currentSpending" class="w-full flex justify-end items-center">
+          <span class="font-semibold text-gray-700">{{ t('form.edited') }}:</span>
+          <span class="ml-1 text-gray-600">{{
+            currentSpending.editedAt
+              ? formatDateLocalized(currentSpending.editedAt, 'long')
+              : 'Nikdy'
+          }}</span>
+        </div>
 
         <div class="flex gap-10">
           <FormBasicFields
@@ -163,12 +170,13 @@
 
       <template #footer>
         <FormActions
-          @save="handleSave"
           show-delete
+          :save-text="isEditMode ? t('form.saveChangesButton') : t('form.createPurchaseButton')"
+          @save="handleSave"
           @delete="handleDelete"
           @cancel="closeDrawer"
-          :save-text="isEditMode ? t('form.saveChangesButton') : t('form.createPurchaseButton')"
-      /></template>
+        />
+      </template>
     </n-drawer-content>
   </n-drawer>
 </template>

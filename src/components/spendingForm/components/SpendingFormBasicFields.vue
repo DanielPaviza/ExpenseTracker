@@ -71,7 +71,7 @@
       <n-input v-model:value="formData.name" :placeholder="t('form.namePlaceholder')" />
     </n-form-item>
 
-    <n-form-item v-if="!isEditMode" :label="t('form.creationDate')" path="createdAt">
+    <n-form-item :label="t('form.creationDate')" path="createdAt">
       <n-date-picker
         v-model:value="createdAtTimestamp"
         type="datetime"
