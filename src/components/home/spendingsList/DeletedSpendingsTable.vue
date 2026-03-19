@@ -167,6 +167,7 @@
       :title="t('table.deleted')"
       :total-price="totalPrice"
       class="bg-red-300 hover:bg-red-500"
+      :total-count-spendings="totalCountSpendings"
       @toggle-collapse="toggleCollapse"
     />
   </Transition>
