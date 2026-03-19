@@ -13,8 +13,6 @@
 
   const selectedId = defineModel<number | string>('selectedId')
 
-  console.log(selectedId.value)
-
   const colorMap = {
     red: 'border-red-500 text-red-400 bg-red-100',
     blue: 'border-blue-500 text-blue-500 bg-blue-100',
@@ -35,7 +33,6 @@
 
   const getButtonColorStyle = (button: ButtonOption): string => {
     if (selectedId.value !== button.id) return colorMap['default']
-    console.log(colorMap[button.selectedColor || defaultColor])
     return colorMap[button.selectedColor || defaultColor]
   }
 

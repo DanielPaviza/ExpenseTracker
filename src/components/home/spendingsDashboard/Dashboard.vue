@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import ButtonNavigation from '@components/shared/ButtonNavigation.vue'
 
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import Carousel from '@/components/home/spendingsDashboard/carousel/Carousel.vue'
@@ -11,10 +11,12 @@
   const { t } = useI18n()
   const { settings } = useSettingsStore()
 
-  const summaryCards = SUMMARY_CARDS.map((card, index) => ({
-    id: index,
-    label: t(card.title),
-  }))
+  const summaryCards = computed(() =>
+    SUMMARY_CARDS.map((card, index) => ({
+      id: index,
+      label: t(card.title),
+    })),
+  )
 
   const defaultSummaryCard = SUMMARY_CARDS.findIndex(
     (card) => card.id === settings.defaultSummaryCard,

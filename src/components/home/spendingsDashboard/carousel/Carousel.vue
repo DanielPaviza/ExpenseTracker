@@ -16,7 +16,7 @@
   import CarouselSlide from '@/components/home/spendingsDashboard/carousel/CarouselSlide.vue'
   import { useSpendingsStore } from '@/stores/spendingsStore'
 
-  const { categoryView } = useSpendingsStore()
+  const spendingStore = useSpendingsStore()
 
   const { slideCount } = defineProps<{
     slideCount: number
@@ -27,7 +27,7 @@
     default: 0,
   })
 
-  const isCategorySelected = computed(() => categoryView !== null)
+  const isCategorySelected = computed(() => spendingStore.categoryView !== null)
 
   const nextSlide = () => {
     currentSlideId.value = (currentSlideId.value + 1) % slideCount
