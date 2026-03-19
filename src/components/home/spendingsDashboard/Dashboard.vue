@@ -23,7 +23,7 @@
   const currentSlide = ref<number>(defaultSummaryCard ?? 0)
 </script>
 <template>
-  <div class="w-full">
+  <div class="w-full mt-6">
     <ButtonNavigation v-model:selected-id="currentSlide" :buttons="summaryCards" class="mb-4" />
     <Carousel v-model:current-slide-id="currentSlide" :slide-count="summaryCards.length" />
   </div>

@@ -4,10 +4,11 @@
 
   import { useI18n } from 'vue-i18n'
 
-  const { showDelete, showReset, saveText } = defineProps<{
+  const { showDelete, showReset, saveText, canSave } = defineProps<{
     showDelete?: boolean
     showReset?: boolean
     saveText: string
+    canSave?: boolean
   }>()
 
   const emit = defineEmits<{
@@ -38,7 +39,7 @@
         {{ t('dialogs.delete') }}
       </n-button>
     </div>
-    <n-button color="#3b82f6" @click="emit('save')">
+    <n-button :disabled="!canSave" color="#3b82f6" @click="emit('save')">
       <template #icon>
         <n-icon>
           <SaveOutline />

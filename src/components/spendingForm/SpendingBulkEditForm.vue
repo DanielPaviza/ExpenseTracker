@@ -36,6 +36,8 @@
   const newName = ref<string>(name)
   const isNameEdited = computed(() => newName.value !== name)
 
+  const isNewNameValid = computed(() => newName.value.trim().length > 0)
+
   // Best-practice: single source of truth for scope choices
   const scopeChoices = computed(() => [
     {
@@ -45,6 +47,8 @@
     {
       id: 'all-categories',
       label: t('spendingBulkEditForm.allCategories'),
+      selectedColor: 'orange',
+      colorHover: 'orange',
     },
   ])
 
@@ -73,6 +77,11 @@
   }
 
   async function handleSave(): Promise<void> {
+    if (!isNewNameValid.value) {
+      message.warning(t('messages.nameCannotBeEmpty'))
+      return
+    }
+
     if (!isNameEdited.value) {
       closeDrawer()
       return
@@ -119,9 +128,14 @@
               </div>
             </div>
           </template>
-          <n-input v-model:value="newName" :placeholder="props.nameLabel" />
+          <div class="flex flex-col w-full">
+            <n-input v-model:value="newName" :placeholder="props.nameLabel" />
+            <div v-if="!isNewNameValid" class="text-sm text-red-500 mt-1 ms-1">
+              {{ $t('messages.nameCannotBeEmpty') }}
+            </div>
+          </div>
         </n-form-item>
-        <div v-if="isNameEdited">
+        <div v-if="isNameEdited && isNewNameValid">
           <div class="text-lg font-semibold">{{ $t('common.rename') }}</div>
           <div
             class="text-lg flex justify-center items-center p-3 rounded bg-blue-50 text-blue-800 mt-1"
@@ -139,6 +153,7 @@
         <FormActions
           show-delete
           :save-text="t('form.saveChangesButton')"
+          :can-save="isNewNameValid"
           @save="handleSave"
           @delete="deleteDialog"
           @cancel="closeDrawer"

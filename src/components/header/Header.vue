@@ -57,7 +57,7 @@
     class="sticky z-50 h-fit flex flex-col border-b-2 pt-4 pb-4 border-blue bg-blueLightTransparent backdrop-blur-md"
     :class="{
       'inset-0 overflow-hidden bg-white backdrop-blur-[10px]': isCategorySelectionOpen,
-      'top-0 mb-8': !isCategorySelectionOpen,
+      'top-0': !isCategorySelectionOpen,
     }"
   >
     <MarginContainer class="h-full flex flex-col min-h-0 z-50">

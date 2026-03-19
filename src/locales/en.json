@@ -162,7 +162,8 @@
     "purchaseCreatedSuccessfully": "Purchase created successfully",
     "purchaseDeletedSuccessfully": "Purchase deleted successfully",
     "purchaseEditedSuccessfully": "Purchase edited successfully",
-    "settingsSavedSuccessfully": "Settings saved successfully"
+    "settingsSavedSuccessfully": "Settings saved successfully",
+    "nameCannotBeEmpty": "Name cannot be empty"
   },
   "settings": {
     "categoryViewDefault": "Default category view",

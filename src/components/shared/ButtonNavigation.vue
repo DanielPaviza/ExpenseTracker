@@ -1,10 +1,47 @@
 <script setup lang="ts">
+  interface ButtonOption {
+    id: number | string
+    label: string
+    selectedColor?: string
+    colorHover?: string
+  }
+
   const { buttons, full } = defineProps<{
-    buttons: { id: number | string; label: string }[]
+    buttons: ButtonOption[]
     full?: boolean
   }>()
 
   const selectedId = defineModel<number | string>('selectedId')
+
+  console.log(selectedId.value)
+
+  const colorMap = {
+    red: 'border-red-500 text-red-400 bg-red-100',
+    blue: 'border-blue-500 text-blue-500 bg-blue-100',
+    green: 'border-green-400 text-green-500 bg-green-50',
+    orange: 'border-orange-400 text-orange-500 bg-orange-50',
+    default: 'border-gray-300 text-gray-800 bg-gray-100',
+  } as Record<string, string>
+
+  const hoverColorMap = {
+    red: 'hover:border-red-600 hover:text-red-500',
+    blue: 'hover:border-blue-600 hover:text-blue-500',
+    green: 'hover:border-green-600 hover:text-green-500',
+    orange: 'hover:border-orange-600 hover:text-orange-500',
+  } as Record<string, string>
+
+  const defaultColor = 'blue'
+  const defaultHoverColor = 'blue'
+
+  const getButtonColorStyle = (button: ButtonOption): string => {
+    if (selectedId.value !== button.id) return colorMap['default']
+    console.log(colorMap[button.selectedColor || defaultColor])
+    return colorMap[button.selectedColor || defaultColor]
+  }
+
+  const getButtonHoverColorStyle = (button: ButtonOption): string => {
+    return `${hoverColorMap[button.colorHover || defaultHoverColor]} hover:-translate-y-0.5 hover:shadow-md active:translate-y-0`
+  }
 </script>
 
 <template>
@@ -13,22 +50,16 @@
       v-for="(button, idx) in buttons"
       :key="button.id"
       :class="[
-        'relative overflow-hidden px-14 py-1.5 bg-gray-100 border-2 border-[rgba(166,162,182,0.3)] text-[#a6a2b6] text-sm font-medium cursor-pointer transition-all duration-300',
+        'relative overflow-hidden border-2 px-14 py-2 text-sm font-medium cursor-pointer transition-all duration-300',
         idx === 0 ? 'rounded-l-lg' : '',
         full ? 'w-full' : '',
         idx === buttons.length - 1 ? 'rounded-r-lg' : '',
-        selectedId === button.id
-          ? 'bg-blue-100 border-blue-300 text-blue-400 font-semibold shadow-sm'
-          : '',
-        'hover:border-blue-400 hover:text-blue-500 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0',
+        getButtonColorStyle(button),
+        getButtonHoverColorStyle(button),
       ]"
       @click="selectedId = button.id"
     >
       <span class="relative z-10">{{ button.label }}</span>
-      <span
-        class="absolute top-1/2 left-1/2 w-0 h-0 rounded-full bg-blue-200 opacity-10 pointer-events-none transition-all duration-400"
-        style="transform: translate(-50%, -50%)"
-      ></span>
     </button>
   </div>
 </template>

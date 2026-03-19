@@ -164,7 +164,8 @@
     "purchaseCreatedSuccessfully": "Nákup byl úspěšně vytvořen",
     "purchaseDeletedSuccessfully": "Nákup byl úspěšně smazán",
     "purchaseEditedSuccessfully": "Nákup byl úspěšně upraven",
-    "settingsSavedSuccessfully": "Nastavení bylo úspěšně uloženo"
+    "settingsSavedSuccessfully": "Nastavení bylo úspěšně uloženo",
+    "nameCannotBeEmpty": "Název nesmí být prázdný"
   },
   "settings": {
     "categoryViewDefault": "Výchozí kategorie",
