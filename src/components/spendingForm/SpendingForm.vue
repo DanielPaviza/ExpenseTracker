@@ -15,7 +15,7 @@
   import { useSpendingFormOptions } from '@/composables/spending/useSpendingFormOptions'
   import { useSpendingFormValidation } from '@/composables/spending/useSpendingFormValidation'
   import { formatDateLocalized } from '@/composables/useDateFormat'
-  import { useFileUpload } from '@/composables/useFileUpload'
+  import { useFileHandler } from '@/composables/useFileHandler'
   import { SpendingDocument } from '@/types/SpendingDocument'
 
   const { deleteDialog } = useSpendingDialogAction()
@@ -26,7 +26,7 @@
   const message = useMessage()
 
   // File upload functionality
-  const { uploadFile, deleteFile } = useFileUpload()
+  const { uploadFile, deleteFile } = useFileHandler()
 
   const documentsToUpload = ref<SpendingDocument[]>([])
   const documentsToDelete = ref<SpendingDocument[]>([])

@@ -136,7 +136,7 @@ ExpenseTracker/
 │   │   ├── useSpecialSpendings.ts   # Free / unpaid spendings logic
 │   │   ├── useViewSort.ts           # ABC / price sorting of table view sections
 │   │   ├── useItemsLimit.ts         # Show-more / show-less list truncation
-│   │   ├── useFileUpload.ts         # Document upload/delete via Tauri FS plugin
+│   │   ├── useFileHandler.ts         # Document upload/delete via Tauri FS plugin
 │   │   ├── useDocumentsDragDrop.ts  # Drag-and-drop file handling
 │   │   └── useOnAppCloseActions.ts  # Auto-backup + unsaved-changes dialog on close
 │   ├── components/

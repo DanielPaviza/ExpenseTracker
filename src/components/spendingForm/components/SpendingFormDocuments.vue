@@ -1,16 +1,16 @@
 <script setup lang="ts">
-  import { AddOutline, DocumentOutline } from '@vicons/ionicons5'
+  import { AddOutline, DocumentAttachOutline } from '@vicons/ionicons5'
   import { NButton, NIcon } from 'naive-ui'
 
-  import { computed, ref } from 'vue'
+  import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import FormDocumentCard from '@/components/spendingForm/components/SpendingFormDocumentCard.vue'
   import { useDocumentsDragDrop } from '@/composables/useDocumentsDragDrop'
-  import { useFileUpload } from '@/composables/useFileUpload'
+  import { useFileHandler } from '@/composables/useFileHandler'
   import { SpendingDocument } from '@/types/SpendingDocument'
 
-  const { convertDocumentPath } = useFileUpload()
+  const { convertDocumentPath } = useFileHandler()
 
   const documents = defineModel<SpendingDocument[]>('documents', { required: true })
 
@@ -23,10 +23,6 @@
 
   const { t } = useI18n()
   const fileInputRef = ref<HTMLInputElement | null>(null)
-
-  const documentsEmpty = computed(
-    () => documents.value.length + documentsToUpload.value.length === 0,
-  )
 
   // Drag and drop functionality
   const { isDragging, handleDragOver, handleDragLeave, handleDrop, handleFileSelect } =
@@ -59,14 +55,13 @@
     @change="handleFileSelect"
   />
   <div
-    class="drop-zone p-4 rounded-lg border-dashed border-2 border-gray-300 bg-gray-50 hover:bg-gray-100 cursor-pointer"
+    class="drop-zone p-6 rounded-lg border-dashed border-2 border-gray-300"
     :class="{ 'drop-zone-active': isDragging }"
     @dragover="handleDragOver"
     @dragleave="handleDragLeave"
     @drop="handleDrop"
-    @click="openFilePicker"
   >
-    <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center justify-between mb-5">
       <span class="text-lg font-medium text-gray-700">{{ t('form.documents') }}</span>
       <NButton color="#3b82f6" size="small" type="primary" @click.stop="openFilePicker">
         <template #icon>
@@ -74,16 +69,10 @@
             <AddOutline />
           </NIcon>
         </template>
-        {{ t('form.addDocument') }}
       </NButton>
     </div>
 
-    <div v-if="documentsEmpty" class="flex flex-col items-center justify-center p-6">
-      <NIcon size="48" :component="DocumentOutline" class="text-gray-400 mb-2" />
-      <p class="text-gray-500 text-sm">{{ t('form.documentsDropZone') }}</p>
-    </div>
-
-    <div v-else class="flex gap-4 flex-wrap">
+    <div class="flex gap-4 flex-wrap">
       <FormDocumentCard
         v-for="(_doc, index) in documents"
         :key="`document-${index}`"
@@ -98,6 +87,13 @@
         :document-path="documentsToUpload[index].path"
         @delete-document="deleteNewDocument(index)"
       />
+      <div
+        class="flex flex-col relative justify-center items-center border border-gray-200 bg-gray-50 hover:bg-blue-50 hover:shadow-lg rounded-lg p-8 shadow cursor-pointer"
+        @click="openFilePicker"
+      >
+        <NIcon size="124" :component="DocumentAttachOutline" class="text-gray-400 mb-2" />
+        <div class="text-sm font-semibold text-gray-500">{{ t('form.addDocument') }}</div>
+      </div>
     </div>
   </div>
 </template>

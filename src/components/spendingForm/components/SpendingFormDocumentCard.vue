@@ -14,6 +14,7 @@
     NIcon,
     NImage,
     NInput,
+    NModal,
     NText,
     useDialog,
     useMessage,
@@ -56,8 +57,14 @@
 
   const documentFileName = computed(() => `${document.value.name}.${document.value.extension}`)
   const isImageDocument = computed(() => isImageFile(document.value.extension))
+  const isPdfDocument = computed(() => document.value.extension.toLowerCase() === 'pdf')
   const hasDocumentPath = computed(() => Boolean(documentPath.value))
   const isDownloadDisabled = computed(() => !hasDocumentPath.value || isDocumentError.value)
+  const showPdfPreview = ref(false)
+
+  const canOpenPdfPreview = computed(
+    () => isPdfDocument.value && hasDocumentPath.value && !isDocumentError.value,
+  )
 
   const saveNewName = (): void => {
     if (isNewNameEmpty.value) return
@@ -143,13 +150,20 @@
       nodes.close,
     ]
   }
+
+  const openPdfPreview = (): void => {
+    if (!canOpenPdfPreview.value) return
+    showPdfPreview.value = true
+  }
 </script>
 
 <template>
-  <div class="document-card">
-    <NCard size="small" :content-style="{ padding: '12px' }" @click.stop>
+  <div class="document-card shadow border border-gray-200 rounded-lg">
+    <NCard size="small" :content-style="{ padding: '16px' }">
       <!-- Preview -->
-      <div class="h-[250px] max-w-[400px] mb-2">
+      <div
+        class="h-[200px] max-w-[320px] mb-2 shadow-sm hover:border hover:rounded border-gray-300"
+      >
         <div
           v-if="isDocumentError"
           class="flex flex-col gap-2 h-full items-center justify-center rounded border border-dashed border-red-200 bg-red-50 px-4 text-center"
@@ -158,6 +172,15 @@
           <NText type="error" class="font-semibold">
             {{ t('messages.documentUnavailable') }}
           </NText>
+        </div>
+        <div
+          v-else-if="isPdfDocument"
+          class="relative flex justify-center flex-col items-center opacity-80 h-full w-[200px]"
+          :class="{ 'cursor-pointer hover:opacity-100': canOpenPdfPreview }"
+          @click="openPdfPreview"
+        >
+          <NIcon size="120" :component="getFileIcon(document.extension)" color="#f5051c" />
+          <div class="absolute top-5 right-5 font-bold text-sm text-[#f5051c]">PDF</div>
         </div>
         <n-image
           v-else-if="isImageDocument && documentPath"
@@ -168,9 +191,24 @@
           :render-toolbar="renderToolbar"
         />
         <div v-else class="flex justify-center items-center opacity-80 h-full w-[200px]">
-          <NIcon size="60" :component="getFileIcon(document.extension)" />
+          <NIcon size="120" :component="getFileIcon(document.extension)" />
         </div>
       </div>
+
+      <NModal
+        v-model:show="showPdfPreview"
+        preset="card"
+        style="width: min(92vw, 1100px)"
+        :title="documentFileName"
+        :bordered="false"
+      >
+        <iframe
+          v-if="isPdfDocument && documentPath"
+          :src="documentPath"
+          class="w-full h-[80vh]"
+          :title="documentFileName"
+        />
+      </NModal>
 
       <!-- Document info -->
       <div class="document-info">
@@ -211,7 +249,7 @@
         </div>
         <div v-else class="flex justify-between items-center gap-6">
           <NText class="document-name font-semibold text-[16px]" :title="document.name">
-            document.name }}
+            {{ document.name }}
           </NText>
           <NButton
             size="small"

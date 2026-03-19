@@ -15,7 +15,7 @@ import { SpendingDocument } from '@/types/SpendingDocument'
 /**
  * Composable for managing file uploads to the Documents folder
  */
-export function useFileUpload() {
+export function useFileHandler() {
   const message = useMessage()
   const documentDirectoryExists = ref(false)
   const documentsFolderPath = ref<string | null>(null)
