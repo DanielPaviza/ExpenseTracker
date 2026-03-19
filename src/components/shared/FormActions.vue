@@ -4,7 +4,12 @@
 
   import { useI18n } from 'vue-i18n'
 
-  const { showDelete, showReset, saveText, canSave } = defineProps<{
+  const {
+    showDelete,
+    showReset,
+    saveText,
+    canSave = true,
+  } = defineProps<{
     showDelete?: boolean
     showReset?: boolean
     saveText: string
