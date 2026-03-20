@@ -52,16 +52,21 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <SortButtons v-model="sortBy" :options="sortOptions" />
+    <template v-if="displayedTags.length">
+      <SortButtons v-model="sortBy" :options="sortOptions" />
 
-    <StatItem v-for="tag in displayedTags" :key="tag.name" :stat="tag" />
+      <StatItem v-for="tag in displayedTags" :key="tag.name" :stat="tag" />
 
-    <div
-      v-if="hasMore"
-      class="mt-1 text-blueLight text-xs cursor-pointer"
-      @click="showAll = !showAll"
-    >
-      {{ toggleText }}
+      <div
+        v-if="hasMore"
+        class="mt-1 text-blueLight text-xs cursor-pointer"
+        @click="showAll = !showAll"
+      >
+        {{ toggleText }}
+      </div>
+    </template>
+    <div v-else class="text-gray-500 text-center py-4">
+      {{ $t('common.noRecordsFound') }}
     </div>
   </SummaryCard>
 </template>

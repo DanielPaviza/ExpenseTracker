@@ -42,11 +42,14 @@
   <SummaryCard
     :title="$t('summary.unpaidExpenses')"
     :subtitle="`${unpaidSpendings.length} ${$t('summary.items')}`"
-    chart-type="Doughnut"
+    :chart-type="`${unpaidSpendings.length > 0 ? 'Doughnut' : 'None'}`"
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div class="max-w-[90%] min-w-[280px]">
+    <div v-if="unpaidSpendings.length === 0" class="text-gray-500 text-center py-4 w-full">
+      {{ $t('common.noRecordsFound') }}
+    </div>
+    <div v-else class="max-w-[90%] min-w-[280px]">
       <div class="flex justify-between">
         <div class="font-bold text-blue me-3">{{ $t('summary.totalPaid') }}:</div>
         <div class="font-semibold">

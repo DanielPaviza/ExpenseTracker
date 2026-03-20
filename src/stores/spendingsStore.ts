@@ -255,8 +255,10 @@ export const useSpendingsStore = defineStore('spendings', () => {
     if (spendingsInCategoryView.value.length === 0) return []
 
     const countMap = new Map<string, number>()
-    for (const s of spendingsInCategoryView.value)
-      if (s.subCategory) countMap.set(s.subCategory, (countMap.get(s.subCategory) || 0) + 1)
+    for (const s of spendingsInCategoryView.value) {
+      const key = s.subCategory || t('common.unknown')
+      countMap.set(key, (countMap.get(key) || 0) + 1)
+    }
 
     return Array.from(countMap.entries())
       .sort((a, b) => b[1] - a[1])
