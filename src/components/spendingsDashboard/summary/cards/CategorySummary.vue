@@ -8,32 +8,37 @@
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  import SortButtons from '@/components/home/spendingsDashboard/summary/SortButtons.vue'
-  import StatItem from '@/components/home/spendingsDashboard/summary/StatItem.vue'
-  import SummaryCard from '@/components/home/spendingsDashboard/summary/SummaryCard.vue'
+  import SortButtons from '@/components/spendingsDashboard/summary/SortButtons.vue'
+  import StatItem from '@/components/spendingsDashboard/summary/StatItem.vue'
+  import SummaryCard from '@/components/spendingsDashboard/summary/SummaryCard.vue'
 
   const { t } = useI18n()
   const store = useSpendingsStore()
-  const { spendings, tags, totalPrice } = storeToRefs(store)
+  const { spendings, categories, totalPrice } = storeToRefs(store)
 
   const sortBy = ref<SortType>('price-desc')
 
   const { sortedStats } = useEntityStats({
     spendings,
-    entities: tags,
+    entities: categories,
     totalPrice,
-    filterFn: (s, tag) => s.tags && s.tags.includes(tag),
+    filterFn: (s, cat) => s.category === cat,
     sortBy,
     includeAverage: true,
   })
 
-  const { displayedItems: displayedTags, hasMore, toggleText, showAll } = useItemsLimit(sortedStats)
+  const {
+    displayedItems: displayedCategories,
+    hasMore,
+    toggleText,
+    showAll,
+  } = useItemsLimit(sortedStats)
 
   const { chartLabels, chartDatasets } = useSummaryChart({
     stats: sortedStats,
     sortBy,
-    labelKey: 'summary.expensesByTags',
-    countLabelKey: 'summary.purchasesByTags',
+    labelKey: 'summary.expensesByCategories',
+    countLabelKey: 'summary.purchasesByCategories',
   })
 
   const sortOptions = computed(() => [
@@ -45,8 +50,8 @@
 
 <template>
   <SummaryCard
-    :title="$t('summary.expensesByTags')"
-    :subtitle="`${tags.length} ${$t('summary.tags')}`"
+    :title="$t('summary.expensesByCategories')"
+    :subtitle="`${categories.length} ${$t('summary.categories')}`"
     chart-type="Doughnut"
     :chart-type-change-enabled="true"
     :chart-labels="chartLabels"
@@ -54,7 +59,7 @@
   >
     <SortButtons v-model="sortBy" :options="sortOptions" />
 
-    <StatItem v-for="tag in displayedTags" :key="tag.name" :stat="tag" />
+    <StatItem v-for="category in displayedCategories" :key="category.name" :stat="category" />
 
     <div
       v-if="hasMore"

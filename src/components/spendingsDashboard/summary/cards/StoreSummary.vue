@@ -8,8 +8,8 @@
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  import SortButtons from '@/components/home/spendingsDashboard/summary/SortButtons.vue'
-  import SummaryCard from '@/components/home/spendingsDashboard/summary/SummaryCard.vue'
+  import SortButtons from '@/components/spendingsDashboard/summary/SortButtons.vue'
+  import SummaryCard from '@/components/spendingsDashboard/summary/SummaryCard.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { t } = useI18n()

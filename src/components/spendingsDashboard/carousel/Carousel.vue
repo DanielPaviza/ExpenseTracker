@@ -1,19 +1,19 @@
 <script setup lang="ts">
-  import AverageSummary from '@components/home/spendingsDashboard/summary/cards/AverageSummary.vue'
-  import CategorySummary from '@components/home/spendingsDashboard/summary/cards/CategorySummary.vue'
-  import FreeSummary from '@components/home/spendingsDashboard/summary/cards/FreeSummary.vue'
-  import OverallPriceSummary from '@components/home/spendingsDashboard/summary/cards/OverallPriceSummary.vue'
-  import StatisticsSummary from '@components/home/spendingsDashboard/summary/cards/StatisticsSummary.vue'
-  import StoreSummary from '@components/home/spendingsDashboard/summary/cards/StoreSummary.vue'
-  import SubCategorySummary from '@components/home/spendingsDashboard/summary/cards/SubCategorySummary.vue'
-  import TagSummary from '@components/home/spendingsDashboard/summary/cards/TagSummary.vue'
-  import UnpaidSummary from '@components/home/spendingsDashboard/summary/cards/UnpaidSummary.vue'
+  import AverageSummary from '@components/spendingsDashboard/summary/cards/AverageSummary.vue'
+  import CategorySummary from '@components/spendingsDashboard/summary/cards/CategorySummary.vue'
+  import FreeSummary from '@components/spendingsDashboard/summary/cards/FreeSummary.vue'
+  import OverallPriceSummary from '@components/spendingsDashboard/summary/cards/OverallPriceSummary.vue'
+  import StatisticsSummary from '@components/spendingsDashboard/summary/cards/StatisticsSummary.vue'
+  import StoreSummary from '@components/spendingsDashboard/summary/cards/StoreSummary.vue'
+  import SubCategorySummary from '@components/spendingsDashboard/summary/cards/SubCategorySummary.vue'
+  import TagSummary from '@components/spendingsDashboard/summary/cards/TagSummary.vue'
+  import UnpaidSummary from '@components/spendingsDashboard/summary/cards/UnpaidSummary.vue'
   import { NCarousel } from 'naive-ui'
 
   import { computed } from 'vue'
 
-  import CarouselItem from '@/components/home/spendingsDashboard/carousel/CarouselItem.vue'
-  import CarouselSlide from '@/components/home/spendingsDashboard/carousel/CarouselSlide.vue'
+  import CarouselItem from '@/components/spendingsDashboard/carousel/CarouselItem.vue'
+  import CarouselSlide from '@/components/spendingsDashboard/carousel/CarouselSlide.vue'
   import { useSpendingsStore } from '@/stores/spendingsStore'
 
   const spendingStore = useSpendingsStore()

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import DeletedSpendingsTable from '@components/home/spendingsList/DeletedSpendingsTable.vue'
-  import SpendingsCategoryTable from '@components/home/spendingsList/SpendingsCategoryTable.vue'
-  import SpendingsDataTable from '@components/home/spendingsList/dataTable/SpendingsDataTable.vue'
   import ButtonNavigation from '@components/shared/ButtonNavigation.vue'
+  import DeletedSpendingsTable from '@components/spendingsList/DeletedSpendingsTable.vue'
+  import SpendingsCategoryTable from '@components/spendingsList/SpendingsCategoryTable.vue'
+  import SpendingsDataTable from '@components/spendingsList/dataTable/SpendingsDataTable.vue'
   import { NSelect } from 'naive-ui'
 
   import { computed, ref, watch } from 'vue'

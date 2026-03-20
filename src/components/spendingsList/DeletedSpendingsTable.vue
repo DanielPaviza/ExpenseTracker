@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import CollapsedTableView from '@components/home/spendingsList/dataTable/shared/CollapsedTableView.vue'
-  import TableFooter from '@components/home/spendingsList/dataTable/shared/TableFooter.vue'
   import Tooltip from '@components/shared/Tooltip.vue'
+  import CollapsedTableView from '@components/spendingsList/dataTable/shared/CollapsedTableView.vue'
+  import TableFooter from '@components/spendingsList/dataTable/shared/TableFooter.vue'
   import { useSpendingsStore } from '@stores/spendingsStore'
   import { ArrowUpOutline, ListOutline, RefreshOutline } from '@vicons/ionicons5'
   import { NButton, NIcon, useMessage } from 'naive-ui'

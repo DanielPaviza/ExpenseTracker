@@ -8,9 +8,9 @@
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  import SortButtons from '@/components/home/spendingsDashboard/summary/SortButtons.vue'
-  import StatItem from '@/components/home/spendingsDashboard/summary/StatItem.vue'
-  import SummaryCard from '@/components/home/spendingsDashboard/summary/SummaryCard.vue'
+  import SortButtons from '@/components/spendingsDashboard/summary/SortButtons.vue'
+  import StatItem from '@/components/spendingsDashboard/summary/StatItem.vue'
+  import SummaryCard from '@/components/spendingsDashboard/summary/SummaryCard.vue'
 
   const { t } = useI18n()
   const store = useSpendingsStore()

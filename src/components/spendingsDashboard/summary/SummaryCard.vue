@@ -5,7 +5,7 @@
 
   import { computed, ref } from 'vue'
 
-  import Chart from '@/components/home/spendingsDashboard/summary/Chart.vue'
+  import Chart from '@/components/spendingsDashboard/summary/Chart.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const {

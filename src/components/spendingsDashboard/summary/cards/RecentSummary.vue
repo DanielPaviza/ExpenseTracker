@@ -5,7 +5,7 @@
 
   import { computed, ref } from 'vue'
 
-  import SummaryCard from '@/components/home/spendingsDashboard/summary/SummaryCard.vue'
+  import SummaryCard from '@/components/spendingsDashboard/summary/SummaryCard.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
   import { formatDateLocalized } from '@/composables/useDateFormat'
   import { Spending } from '@/types/Spending'

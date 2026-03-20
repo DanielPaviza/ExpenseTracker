@@ -4,7 +4,7 @@
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  import Carousel from '@/components/home/spendingsDashboard/carousel/Carousel.vue'
+  import Carousel from '@/components/spendingsDashboard/carousel/Carousel.vue'
   import { SUMMARY_CARDS } from '@/constants/summaryCards'
   import { useSettingsStore } from '@/stores/settingsStore'
 

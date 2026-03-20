@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import SortIndicator from '@components/home/spendingsList/SortIndicator.vue'
   import Tooltip from '@components/shared/Tooltip.vue'
+  import SortIndicator from '@components/spendingsList/SortIndicator.vue'
 
   import { onBeforeUpdate, ref } from 'vue'
   import type { ComponentPublicInstance } from 'vue'

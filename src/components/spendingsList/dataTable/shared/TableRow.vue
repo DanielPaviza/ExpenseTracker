@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import SpendingStatusIndicator from '@components/home/spendingsList/SpendingStatusIndicator.vue'
+  import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
 
   import { type VNode, ref } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import SpendingsDataTableAction from '@/components/home/spendingsList/SpendingsDataTableAction.vue'
-  import SpendingsDataTableActionContext from '@/components/home/spendingsList/SpendingsDataTableActionContext.vue'
+  import SpendingsDataTableAction from '@/components/spendingsList/SpendingsDataTableAction.vue'
+  import SpendingsDataTableActionContext from '@/components/spendingsList/SpendingsDataTableActionContext.vue'
   import { useSpendingStatus } from '@/composables/spending/useSpendingStatus'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'

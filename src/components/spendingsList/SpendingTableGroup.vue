@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import TableRow from '@components/home/spendingsList/dataTable/shared/TableRow.vue'
+  import TableRow from '@components/spendingsList/dataTable/shared/TableRow.vue'
   import { ChevronForwardOutline } from '@vicons/ionicons5'
   import { NIcon } from 'naive-ui'
 

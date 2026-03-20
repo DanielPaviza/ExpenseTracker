@@ -6,7 +6,7 @@
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
 
-  import SummaryCard from '@/components/home/spendingsDashboard/summary/SummaryCard.vue'
+  import SummaryCard from '@/components/spendingsDashboard/summary/SummaryCard.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
   const { t } = useI18n()
