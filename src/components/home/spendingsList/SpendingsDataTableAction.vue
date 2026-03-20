@@ -12,7 +12,7 @@
 </script>
 
 <template>
-  <div class="px-2">
+  <div class="px-2 mt-1 flex justify-end">
     <n-dropdown
       :options="
         actionOptions.map((option) => ({

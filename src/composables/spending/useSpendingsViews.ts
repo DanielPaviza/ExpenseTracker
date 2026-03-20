@@ -1,6 +1,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
+import { useSettingsStore } from '@/stores/settingsStore'
 import { useSpendingsStore } from '@/stores/spendingsStore'
 import type { Spending } from '@/types/Spending'
 import { SpendingList, SpendingListKey } from '@/types/SpendingList'
@@ -8,6 +9,7 @@ import { SpendingList, SpendingListKey } from '@/types/SpendingList'
 export function useSpendingsViews() {
   const { t } = useI18n()
   const spendingsStore = useSpendingsStore()
+  const { settings } = useSettingsStore()
 
   // Check if a specific category is selected
   const isCategorySelected = computed(() => spendingsStore.categoryView !== null)
@@ -106,6 +108,11 @@ export function useSpendingsViews() {
     return sorted
   }
 
+  const getHiddenColumnsForView = (defaultColumns: string[] = []): string[] => [
+    ...settings.defaultHiddenSpendingColumns,
+    ...defaultColumns,
+  ]
+
   // View definitions factory
   const createViews = (
     nameSortState: 'none' | 'asc' | 'desc',
@@ -115,7 +122,7 @@ export function useSpendingsViews() {
       id: 'allInOne',
       label: t('table.allInOneTable'),
       categories: [t('table.allExpenses')],
-      hiddenColumnKeys: [],
+      hiddenColumnKeys: getHiddenColumnsForView(),
       enableSorting: false,
       getSpendings: (_: string): Spending[] =>
         getSortedSpendings(spendingsStore.spendings, nameSortState, priceSortState),
@@ -126,7 +133,7 @@ export function useSpendingsViews() {
           id: 'byCategories',
           label: t('table.bySubCategories'),
           categories: spendingsStore.subCategories,
-          hiddenColumnKeys: ['subCategory'],
+          hiddenColumnKeys: getHiddenColumnsForView(['subCategory']),
           enableSorting: true,
           getSpendings: (subCategory: string): Spending[] =>
             getSortedSpendings(
@@ -139,7 +146,7 @@ export function useSpendingsViews() {
           id: 'byCategories',
           label: t('table.byCategories'),
           categories: spendingsStore.categories,
-          hiddenColumnKeys: ['category'],
+          hiddenColumnKeys: getHiddenColumnsForView(['category']),
           enableSorting: true,
           getSpendings: (category: string): Spending[] =>
             getSortedSpendings(getSpendingsByCategory(category), nameSortState, priceSortState),
@@ -148,7 +155,7 @@ export function useSpendingsViews() {
       id: 'byStores',
       label: t('table.byStores'),
       categories: stores.value,
-      hiddenColumnKeys: ['store'],
+      hiddenColumnKeys: getHiddenColumnsForView(['store']),
       enableSorting: true,
       getSpendings: (store: string): Spending[] =>
         getSortedSpendings(getSpendingsByStore(store), nameSortState, priceSortState),
@@ -157,7 +164,7 @@ export function useSpendingsViews() {
       id: 'byTags',
       label: t('table.byTags'),
       categories: allTags.value,
-      hiddenColumnKeys: ['tags'],
+      hiddenColumnKeys: getHiddenColumnsForView(),
       enableSorting: true,
       getSpendings: (tag: string): Spending[] =>
         getSortedSpendings(getSpendingsByTag(tag), nameSortState, priceSortState),

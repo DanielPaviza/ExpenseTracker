@@ -4,4 +4,5 @@ export type Settings = {
   languageCode: string
   defaultSummaryCard: string
   defaultCategoryView: string | null
+  defaultHiddenSpendingColumns: string[]
 }

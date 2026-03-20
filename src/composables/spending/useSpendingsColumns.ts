@@ -134,9 +134,9 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         render: (row) => row.payer,
       },
       {
-        title: t('columns.created'),
+        title: t('columns.createdAt'),
         key: 'createdAt',
-        isHidden: true,
+        isHidden: false,
         filterEnabled: true,
         selectFilterEnabled: false,
         tooltip: null,

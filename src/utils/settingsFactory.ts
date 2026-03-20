@@ -10,5 +10,7 @@ export function createSettings(data?: Partial<Settings>): Settings {
     tableGroupDefaultOpen: data?.tableGroupDefaultOpen ?? DEFAULT_SETTINGS.tableGroupDefaultOpen,
     defaultSummaryCard: data?.defaultSummaryCard ?? DEFAULT_SETTINGS.defaultSummaryCard,
     defaultCategoryView: data?.defaultCategoryView ?? DEFAULT_SETTINGS.defaultCategoryView,
+    defaultHiddenSpendingColumns:
+      data?.defaultHiddenSpendingColumns ?? DEFAULT_SETTINGS.defaultHiddenSpendingColumns,
   }) as Settings
 }

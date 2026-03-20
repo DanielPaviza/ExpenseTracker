@@ -8,4 +8,5 @@ export const DEFAULT_SETTINGS: Settings = {
   tableGroupDefaultOpen: false,
   defaultSummaryCard: 'overviewAndCategories',
   defaultCategoryView: null,
+  defaultHiddenSpendingColumns: ['isToBePaid', 'isFree', 'createdAt'],
 }

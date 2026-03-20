@@ -3,7 +3,7 @@
   import { useMessage } from 'naive-ui'
   import { NDrawer, NDrawerContent, NForm, NFormItem, NSelect } from 'naive-ui'
 
-  import { onMounted, ref } from 'vue'
+  import { computed, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
@@ -11,6 +11,7 @@
   import SelectBool from '@/components/shared/SelectBool.vue'
   import SelectTextNull from '@/components/shared/SelectTextNull.vue'
   import tooltip from '@/components/shared/Tooltip.vue'
+  import { useSpendingsColumns } from '@/composables/spending/useSpendingsColumns'
   import { useSettingsFormValidation } from '@/composables/useSettingsFormValidation'
   import { CURRENCY_SYMBOL_PRESETS } from '@/constants/currency'
   import { DEFAULT_SETTINGS } from '@/constants/defaultSettings'
@@ -20,6 +21,7 @@
   import { Settings } from '@/types/Settings'
 
   const { t } = useI18n()
+  const { columns } = useSpendingsColumns()
   const { settings, save: saveSettings } = useSettingsStore()
   const { categories } = useSpendingsStore()
   const tempSettings = ref<Settings>({ ...settings })
@@ -46,6 +48,10 @@
   const handleReset = (): void => {
     tempSettings.value = { ...DEFAULT_SETTINGS }
   }
+
+  const isDefaultHiddenColumnsValid = computed(
+    (): boolean => tempSettings.value.defaultHiddenSpendingColumns.length < columns.value.length,
+  )
 </script>
 
 <template>
@@ -115,12 +121,39 @@
             :null-item-label="$t('common.allCategories')"
           />
         </n-form-item>
+
+        <n-form-item path="defaultHiddenSpendingColumns">
+          <template #label>
+            <div class="flex items-center">
+              <span>{{ t('settings.hiddenSpendingColumnsDefault') }}</span>
+              <div class="ms-2">
+                <tooltip :text="t('settings.hiddenSpendingColumnsDefaultTooltip')" />
+              </div>
+            </div>
+          </template>
+          <div class="flex flex-col w-full">
+            <n-select
+              v-model:value="tempSettings.defaultHiddenSpendingColumns"
+              :options="columns.map((column) => ({ label: column.title, value: column.key }))"
+              :placeholder="t('form.selectTags')"
+              filterable
+              multiple
+              tag
+              clearable
+              :status="isDefaultHiddenColumnsValid ? 'success' : 'error'"
+            />
+            <div v-if="!isDefaultHiddenColumnsValid" class="text-red-500 text-sm mt-1">
+              {{ t('settings.hiddenSpendingColumnsValidation') }}
+            </div>
+          </div>
+        </n-form-item>
       </n-form>
 
       <template #footer>
         <FormActions
           show-reset
           :save-text="t('form.saveChangesButton')"
+          :can-save="isDefaultHiddenColumnsValid"
           @save="handleSave"
           @cancel="closeDrawer"
           @reset="handleReset"
