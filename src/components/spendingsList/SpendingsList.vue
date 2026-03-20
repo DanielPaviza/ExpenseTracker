@@ -3,7 +3,7 @@
   import DeletedSpendingsTable from '@components/spendingsList/DeletedSpendingsTable.vue'
   import SpendingsCategoryTable from '@components/spendingsList/SpendingsCategoryTable.vue'
   import SpendingsDataTable from '@components/spendingsList/dataTable/SpendingsDataTable.vue'
-  import { NSelect } from 'naive-ui'
+  import { NInput, NSelect } from 'naive-ui'
 
   import { computed, ref, watch } from 'vue'
 
@@ -30,6 +30,21 @@
   const defaultView: SpendingList = VIEWS.value[defaultViewKey]
   const currentViewKey = ref<SpendingListKey>(defaultViewKey)
   const currentView = computed<SpendingList>(() => VIEWS.value[currentViewKey.value])
+
+  // Persistent per-view name filters
+  const nameFiltersByView = ref<Record<SpendingListKey, string>>({
+    allInOne: '',
+    byCategories: '',
+    byStores: '',
+    byTags: '',
+  })
+
+  const nameFilter = computed<string>({
+    get: () => nameFiltersByView.value[currentViewKey.value],
+    set: (value: string) => {
+      nameFiltersByView.value[currentViewKey.value] = value
+    },
+  })
 
   const hideColumnSelectHeaders = computed(() => {
     return allColumns.value.map((col) => ({
@@ -71,6 +86,14 @@
     if (currentViewKey.value === 'allInOne') return
     router.push(`/bulkEdit/${getPath()}/${encodeURIComponent(value)}`)
   }
+
+  const filteredSortedCategories = computed(() => {
+    const filteredCategories = currentView.value.categories.filter((category) => {
+      const filterValue = nameFilter.value.toLowerCase()
+      return category.toLowerCase().includes(filterValue)
+    })
+    return getSortedCategories(filteredCategories, currentView.value)
+  })
 
   watch(
     currentView,
@@ -140,8 +163,14 @@
   </div>
 
   <div v-if="currentView.categories?.length > 0" class="pb-10">
+    <div v-if="currentView.showFilter">
+      <label class="text-[14px] ms-1 font-semibold text-nowrap text-blue">
+        {{ $t('table.filterByName') }}
+      </label>
+      <n-input v-model:value="nameFilter" :placeholder="$t('table.filterPlaceholder')" clearable />
+    </div>
     <SpendingsCategoryTable
-      v-for="category in getSortedCategories(currentView.categories || [], currentView)"
+      v-for="category in filteredSortedCategories"
       :key="category"
       :category="category"
       :spendings="currentView.getSpendings(category)"

@@ -124,6 +124,7 @@ export function useSpendingsViews() {
       categories: [t('table.allExpenses')],
       hiddenColumnKeys: getHiddenColumnsForView(),
       enableSorting: false,
+      showFilter: false,
       getSpendings: (_: string): Spending[] =>
         getSortedSpendings(spendingsStore.spendings, nameSortState, priceSortState),
     },
@@ -135,6 +136,7 @@ export function useSpendingsViews() {
           categories: spendingsStore.subCategories,
           hiddenColumnKeys: getHiddenColumnsForView(['subCategory']),
           enableSorting: true,
+          showFilter: true,
           getSpendings: (subCategory: string): Spending[] =>
             getSortedSpendings(
               getSpendingsBySubCategory(subCategory),
@@ -148,6 +150,7 @@ export function useSpendingsViews() {
           categories: spendingsStore.categories,
           hiddenColumnKeys: getHiddenColumnsForView(['category']),
           enableSorting: true,
+          showFilter: true,
           getSpendings: (category: string): Spending[] =>
             getSortedSpendings(getSpendingsByCategory(category), nameSortState, priceSortState),
         },
@@ -157,6 +160,7 @@ export function useSpendingsViews() {
       categories: stores.value,
       hiddenColumnKeys: getHiddenColumnsForView(['store']),
       enableSorting: true,
+      showFilter: true,
       getSpendings: (store: string): Spending[] =>
         getSortedSpendings(getSpendingsByStore(store), nameSortState, priceSortState),
     },
@@ -166,6 +170,7 @@ export function useSpendingsViews() {
       categories: allTags.value,
       hiddenColumnKeys: getHiddenColumnsForView(),
       enableSorting: true,
+      showFilter: true,
       getSpendings: (tag: string): Spending[] =>
         getSortedSpendings(getSpendingsByTag(tag), nameSortState, priceSortState),
     },
