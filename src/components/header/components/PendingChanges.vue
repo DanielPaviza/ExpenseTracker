@@ -30,7 +30,7 @@
       <n-button type="success" @click="handleSave">
         {{ $t('header.saveChanges') }}
       </n-button>
-      <n-button type="error" @click="discardChangesDialog()">
+      <n-button type="warning" @click="discardChangesDialog()">
         {{ $t('header.discardChanges') }}
       </n-button>
     </div>

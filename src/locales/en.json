@@ -66,7 +66,7 @@
     "deleteTagSuccess": "Tag \"{name}\" has been successfully deleted",
     "deleteTagTitle": "Delete records with tag",
     "discard": "Discard",
-    "discardChangesContent": "Do you really want to discard all unsaved changes? This action is irreversible.",
+    "discardChangesContent": "Do you really want to discard all unsaved changes?",
     "discardChangesTitle": "Discard Changes",
     "restore": "Restore",
     "restoreAllContent": "Do you really want to restore all deleted expenses ({count})?",
