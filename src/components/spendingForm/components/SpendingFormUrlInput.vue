@@ -16,7 +16,12 @@
   <n-form-item :label="label" path="url">
     <div class="flex gap-2 w-full">
       <div class="w-full">
-        <n-input v-model:value="url" :placeholder="t('form.urlPlaceholder')" clearable />
+        <n-input
+          v-model:value="url"
+          :placeholder="t('form.urlPlaceholder')"
+          clearable
+          class="shadow"
+        />
       </div>
       <a v-if="url" :href="url" target="_blank">
         <n-button color="#3b82f6" :title="t('form.openLink')">

@@ -35,6 +35,7 @@
     "reset": "Reset",
     "showAllArrowCount": "▼ Show all ({count})",
     "showLessArrowCount": "▲ Show less",
+    "unknown": "Unknown",
     "yes": "Yes"
   },
   "dashboard": {

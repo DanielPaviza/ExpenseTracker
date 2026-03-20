@@ -2,6 +2,7 @@ import { loadSpendings, saveSpendings } from '@utils/spendingStorage'
 import { defineStore } from 'pinia'
 
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { useSettingsStore } from '@/stores/settingsStore'
 import { Spending } from '@/types/Spending'
@@ -11,6 +12,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
   const originalSpendings = ref<Spending[]>([])
   const isLoading = ref(false)
   const settingsStore = useSettingsStore()
+  const { t } = useI18n()
 
   // App view state - null means no filtering by category
   const categoryView = ref<string | null>(null)
@@ -278,8 +280,10 @@ export const useSpendingsStore = defineStore('spendings', () => {
     if (spendingsInCategoryView.value.length === 0) return []
 
     const countMap = new Map<string, number>()
-    for (const s of spendingsInCategoryView.value)
-      if (s.payer) countMap.set(s.payer, (countMap.get(s.payer) || 0) + 1)
+    for (const s of spendingsInCategoryView.value) {
+      const key = s.payer || t('common.unknown')
+      countMap.set(key, (countMap.get(key) || 0) + 1)
+    }
 
     return Array.from(countMap.entries())
       .sort((a, b) => b[1] - a[1])
@@ -292,7 +296,7 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
     const countMap = new Map<string, number>()
     for (const s of spendingsInCategoryView.value) {
-      const key = s.store || 'Neznámé'
+      const key = s.store || t('common.unknown')
       countMap.set(key, (countMap.get(key) || 0) + 1)
     }
     return Array.from(countMap.entries())

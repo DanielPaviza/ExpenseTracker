@@ -34,10 +34,11 @@
       <n-select
         :value="formData.tableGroup"
         :options="tableGroupOptions"
-        :placeholder="t('form.selectGroup')"
+        placeholder=""
         filterable
         tag
         clearable
+        class="shadow"
         @update:value="handleSetTableGroup"
       />
     </n-form-item>
@@ -46,28 +47,21 @@
       <n-select
         v-model:value="formData.tags"
         :options="tagOptions"
-        :placeholder="t('form.selectTags')"
+        placeholder=""
         filterable
         multiple
         tag
         clearable
+        class="shadow"
       />
     </n-form-item>
 
     <n-form-item :label="t('form.storeCode')" path="storeCode">
-      <n-input
-        v-model:value="formData.storeCode"
-        :placeholder="t('form.storeCodePlaceholder')"
-        clearable
-      />
+      <n-input v-model:value="formData.storeCode" placeholder="" clearable class="shadow" />
     </n-form-item>
 
     <n-form-item :label="t('form.dimensions')" path="dimensions">
-      <n-input
-        v-model:value="formData.dimensions"
-        :placeholder="t('form.dimensionsPlaceholder')"
-        clearable
-      />
+      <n-input v-model:value="formData.dimensions" placeholder="" clearable class="shadow" />
     </n-form-item>
 
     <FormUrlInput v-model:url="formData.url!" :label="t('form.url')" />
@@ -81,7 +75,8 @@
       <n-input
         v-model:value="formData.description"
         type="textarea"
-        :placeholder="t('form.descriptionPlaceholder')"
+        class="shadow"
+        placeholder=""
         :rows="4"
         clearable
       />

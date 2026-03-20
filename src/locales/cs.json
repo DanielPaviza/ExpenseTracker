@@ -35,6 +35,7 @@
     "reset": "Resetovat",
     "showAllArrowCount": "▼ Zobrazit všechny ({count})",
     "showLessArrowCount": "▲ Zobrazit méně",
+    "unknown": "Neznámé",
     "yes": "Ano"
   },
   "dashboard": {

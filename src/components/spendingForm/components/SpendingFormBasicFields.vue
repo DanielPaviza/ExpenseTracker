@@ -46,6 +46,7 @@
         :placeholder="t('form.selectCategory')"
         filterable
         tag
+        class="shadow"
       />
     </n-form-item>
 
@@ -53,26 +54,27 @@
       <n-select
         v-model:value="formData.subCategory"
         :options="subCategoryOptions"
-        :placeholder="t('form.selectSubCategory')"
         filterable
         tag
+        placeholder=""
+        class="shadow"
       />
     </n-form-item>
 
     <n-form-item :label="t('form.type')" path="type">
-      <n-input v-model:value="formData.type" :placeholder="t('form.typePlaceholder')" />
+      <n-input v-model:value="formData.type" placeholder="" class="shadow" />
     </n-form-item>
 
     <n-form-item :label="t('form.name')" path="name">
-      <n-input v-model:value="formData.name" :placeholder="t('form.namePlaceholder')" />
+      <n-input v-model:value="formData.name" placeholder="" class="shadow" />
     </n-form-item>
 
     <n-form-item :label="t('form.creationDate')" path="createdAt">
       <n-date-picker
         v-model:value="createdAtTimestamp"
         type="datetime"
-        :placeholder="t('form.selectDateTime')"
-        class="w-full"
+        placeholder=""
+        class="w-full shadow"
         format="dd.MM.yyyy HH:mm"
       />
     </n-form-item>
@@ -81,9 +83,10 @@
       <n-select
         v-model:value="formData.payer"
         :options="payerOptions"
-        :placeholder="t('form.selectPayer')"
+        placeholder=""
         filterable
         tag
+        class="shadow"
       />
     </n-form-item>
 
@@ -91,16 +94,23 @@
       <n-select
         v-model:value="formData.store"
         :options="storeOptions"
-        :placeholder="t('form.selectStore')"
+        placeholder=""
         filterable
         tag
         clearable
+        class="shadow"
       />
     </n-form-item>
 
     <div class="flex gap-4">
       <n-form-item :label="t('form.quantity')" path="quantity" class="flex-1">
-        <n-input-number v-model:value="formData.quantity" :min="0" :step="1" class="w-full" />
+        <n-input-number
+          v-model:value="formData.quantity"
+          :min="0"
+          :step="1"
+          class="w-full shadow"
+          placeholder="1"
+        />
       </n-form-item>
 
       <n-form-item :label="t('form.unitPrice')" path="unitPrice" class="flex-1">
@@ -108,9 +118,9 @@
           v-model:value="formData.unitPrice"
           :min="0"
           :step="100"
-          :placeholder="String(formData.unitPrice)"
+          placeholder="0"
           :show-button="false"
-          class="w-full"
+          class="w-full shadow"
         />
       </n-form-item>
     </div>
