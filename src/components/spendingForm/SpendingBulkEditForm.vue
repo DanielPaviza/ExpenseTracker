@@ -99,6 +99,8 @@
 
 <template>
   <n-drawer :show="isOpen" width="40%" placement="right" @update:show="closeDrawer">
+    <div class="backdrop-blur fixed left-0 w-screen h-screen -z-10 opacity-100"></div>
+
     <n-drawer-content closable class="p-4">
       <template #header>
         <div class="text-2xl font-bold text-blue">
