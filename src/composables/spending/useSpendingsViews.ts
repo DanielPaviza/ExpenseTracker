@@ -30,83 +30,61 @@ export function useSpendingsViews() {
     return [...tagSet].sort()
   })
 
-  const spendingsByCategory = computed(() => {
-    const map = new Map<string, Spending[]>()
-    spendingsStore.spendings.forEach((s: Spending) => {
-      if (!map.has(s.category)) map.set(s.category, [])
+  const allSpendings = computed(() =>
+    spendingsStore.spendings.map((s: Spending) => {
+      s.tableGroup = ''
+      return s
+    }),
+  )
 
-      map.get(s.category)!.push(s)
-    })
-    return map
+  const spendingsByCategory = computed<Spending[]>(() => {
+    const copy = [...spendingsStore.spendings]
+    const mappedSpendings = copy.map((s: Spending) => ({
+      ...s,
+      tableGroup: s.category,
+    }))
+
+    return mappedSpendings
   })
 
   const spendingsBySubCategory = computed(() => {
-    const map = new Map<string, Spending[]>()
-    spendingsStore.spendings.forEach((s: Spending) => {
-      const subCategory = s.subCategory || t('table.unknown')
-      if (!map.has(subCategory)) map.set(subCategory, [])
+    const copy = [...spendingsStore.spendings]
+    const mappedSpendings = copy.map((s: Spending) => ({
+      ...s,
+      tableGroup: s.subCategory,
+    }))
 
-      map.get(subCategory)!.push(s)
-    })
-    return map
+    return mappedSpendings
   })
 
   const spendingsByStore = computed(() => {
-    const map = new Map<string, Spending[]>()
-    spendingsStore.spendings.forEach((s: Spending) => {
-      const store = s.store || t('table.unknown')
-      if (!map.has(store)) map.set(store, [])
+    const copy = [...spendingsStore.spendings]
+    const mappedSpendings = copy.map((s: Spending) => ({
+      ...s,
+      tableGroup: s.store || t('table.unknown'),
+    }))
 
-      map.get(store)!.push(s)
-    })
-    return map
+    return mappedSpendings
   })
 
-  const spendingsByTag = computed(() => {
-    const map = new Map<string, Spending[]>()
+  const spendingsByTag = computed<Spending[]>(() => {
+    const duplicatedSpendings: Spending[] = []
     spendingsStore.spendings.forEach((s: Spending) => {
       if (s.tags.length === 0) {
-        if (!map.has(t('table.noTag'))) map.set(t('table.noTag'), [])
-
-        map.get(t('table.noTag'))!.push(s)
+        const copy = { ...s }
+        copy.tableGroup = t('table.noTag')
+        duplicatedSpendings.push(copy)
       }
-      s.tags.forEach((tag: string) => {
-        if (!map.has(tag)) map.set(tag, [])
 
-        map.get(tag)!.push(s)
+      s.tags.forEach((tag: string) => {
+        const copy = { ...s }
+        copy.tableGroup = tag
+        duplicatedSpendings.push(copy)
       })
     })
-    return map
+
+    return duplicatedSpendings
   })
-
-  const getSpendingsByCategory = (category: string): Spending[] =>
-    spendingsByCategory.value.get(category) || []
-  const getSpendingsBySubCategory = (subCategory: string): Spending[] =>
-    spendingsBySubCategory.value.get(subCategory) || []
-  const getSpendingsByStore = (store: string): Spending[] => spendingsByStore.value.get(store) || []
-  const getSpendingsByTag = (tag: string): Spending[] => spendingsByTag.value.get(tag) || []
-
-  // Helper function for sorting spendings
-  const getSortedSpendings = (
-    spendings: Spending[],
-    nameSortState: 'none' | 'asc' | 'desc',
-    priceSortState: 'none' | 'asc' | 'desc',
-  ): Spending[] => {
-    const sorted = [...spendings]
-
-    if (nameSortState !== 'none')
-      sorted.sort((a, b) => {
-        const comparison = a.name.localeCompare(b.name, 'cs')
-        return nameSortState === 'asc' ? comparison : -comparison
-      })
-    else if (priceSortState !== 'none')
-      sorted.sort((a, b) => {
-        const comparison = a.totalPrice - b.totalPrice
-        return priceSortState === 'asc' ? comparison : -comparison
-      })
-
-    return sorted
-  }
 
   const getHiddenColumnsForView = (defaultColumns: string[] = []): string[] => [
     ...settings.defaultHiddenSpendingColumns,
@@ -114,10 +92,7 @@ export function useSpendingsViews() {
   ]
 
   // View definitions factory
-  const createViews = (
-    nameSortState: 'none' | 'asc' | 'desc',
-    priceSortState: 'none' | 'asc' | 'desc',
-  ): Record<SpendingListKey, SpendingList> => ({
+  const createViews = (): Record<SpendingListKey, SpendingList> => ({
     allInOne: {
       id: 'allInOne',
       label: t('table.allInOneTable'),
@@ -125,8 +100,7 @@ export function useSpendingsViews() {
       hiddenColumnKeys: getHiddenColumnsForView(),
       enableSorting: false,
       showFilter: false,
-      getSpendings: (_: string): Spending[] =>
-        getSortedSpendings(spendingsStore.spendings, nameSortState, priceSortState),
+      spendings: allSpendings.value,
     },
     // Show bySubCategories when a category is selected, otherwise byCategories
     byCategories: isCategorySelected.value
@@ -136,13 +110,8 @@ export function useSpendingsViews() {
           categories: spendingsStore.subCategories,
           hiddenColumnKeys: getHiddenColumnsForView(['subCategory']),
           enableSorting: true,
-          showFilter: true,
-          getSpendings: (subCategory: string): Spending[] =>
-            getSortedSpendings(
-              getSpendingsBySubCategory(subCategory),
-              nameSortState,
-              priceSortState,
-            ),
+          showFilter: false,
+          spendings: spendingsBySubCategory.value,
         }
       : {
           id: 'byCategories',
@@ -150,9 +119,8 @@ export function useSpendingsViews() {
           categories: spendingsStore.categories,
           hiddenColumnKeys: getHiddenColumnsForView(['category']),
           enableSorting: true,
-          showFilter: true,
-          getSpendings: (category: string): Spending[] =>
-            getSortedSpendings(getSpendingsByCategory(category), nameSortState, priceSortState),
+          showFilter: false,
+          spendings: spendingsByCategory.value,
         },
     byStores: {
       id: 'byStores',
@@ -160,9 +128,8 @@ export function useSpendingsViews() {
       categories: stores.value,
       hiddenColumnKeys: getHiddenColumnsForView(['store']),
       enableSorting: true,
-      showFilter: true,
-      getSpendings: (store: string): Spending[] =>
-        getSortedSpendings(getSpendingsByStore(store), nameSortState, priceSortState),
+      showFilter: false,
+      spendings: spendingsByStore.value,
     },
     byTags: {
       id: 'byTags',
@@ -170,9 +137,8 @@ export function useSpendingsViews() {
       categories: allTags.value,
       hiddenColumnKeys: getHiddenColumnsForView(),
       enableSorting: true,
-      showFilter: true,
-      getSpendings: (tag: string): Spending[] =>
-        getSortedSpendings(getSpendingsByTag(tag), nameSortState, priceSortState),
+      showFilter: false,
+      spendings: spendingsByTag.value,
     },
   })
 

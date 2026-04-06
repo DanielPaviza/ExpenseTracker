@@ -5,8 +5,8 @@
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
 
-  import CategoryActionContext from '@/components/header/components/CategoryActionContext.vue'
   import DonutChart from '@/components/header/components/DonutChart.vue'
+  import BulkEditActionContext from '@/components/shared/BulkEditActionContext.vue'
   import { BulkEdit } from '@/constants/bulkEdit'
 
   const actionContextMouseEvent = ref<MouseEvent | null>(null)
@@ -90,7 +90,7 @@
       <DonutChart :percent="percent" :color="color" />
     </div>
   </div>
-  <CategoryActionContext
+  <BulkEditActionContext
     v-if="canBeEdited"
     :mouse-event="actionContextMouseEvent"
     :on-edit="handleGotoEditCategory"

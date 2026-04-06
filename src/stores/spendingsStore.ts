@@ -138,7 +138,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
 
   function removeSpendingStore(store: string, acrossAllCategories: boolean): void {
     const toDelete = spendings.value.filter(
-      (s) => s.store === store && (acrossAllCategories || s.category === categoryView.value),
+      (s) =>
+        s.store === store &&
+        (categoryView.value === null || acrossAllCategories || s.category === categoryView.value),
     )
     for (const spending of toDelete) removeSpending(spending.id)
   }
@@ -148,11 +150,19 @@ export const useSpendingsStore = defineStore('spendings', () => {
     newStore: string,
     acrossAllCategories: boolean,
   ): void {
+    console.log(
+      `Renaming store from "${oldStore}" to "${newStore}" across all categories: ${acrossAllCategories}`,
+    )
     for (const spending of spendings.value)
       if (
         spending.store === oldStore &&
-        (acrossAllCategories || spending.category === categoryView.value)
+        (categoryView.value === null ||
+          acrossAllCategories ||
+          spending.category === categoryView.value)
       ) {
+        console.log(
+          `Updating spending "${spending.name}" (ID: ${spending.id}) with new store "${newStore}"`,
+        )
         const updatedSpending = { ...spending, store: newStore }
         updateSpending(spending.id, updatedSpending)
       }
@@ -161,7 +171,8 @@ export const useSpendingsStore = defineStore('spendings', () => {
   function removeSpendingSubCategory(subCategory: string, acrossAllCategories: boolean): void {
     const toDelete = spendings.value.filter(
       (s) =>
-        s.subCategory === subCategory && (acrossAllCategories || s.category === categoryView.value),
+        s.subCategory === subCategory &&
+        (categoryView.value === null || acrossAllCategories || s.category === categoryView.value),
     )
     for (const spending of toDelete) removeSpending(spending.id)
   }
@@ -174,7 +185,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
     for (const spending of spendings.value)
       if (
         spending.subCategory === oldSubCategory &&
-        (acrossAllCategories || spending.category === categoryView.value)
+        (categoryView.value === null ||
+          acrossAllCategories ||
+          spending.category === categoryView.value)
       ) {
         const updatedSpending = { ...spending, subCategory: newSubCategory }
         updateSpending(spending.id, updatedSpending)
@@ -186,7 +199,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
       if (
         spending.tags &&
         spending.tags.includes(tag) &&
-        (acrossAllCategories || spending.category === categoryView.value)
+        (categoryView.value === null ||
+          acrossAllCategories ||
+          spending.category === categoryView.value)
       ) {
         const updatedTags = spending.tags.filter((t) => t !== tag)
         const updatedSpending = { ...spending, tags: updatedTags }
@@ -199,7 +214,9 @@ export const useSpendingsStore = defineStore('spendings', () => {
       if (
         spending.tags &&
         spending.tags.includes(oldTag) &&
-        (acrossAllCategories || spending.category === categoryView.value)
+        (categoryView.value === null ||
+          acrossAllCategories ||
+          spending.category === categoryView.value)
       ) {
         const updatedTags = spending.tags.map((t) => (t === oldTag ? newTag : t))
         const updatedSpending = { ...spending, tags: updatedTags }

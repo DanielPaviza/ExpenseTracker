@@ -1,50 +1,32 @@
 <script setup lang="ts">
   import ButtonNavigation from '@components/shared/ButtonNavigation.vue'
   import DeletedSpendingsTable from '@components/spendingsList/DeletedSpendingsTable.vue'
-  import SpendingsCategoryTable from '@components/spendingsList/SpendingsCategoryTable.vue'
   import SpendingsDataTable from '@components/spendingsList/dataTable/SpendingsDataTable.vue'
-  import { NInput, NSelect } from 'naive-ui'
+  import { NSelect } from 'naive-ui'
 
   import { computed, ref, watch } from 'vue'
 
   import { useSpendingsColumns } from '@/composables/spending/useSpendingsColumns'
   import { useSpendingsViews } from '@/composables/spending/useSpendingsViews'
-  import { useViewSort } from '@/composables/useViewSort'
-  import router from '@/router'
-  import { useSpendingsStore } from '@/stores/spendingsStore'
+  import { DEFAULT_TABLE_GROUP_SORT } from '@/constants/defaultTableGroupSort'
   import { SpendingList, SpendingListKey } from '@/types/SpendingList'
+  import { SortState, SortType } from '@/types/TableGroupSort'
 
-  const spendingStore = useSpendingsStore()
+  import TableGroupSort from './TableGroupSort.vue'
+
   const { columns: allColumns } = useSpendingsColumns()
 
-  // Use new composables for views and sorting
-  const { nameSortState, priceSortState, toggleNameSort, togglePriceSort, getSortedCategories } =
-    useViewSort()
   const { createViews } = useSpendingsViews() // stores and allTags used internally
 
-  const VIEWS = computed<Record<SpendingListKey, SpendingList>>(() =>
-    createViews(nameSortState.value, priceSortState.value),
-  )
+  const VIEWS = computed<Record<SpendingListKey, SpendingList>>(() => createViews())
 
-  const defaultViewKey = 'allInOne' as SpendingListKey
-  const defaultView: SpendingList = VIEWS.value[defaultViewKey]
-  const currentViewKey = ref<SpendingListKey>(defaultViewKey)
+  const allInOneKey = 'allInOne' as SpendingListKey
+  const currentViewKey = ref<SpendingListKey>(allInOneKey)
   const currentView = computed<SpendingList>(() => VIEWS.value[currentViewKey.value])
+  const showGroupedData = computed(() => currentViewKey.value !== allInOneKey)
 
-  // Persistent per-view name filters
-  const nameFiltersByView = ref<Record<SpendingListKey, string>>({
-    allInOne: '',
-    byCategories: '',
-    byStores: '',
-    byTags: '',
-  })
-
-  const nameFilter = computed<string>({
-    get: () => nameFiltersByView.value[currentViewKey.value],
-    set: (value: string) => {
-      nameFiltersByView.value[currentViewKey.value] = value
-    },
-  })
+  const sortState = ref<SortState>(DEFAULT_TABLE_GROUP_SORT.sortState)
+  const sortType = ref<SortType>(DEFAULT_TABLE_GROUP_SORT.sortType)
 
   const hideColumnSelectHeaders = computed(() => {
     return allColumns.value.map((col) => ({
@@ -70,30 +52,6 @@
       ...(newView?.hiddenColumnKeys || []),
     ]
   }
-
-  const openSpendingBulkEdit = (value: string): void => {
-    const getPath = () => {
-      switch (currentViewKey.value) {
-        case 'byCategories':
-          return spendingStore.categoryView === null ? 'category' : 'subCategory'
-        case 'byStores':
-          return 'store'
-        case 'byTags':
-          return 'tag'
-      }
-    }
-
-    if (currentViewKey.value === 'allInOne') return
-    router.push(`/bulkEdit/${getPath()}/${encodeURIComponent(value)}`)
-  }
-
-  const filteredSortedCategories = computed(() => {
-    const filteredCategories = currentView.value.categories.filter((category) => {
-      const filterValue = nameFilter.value.toLowerCase()
-      return category.toLowerCase().includes(filterValue)
-    })
-    return getSortedCategories(filteredCategories, currentView.value)
-  })
 
   watch(
     currentView,
@@ -125,74 +83,25 @@
             clearable
           />
         </div>
-        <div v-if="currentView?.enableSorting">
-          <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
-            {{ $t('table.sorting') }}
-          </div>
-          <div class="flex gap-2">
-            <button
-              class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
-              :class="{
-                'border-blue bg-blue text-white': nameSortState !== 'none',
-                'border-gray-300 bg-white text-gray-700 hover:border-blue':
-                  nameSortState === 'none',
-              }"
-              @click="toggleNameSort"
-            >
-              ABC
-              <span v-if="nameSortState === 'asc'"> ↑</span>
-              <span v-if="nameSortState === 'desc'"> ↓</span>
-            </button>
-            <button
-              class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
-              :class="{
-                'border-blue bg-blue text-white': priceSortState !== 'none',
-                'border-gray-300 bg-white text-gray-700 hover:border-blue':
-                  priceSortState === 'none',
-              }"
-              @click="togglePriceSort"
-            >
-              {{ $t('table.price') }}
-              <span v-if="priceSortState === 'asc'"> ↑</span>
-              <span v-if="priceSortState === 'desc'"> ↓</span>
-            </button>
-          </div>
-        </div>
+        <TableGroupSort
+          v-if="currentView?.enableSorting"
+          v-on="{
+            'update:sortState': (value: SortState) => (sortState = value),
+            'update:sortType': (value: SortType) => (sortType = value),
+          }"
+        />
       </div>
     </div>
   </div>
 
-  <div v-if="currentView.categories?.length > 0" class="pb-10">
-    <div v-if="currentView.showFilter">
-      <label class="text-[14px] ms-1 font-semibold text-nowrap text-blue">
-        {{ $t('table.filterByName') }}
-      </label>
-      <n-input v-model:value="nameFilter" :placeholder="$t('table.filterPlaceholder')" clearable />
-    </div>
-    <SpendingsCategoryTable
-      v-for="category in filteredSortedCategories"
-      :key="category"
-      :category="category"
-      :spendings="currentView.getSpendings(category)"
-      :columns="columns"
-      :is-collapsed-default="currentView.id != defaultView.id"
-    >
-      <template #default="{ data, title, columns: cols, isCollapsedDefault: collapsed }">
-        <SpendingsDataTable
-          :data="data"
-          :columns="cols"
-          :title="title"
-          :is-collapsed-default="collapsed"
-          :can-open-settings="currentView.id !== defaultView.id"
-          @open-settings="openSpendingBulkEdit(title)"
-        />
-      </template>
-    </SpendingsCategoryTable>
-  </div>
-
-  <div v-else class="text-center text-blue py-8 text-xl">
-    {{ $t('common.noRecordsFound') }}
-  </div>
+  <SpendingsDataTable
+    :spendings="currentView?.spendings || []"
+    :show-grouped-data="showGroupedData"
+    :columns="columns"
+    :table-group-sort-state="sortState"
+    :table-group-sort-type="sortType"
+    :current-view-key="currentViewKey"
+  />
 
   <!-- Deleted Spendings Section -->
   <div class="my-8">

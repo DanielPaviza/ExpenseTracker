@@ -7,6 +7,6 @@ export type SpendingList = {
   hiddenColumnKeys: string[]
   enableSorting: boolean
   showFilter: boolean
-  getSpendings: (categoryOrStoreOrTag: string) => Spending[]
+  spendings: Spending[]
 }
 export type SpendingListKey = 'allInOne' | 'byCategories' | 'byStores' | 'byTags'
