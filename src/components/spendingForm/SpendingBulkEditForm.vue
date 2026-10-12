@@ -35,8 +35,10 @@
   const name = route.params.name as string
   const newName = ref<string>(name)
   const isNameEdited = computed(() => newName.value !== name)
+  const isNameEmpty = computed(() => newName.value.trim() === '')
+  const isNameValid = computed(() => props.canBeEmpty || !isNameEmpty.value)
 
-  const isNewNameValid = computed(() => newName.value.trim().length > 0)
+  const newDisplayName = computed(() => (isNameEmpty.value ? t('table.unknown') : newName.value))
 
   // Best-practice: single source of truth for scope choices
   const scopeChoices = computed(() => [
@@ -77,7 +79,7 @@
   }
 
   async function handleSave(): Promise<void> {
-    if (!isNewNameValid.value) {
+    if (!isNameValid.value) {
       message.warning(t('messages.nameCannotBeEmpty'))
       return
     }
@@ -132,12 +134,12 @@
           </template>
           <div class="flex flex-col w-full">
             <n-input v-model:value="newName" :placeholder="props.nameLabel" />
-            <div v-if="!isNewNameValid" class="text-sm text-red-500 mt-1 ms-1">
+            <div v-if="!isNameValid" class="text-sm text-red-500 mt-1 ms-1">
               {{ $t('messages.nameCannotBeEmpty') }}
             </div>
           </div>
         </n-form-item>
-        <div v-if="isNameEdited && isNewNameValid">
+        <div v-if="isNameEdited && isNameValid">
           <div class="text-lg font-semibold">{{ $t('common.rename') }}</div>
           <div
             class="text-lg flex justify-center items-center p-3 rounded bg-blue-50 text-blue-800 mt-1"
@@ -146,7 +148,7 @@
             <n-icon size="20" class="mx-3 mt-0.5">
               <ArrowForward />
             </n-icon>
-            <strong>{{ newName }}</strong>
+            <strong>{{ newDisplayName }}</strong>
           </div>
         </div>
       </n-form>
@@ -155,7 +157,7 @@
         <FormActions
           show-delete
           :save-text="t('form.saveChangesButton')"
-          :can-save="isNewNameValid"
+          :can-save="isNameValid"
           @save="handleSave"
           @delete="deleteDialog"
           @cancel="closeDrawer"

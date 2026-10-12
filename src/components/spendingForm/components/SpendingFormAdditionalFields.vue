@@ -7,24 +7,27 @@
 
   import type { Spending } from '@/types/Spending'
 
-  const { tableGroupOptions, tagOptions } = defineProps<{
-    tableGroupOptions: SelectOption[]
+  const {
+    //tableGroupOptions,
+    tagOptions,
+  } = defineProps<{
+    //tableGroupOptions: SelectOption[]
     tagOptions: SelectOption[]
   }>()
 
   const { t } = useI18n()
   const formData = defineModel<Spending>('formData', { required: true })
 
-  const handleSetTableGroup = (value: string | null): void => {
-    formData.value.tableGroup = value
-    // If the tags are empty, add the selected tableGroup as a tag
-    if (formData.value.tags.length <= 0 && value) formData.value.tags.push(value)
-  }
+  // const handleSetTableGroup = (value: string | null): void => {
+  //   formData.value.tableGroup = value
+  //   // If the tags are empty, add the selected tableGroup as a tag
+  //   if (formData.value.tags.length <= 0 && value) formData.value.tags.push(value)
+  // }
 </script>
 
 <template>
   <div class="flex-1">
-    <n-form-item path="tableGroup">
+    <!-- <n-form-item path="tableGroup">
       <template #label>
         <div class="flex items-center gap-1">
           {{ t('form.group') }}
@@ -41,7 +44,7 @@
         class="shadow"
         @update:value="handleSetTableGroup"
       />
-    </n-form-item>
+    </n-form-item> -->
 
     <n-form-item :label="t('form.tags')" path="tags">
       <n-select

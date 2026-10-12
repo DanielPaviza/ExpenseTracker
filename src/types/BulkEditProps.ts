@@ -1,6 +1,7 @@
 export interface BulkEditProps {
   name: string
   canSelectScope: boolean
+  canBeEmpty: boolean
   title: string
   nameLabel: string
   deleteDialogTitle: string

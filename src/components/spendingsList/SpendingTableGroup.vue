@@ -4,23 +4,52 @@
   import { NIcon } from 'naive-ui'
 
   import { computed, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
+  import { useRouter } from 'vue-router'
 
+  import BulkEditActionContext from '@/components/shared/BulkEditActionContext.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
   import { useSettingsStore } from '@/stores/settingsStore'
+  import { useSpendingsStore } from '@/stores/spendingsStore'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
   import { calculateTotalPrice } from '@/utils/tableUtils'
 
-  const { tableGroup, items, columns, isShownDefault } = defineProps<{
-    tableGroup: string
+  const { t } = useI18n()
+  const router = useRouter()
+  const spendingStore = useSpendingsStore()
+
+  const {
+    tableGroupName,
+    items,
+    columns,
+    isShownDefault,
+    showExpandedIfOneItemDefault,
+    currentViewKey,
+  } = defineProps<{
+    tableGroupName: string
     items: Spending[]
     columns: SpendingColumn[]
     isShownDefault?: boolean
+    showExpandedIfOneItemDefault?: boolean
+    currentViewKey: string
   }>()
+
+  const actionContextMouseEvent = ref<MouseEvent | null>(null)
+
+  // Fallback groups ("Unknown", "No tag") don't map to a real value that could be bulk edited
+  const canBeEdited = computed(
+    () =>
+      currentViewKey !== 'allInOne' &&
+      tableGroupName !== t('table.unknown') &&
+      tableGroupName !== t('table.noTag'),
+  )
 
   const settingsStore = useSettingsStore()
   const isExpanded = ref(
-    items.length <= 1 || isShownDefault || settingsStore.settings.tableGroupDefaultOpen,
+    (showExpandedIfOneItemDefault && items.length <= 1) ||
+      isShownDefault ||
+      settingsStore.settings.tableGroupDefaultOpen,
   )
 
   const totalPrice = computed(() => calculateTotalPrice(items))
@@ -28,6 +57,28 @@
   function toggleExpanded(event: Event): void {
     event.stopPropagation()
     isExpanded.value = !isExpanded.value
+  }
+
+  function handleContextMenu(event: MouseEvent): void {
+    if (!canBeEdited.value) return
+    event.preventDefault()
+    actionContextMouseEvent.value = event
+  }
+
+  const openSpendingBulkEdit = (): void => {
+    const getPath = () => {
+      switch (currentViewKey) {
+        case 'byCategories':
+          return spendingStore.categoryView === null ? 'category' : 'subCategory'
+        case 'byStores':
+          return 'store'
+        case 'byTags':
+          return 'tag'
+      }
+    }
+
+    if (!canBeEdited.value) return
+    router.push(`/bulkEdit/${getPath()}/${encodeURIComponent(tableGroupName)}`)
   }
 
   watch(
@@ -39,9 +90,15 @@
 </script>
 
 <template>
+  <BulkEditActionContext
+    v-if="canBeEdited"
+    :mouse-event="actionContextMouseEvent"
+    @edit="openSpendingBulkEdit"
+  />
   <tr
     class="bg-blue-50 hover:bg-blue-100 cursor-pointer border-b border-blue-200 px-4 py-2"
     @click="toggleExpanded"
+    @contextmenu="handleContextMenu"
   >
     <td class="py-2">
       <div class="flex items-center gap-2 ps-3">
@@ -52,7 +109,7 @@
         >
           <ChevronForwardOutline />
         </n-icon>
-        <span class="font-semibold text-blue-500">{{ tableGroup }}</span>
+        <span class="font-semibold text-blue-500">{{ tableGroupName }}</span>
         <span class="text-sm text-gray-600">({{ items.length }} {{ $t('table.items') }})</span>
       </div>
     </td>

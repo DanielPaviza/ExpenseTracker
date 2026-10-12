@@ -137,9 +137,8 @@ export const useSpendingsStore = defineStore('spendings', () => {
   }
 
   function removeSpendingStore(store: string, acrossAllCategories: boolean): void {
-    const toDelete = spendings.value.filter(
-      (s) => s.store === store && (acrossAllCategories || s.category === categoryView.value),
-    )
+    const spendingsInScope = acrossAllCategories ? spendings.value : spendingsInCategoryView.value
+    const toDelete = spendingsInScope.filter((s) => s.store === store)
     for (const spending of toDelete) removeSpending(spending.id)
   }
 
@@ -148,21 +147,17 @@ export const useSpendingsStore = defineStore('spendings', () => {
     newStore: string,
     acrossAllCategories: boolean,
   ): void {
-    for (const spending of spendings.value)
-      if (
-        spending.store === oldStore &&
-        (acrossAllCategories || spending.category === categoryView.value)
-      ) {
-        const updatedSpending = { ...spending, store: newStore }
-        updateSpending(spending.id, updatedSpending)
-      }
+    const spendingsInScope = acrossAllCategories ? spendings.value : spendingsInCategoryView.value
+    const toRename = spendingsInScope.filter((s) => s.store === oldStore)
+    for (const spending of toRename) {
+      const updatedSpending = { ...spending, store: newStore }
+      updateSpending(spending.id, updatedSpending)
+    }
   }
 
   function removeSpendingSubCategory(subCategory: string, acrossAllCategories: boolean): void {
-    const toDelete = spendings.value.filter(
-      (s) =>
-        s.subCategory === subCategory && (acrossAllCategories || s.category === categoryView.value),
-    )
+    const spendingsInScope = acrossAllCategories ? spendings.value : spendingsInCategoryView.value
+    const toDelete = spendingsInScope.filter((s) => s.subCategory === subCategory)
     for (const spending of toDelete) removeSpending(spending.id)
   }
 
@@ -171,40 +166,32 @@ export const useSpendingsStore = defineStore('spendings', () => {
     newSubCategory: string,
     acrossAllCategories: boolean,
   ): void {
-    for (const spending of spendings.value)
-      if (
-        spending.subCategory === oldSubCategory &&
-        (acrossAllCategories || spending.category === categoryView.value)
-      ) {
-        const updatedSpending = { ...spending, subCategory: newSubCategory }
-        updateSpending(spending.id, updatedSpending)
-      }
+    const spendingsInScope = acrossAllCategories ? spendings.value : spendingsInCategoryView.value
+    const toRename = spendingsInScope.filter((s) => s.subCategory === oldSubCategory)
+    for (const spending of toRename) {
+      const updatedSpending = { ...spending, subCategory: newSubCategory }
+      updateSpending(spending.id, updatedSpending)
+    }
   }
 
   function removeSpendingTag(tag: string, acrossAllCategories: boolean): void {
-    for (const spending of spendings.value)
-      if (
-        spending.tags &&
-        spending.tags.includes(tag) &&
-        (acrossAllCategories || spending.category === categoryView.value)
-      ) {
-        const updatedTags = spending.tags.filter((t) => t !== tag)
-        const updatedSpending = { ...spending, tags: updatedTags }
-        updateSpending(spending.id, updatedSpending)
-      }
+    const spendingsInScope = acrossAllCategories ? spendings.value : spendingsInCategoryView.value
+    const toDelete = spendingsInScope.filter((s) => s.tags && s.tags.includes(tag))
+    for (const spending of toDelete) {
+      const updatedTags = spending.tags.filter((t) => t !== tag)
+      const updatedSpending = { ...spending, tags: updatedTags }
+      updateSpending(spending.id, updatedSpending)
+    }
   }
 
   function renameSpendingTag(oldTag: string, newTag: string, acrossAllCategories: boolean): void {
-    for (const spending of spendings.value)
-      if (
-        spending.tags &&
-        spending.tags.includes(oldTag) &&
-        (acrossAllCategories || spending.category === categoryView.value)
-      ) {
-        const updatedTags = spending.tags.map((t) => (t === oldTag ? newTag : t))
-        const updatedSpending = { ...spending, tags: updatedTags }
-        updateSpending(spending.id, updatedSpending)
-      }
+    const spendingsInScope = acrossAllCategories ? spendings.value : spendingsInCategoryView.value
+    const toRename = spendingsInScope.filter((s) => s.tags && s.tags.includes(oldTag))
+    for (const spending of toRename) {
+      const updatedTags = spending.tags.map((t) => (t === oldTag ? newTag : t))
+      const updatedSpending = { ...spending, tags: updatedTags }
+      updateSpending(spending.id, updatedSpending)
+    }
   }
 
   function restoreSpending(id: string): void {
