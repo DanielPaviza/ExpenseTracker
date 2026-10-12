@@ -4,6 +4,7 @@
   import { NIcon } from 'naive-ui'
 
   import { computed, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
 
   import BulkEditActionContext from '@/components/shared/BulkEditActionContext.vue'
@@ -14,6 +15,7 @@
   import type { SpendingColumn } from '@/types/SpendingColumn'
   import { calculateTotalPrice } from '@/utils/tableUtils'
 
+  const { t } = useI18n()
   const router = useRouter()
   const spendingStore = useSpendingsStore()
 
@@ -35,6 +37,14 @@
 
   const actionContextMouseEvent = ref<MouseEvent | null>(null)
 
+  // Fallback groups ("Unknown", "No tag") don't map to a real value that could be bulk edited
+  const canBeEdited = computed(
+    () =>
+      currentViewKey !== 'allInOne' &&
+      tableGroupName !== t('table.unknown') &&
+      tableGroupName !== t('table.noTag'),
+  )
+
   const settingsStore = useSettingsStore()
   const isExpanded = ref(
     (showExpandedIfOneItemDefault && items.length <= 1) ||
@@ -50,6 +60,7 @@
   }
 
   function handleContextMenu(event: MouseEvent): void {
+    if (!canBeEdited.value) return
     event.preventDefault()
     actionContextMouseEvent.value = event
   }
@@ -66,7 +77,7 @@
       }
     }
 
-    if (currentViewKey === 'allInOne') return
+    if (!canBeEdited.value) return
     router.push(`/bulkEdit/${getPath()}/${encodeURIComponent(tableGroupName)}`)
   }
 
@@ -79,7 +90,11 @@
 </script>
 
 <template>
-  <BulkEditActionContext :mouse-event="actionContextMouseEvent" @edit="openSpendingBulkEdit" />
+  <BulkEditActionContext
+    v-if="canBeEdited"
+    :mouse-event="actionContextMouseEvent"
+    @edit="openSpendingBulkEdit"
+  />
   <tr
     class="bg-blue-50 hover:bg-blue-100 cursor-pointer border-b border-blue-200 px-4 py-2"
     @click="toggleExpanded"

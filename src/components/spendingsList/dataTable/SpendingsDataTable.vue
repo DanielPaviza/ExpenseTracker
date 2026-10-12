@@ -50,8 +50,12 @@
     () => tableGroupSortType,
   )
 
-  const totalCountSpendings = computed(() => filteredData.value.length)
-  const totalPrice = computed(() => calculateTotalPrice(filteredData.value))
+  // Views like byTags duplicate a spending into multiple groups - count each spending once
+  const uniqueFilteredSpendings = computed(() => [
+    ...new Map(filteredData.value.map((s) => [s.id, s])).values(),
+  ])
+  const totalCountSpendings = computed(() => uniqueFilteredSpendings.value.length)
+  const totalPrice = computed(() => calculateTotalPrice(uniqueFilteredSpendings.value))
 
   function updateFilter(key: string, value: string): void {
     columnFilters.value[key] = value

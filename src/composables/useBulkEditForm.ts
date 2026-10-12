@@ -37,6 +37,7 @@ export function useBulkEditForm() {
     return {
       name: name,
       canSelectScope: false,
+      canBeEmpty: false,
       title: t('spendingBulkEditForm.categoryTitle'),
       nameLabel: t('spendingBulkEditForm.categoryName'),
       deleteDialogTitle: t('dialogs.deleteCategoryTitle'),
@@ -59,6 +60,7 @@ export function useBulkEditForm() {
     return {
       name: name,
       canSelectScope: !!categoryView,
+      canBeEmpty: true,
       title: t('spendingBulkEditForm.subCategoryTitle'),
       nameLabel: t('spendingBulkEditForm.subCategoryName'),
       deleteDialogTitle: t('dialogs.deleteSubCategoryTitle'),
@@ -78,6 +80,7 @@ export function useBulkEditForm() {
     return {
       name: name,
       canSelectScope: !!categoryView,
+      canBeEmpty: true,
       title: t('spendingBulkEditForm.storeTitle'),
       nameLabel: t('spendingBulkEditForm.storeName'),
       deleteDialogTitle: t('dialogs.deleteStoreTitle'),
@@ -97,6 +100,7 @@ export function useBulkEditForm() {
     return {
       name: name,
       canSelectScope: !!categoryView,
+      canBeEmpty: false,
       title: t('spendingBulkEditForm.tagTitle'),
       nameLabel: t('spendingBulkEditForm.tagName'),
       deleteDialogTitle: t('dialogs.deleteTagTitle'),

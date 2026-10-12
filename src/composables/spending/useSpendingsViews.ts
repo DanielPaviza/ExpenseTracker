@@ -30,11 +30,11 @@ export function useSpendingsViews() {
     return [...tagSet].sort()
   })
 
-  const allSpendings = computed(() =>
-    spendingsStore.spendings.map((s: Spending) => {
-      s.tableGroup = ''
-      return s
-    }),
+  const allSpendings = computed<Spending[]>(() =>
+    spendingsStore.spendings.map((s: Spending) => ({
+      ...s,
+      tableGroup: '',
+    })),
   )
 
   const spendingsByCategory = computed<Spending[]>(() => {
