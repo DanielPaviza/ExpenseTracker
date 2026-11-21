@@ -34,7 +34,7 @@
     showAll,
   } = useItemsLimit(sortedStats)
 
-  const { chartLabels, chartDatasets } = useSummaryChart({
+  const { chartLabels, chartDatasets, colors } = useSummaryChart({
     stats: sortedStats,
     sortBy,
     labelKey: 'summary.expensesByCategories',
@@ -59,11 +59,16 @@
   >
     <SortButtons v-model="sortBy" :options="sortOptions" />
 
-    <StatItem v-for="category in displayedCategories" :key="category.name" :stat="category" />
+    <StatItem
+      v-for="(category, idx) in displayedCategories"
+      :key="category.name"
+      :stat="category"
+      :color="colors[idx]"
+    />
 
     <div
       v-if="hasMore"
-      class="mt-1 text-blueLight text-xs cursor-pointer"
+      class="mt-1 text-primary text-xs font-medium cursor-pointer hover:underline"
       @click="showAll = !showAll"
     >
       {{ toggleText }}

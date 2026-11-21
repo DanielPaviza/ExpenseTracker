@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Tooltip from '@components/shared/Tooltip.vue'
+  import { NTooltip } from 'naive-ui'
 
   import { useI18n } from 'vue-i18n'
 
@@ -11,34 +11,23 @@
 
 <template>
   <div v-if="status" class="status-indicator">
-    <Tooltip
-      :text="status === 'new' ? t('table.newPurchase') : t('table.editedPurchase')"
-      :color="status === 'new' ? 'var(--color-green-500)' : 'var(--color-orange-400)'"
-    >
-      <div
-        class="status-dot"
-        :class="{
-          'bg-green-500': status === 'new',
-          'bg-orange-400': status === 'edited',
-        }"
-      />
-    </Tooltip>
+    <n-tooltip>
+      <template #trigger>
+        <span
+          class="block size-2.5 rounded-full ring-3 ring-surface"
+          :class="status === 'new' ? 'bg-success' : 'bg-warning'"
+        />
+      </template>
+      {{ status === 'new' ? t('table.newPurchase') : t('table.editedPurchase') }}
+    </n-tooltip>
   </div>
 </template>
 
 <style scoped>
   .status-indicator {
     position: absolute;
-    right: 50px;
+    right: 56px;
     top: 50%;
     transform: translateY(-50%);
-    pointer-events: auto;
-  }
-
-  .status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 </style>

@@ -62,33 +62,28 @@
   )
 </script>
 <template>
-  <div>
-    <h2 class="font-bold text-2xl text-blue mb-2">
-      {{ $t('table.viewTitle') }}
-    </h2>
-
-    <div class="flex items-end justify-between mb-4">
-      <ButtonNavigation v-model:selected-id="currentViewKey" :buttons="Object.values(VIEWS)" />
-      <div class="flex items-end gap-2">
-        <div class="">
-          <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
-            {{ $t('table.hiddenColumns') }}
-          </div>
-          <n-select
-            v-model:value="hiddenColumnKeys"
-            class="min-w-[140px] hideColumnsSelect"
-            :placeholder="$t('table.hiddenPlaceholder')"
-            multiple
-            :options="hideColumnSelectHeaders"
-            clearable
-          />
+  <div class="mb-4 flex flex-wrap items-end justify-between gap-4">
+    <ButtonNavigation v-model:selected-id="currentViewKey" :buttons="Object.values(VIEWS)" />
+    <div class="flex flex-wrap items-end gap-3">
+      <TableGroupSort
+        v-if="currentView?.enableSorting"
+        v-on="{
+          'update:sortState': (value: SortState) => (sortState = value),
+          'update:sortType': (value: SortType) => (sortType = value),
+        }"
+      />
+      <div>
+        <div class="mb-1 ms-1 text-xs font-medium text-fg-muted">
+          {{ $t('table.hiddenColumns') }}
         </div>
-        <TableGroupSort
-          v-if="currentView?.enableSorting"
-          v-on="{
-            'update:sortState': (value: SortState) => (sortState = value),
-            'update:sortType': (value: SortType) => (sortType = value),
-          }"
+        <n-select
+          v-model:value="hiddenColumnKeys"
+          class="hideColumnsSelect min-w-[220px] max-w-[520px]"
+          :placeholder="$t('table.hiddenPlaceholder')"
+          multiple
+          max-tag-count="responsive"
+          :options="hideColumnSelectHeaders"
+          clearable
         />
       </div>
     </div>
@@ -104,13 +99,7 @@
   />
 
   <!-- Deleted Spendings Section -->
-  <div class="my-8">
+  <div class="mt-8">
     <DeletedSpendingsTable />
   </div>
 </template>
-<style scoped>
-  :deep(.hideColumnsSelect .n-base-selection > div) {
-    padding-top: 6px;
-    padding-bottom: 4px;
-  }
-</style>

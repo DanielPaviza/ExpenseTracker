@@ -1,77 +1,37 @@
 <script setup lang="ts">
   import { NSkeleton } from 'naive-ui'
-
-  import MarginContainer from '@/components/shared/MarginContainer.vue'
 </script>
+
 <template>
-  <div class="flex items-center flex-col h-screen overflow-hidden">
-    <div
-      class="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-blue"
-    >
-      {{ $t('common.loadingData') }}
-    </div>
-    <header class="border-b-2 py-4 border-blue bg-whiteTransparent backdrop-blur-md w-screen">
-      <MarginContainer>
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <h1 class="text-4xl font-extrabold tracking-tight text-blue me-5">
-              {{ $t('appTitle') }}
-            </h1>
-          </div>
-          <div class="flex items-center">
-            <n-skeleton width="100px" text class="me-2" />
-            <n-skeleton width="100px" text class="me-4" />
-            <n-skeleton width="50px" height="36px" :sharp="false" />
-          </div>
+  <div class="flex h-screen overflow-hidden bg-app">
+    <aside class="flex w-64 shrink-0 flex-col gap-4 border-r border-line bg-surface p-5">
+      <div class="flex items-center gap-3">
+        <n-skeleton :width="36" :height="36" :sharp="false" />
+        <n-skeleton text width="60%" />
+      </div>
+      <n-skeleton height="40px" :sharp="false" />
+      <n-skeleton v-for="i in 2" :key="i" height="34px" :sharp="false" />
+    </aside>
+    <div class="flex flex-1 flex-col">
+      <div class="flex h-16 items-center justify-between border-b border-line bg-surface px-10">
+        <n-skeleton width="260px" height="40px" :sharp="false" />
+        <n-skeleton width="160px" height="32px" :sharp="false" />
+      </div>
+      <div class="flex flex-col gap-6 px-10 py-6">
+        <n-skeleton width="240px" height="28px" :sharp="false" />
+        <div class="grid grid-cols-4 gap-5">
+          <n-skeleton v-for="i in 4" :key="i" height="112px" :sharp="false" />
         </div>
-        <n-skeleton width="100%" height="50px" :sharp="false" class="mt-4" />
-      </MarginContainer>
-    </header>
-
-    <div class="w-full mt-10">
-      <MarginContainer class="flex flex-col">
-        <div class="flex gap-px justify-center">
-          <n-skeleton width="205px" height="38px" :sharp="false" />
-          <n-skeleton width="205px" height="38px" :sharp="false" />
-          <n-skeleton width="205px" height="38px" :sharp="false" />
-          <n-skeleton width="205px" height="38px" :sharp="false" />
+        <div class="grid grid-cols-2 gap-5">
+          <n-skeleton height="380px" :sharp="false" />
+          <n-skeleton height="380px" :sharp="false" />
         </div>
-        <div class="flex mt-4 gap-4">
-          <n-skeleton width="50%" height="500px" :sharp="false" />
-          <n-skeleton width="50%" height="500px" :sharp="false" />
+      </div>
+      <div class="pointer-events-none fixed inset-0 flex items-center justify-center">
+        <div class="card px-5 py-3 text-sm font-medium text-fg-muted">
+          {{ $t('common.loadingData') }}
         </div>
-        <hr class="mt-8 mb-6 border-blueLight/40" />
-
-        <div>
-          <n-skeleton width="300px" text class="mt-2" />
-          <div class="flex items-center justify-between">
-            <div class="flex gap-px mt-8">
-              <n-skeleton width="205px" height="38px" :sharp="false" />
-              <n-skeleton width="205px" height="38px" :sharp="false" />
-              <n-skeleton width="205px" height="38px" :sharp="false" />
-              <n-skeleton width="205px" height="38px" :sharp="false" />
-            </div>
-            <div>
-              <n-skeleton width="100px" text class="ms-2" />
-              <n-skeleton width="150px" height="44px" :sharp="false" />
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-8">
-          <div class="flex items-center">
-            <n-skeleton width="32px" height="32px" :sharp="false" class="me-2" />
-            <n-skeleton width="160px" text class="me-2" />
-            <n-skeleton width="120px" text />
-          </div>
-          <n-skeleton width="100%" height="62px" :sharp="false" class="mt-2" />
-        </div>
-      </MarginContainer>
+      </div>
     </div>
   </div>
 </template>
-<style scoped>
-  :deep(.n-spin) {
-    color: #3b82f6;
-  }
-</style>

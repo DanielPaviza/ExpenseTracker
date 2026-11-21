@@ -34,15 +34,13 @@
   })
 
   const chartLabels = computed(() => payerStats.value.map((p) => `${p.name} (${p.percent}%)`))
+  const payerColors = computed(() => generateColorPalette(payerStats.value.length))
+
   const chartDatasets = computed(() => [
     {
       label: t('summary.expensesByPayers'),
       data: payerStats.value.map((p) => p.price),
-      backgroundColor: generateColorPalette(payerStats.value.length, [
-        '#06402b',
-        '#ff9eaf',
-        '#ff4551',
-      ]),
+      backgroundColor: payerColors.value,
     },
   ])
 </script>
@@ -56,29 +54,36 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div v-for="payer in displayedPayers" :key="payer.name" class="flex items-start gap-2 mb-1">
-      <div class="font-bold min-w-20 w-full text-blue truncate" :title="payer.name">
-        {{ payer.name }}:
-      </div>
-      <div>
-        <div class="flex items-center gap-2">
-          <div class="font-semibold whitespace-nowrap">
+    <div v-for="(payer, idx) in displayedPayers" :key="payer.name" class="py-1.5">
+      <div class="flex items-baseline justify-between gap-4">
+        <div class="flex min-w-0 items-center gap-2">
+          <span
+            class="size-2 shrink-0 rounded-full"
+            :style="{ backgroundColor: payerColors[idx] }"
+          />
+          <span class="truncate font-medium text-fg" :title="payer.name">{{ payer.name }}</span>
+        </div>
+        <div class="flex shrink-0 items-baseline gap-2">
+          <span class="text-xs text-fg-subtle tabular-nums">{{ payer.percent }}%</span>
+          <span class="font-semibold whitespace-nowrap tabular-nums">
             {{ formatCurrency(payer.price) }}
-          </div>
-          <div class="text-blue text-sm text-muted-foreground">({{ payer.percent }}%)</div>
+          </span>
         </div>
+      </div>
+      <div class="mt-1.5 h-1 overflow-hidden rounded-full bg-surface-3">
         <div
-          v-if="payer.unpaid > 0"
-          class="flex justify-end text-blue text-sm text-muted-foreground"
-        >
-          {{ formatCurrency(payer.unpaid) }} {{ $t('summary.unpaid') }}
-        </div>
+          class="h-full rounded-full"
+          :style="{ width: `${Math.max(payer.percent, 1)}%`, backgroundColor: payerColors[idx] }"
+        />
+      </div>
+      <div v-if="payer.unpaid > 0" class="mt-1 text-right text-xs text-warning">
+        + {{ formatCurrency(payer.unpaid) }} {{ $t('summary.unpaid') }}
       </div>
     </div>
 
     <div
       v-if="payerStats.length > MAX_DISPLAYED_ITEMS"
-      class="mt-1 text-blueLight text-xs cursor-pointer"
+      class="mt-1 text-primary text-xs font-medium cursor-pointer hover:underline"
       @click="showAll = !showAll"
     >
       {{
@@ -88,10 +93,9 @@
       }}
     </div>
 
-    <hr class="my-2 text-blue" />
-    <div class="text-lg flex justify-between">
-      <span class="font-bold text-blue">{{ $t('summary.total') }}:</span>
-      <span class="font-semibold">{{ formatCurrency(totalPrice) }}</span>
+    <div class="mt-3 flex justify-between border-t border-line pt-3 text-base">
+      <span class="font-medium text-fg-muted">{{ $t('summary.total') }}</span>
+      <span class="font-semibold tabular-nums">{{ formatCurrency(totalPrice) }}</span>
     </div>
   </SummaryCard>
 </template>

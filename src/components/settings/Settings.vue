@@ -1,22 +1,29 @@
 <script setup lang="ts">
   import { useSettingsStore } from '@stores/settingsStore'
   import { useMessage } from 'naive-ui'
-  import { NDrawer, NDrawerContent, NForm, NFormItem, NSelect } from 'naive-ui'
+  import {
+    NDrawer,
+    NDrawerContent,
+    NForm,
+    NFormItem,
+    NRadioButton,
+    NRadioGroup,
+    NSelect,
+  } from 'naive-ui'
 
   import { computed, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { useRouter } from 'vue-router'
 
   import FormActions from '@/components/shared/FormActions.vue'
   import SelectBool from '@/components/shared/SelectBool.vue'
   import SelectTextNull from '@/components/shared/SelectTextNull.vue'
   import tooltip from '@/components/shared/Tooltip.vue'
   import { useSpendingsColumns } from '@/composables/spending/useSpendingsColumns'
+  import { useAppNavigation } from '@/composables/useAppNavigation'
   import { useSettingsFormValidation } from '@/composables/useSettingsFormValidation'
   import { CURRENCY_SYMBOL_PRESETS } from '@/constants/currency'
   import { DEFAULT_SETTINGS } from '@/constants/defaultSettings'
   import { LANGUAGES } from '@/constants/languages'
-  import { SUMMARY_CARDS } from '@/constants/summaryCards'
   import { useSpendingsStore } from '@/stores/spendingsStore'
   import { Settings } from '@/types/Settings'
 
@@ -26,7 +33,7 @@
   const { categories } = useSpendingsStore()
   const tempSettings = ref<Settings>({ ...settings })
 
-  const router = useRouter()
+  const { closeOverlay } = useAppNavigation()
   const message = useMessage()
   const { rules } = useSettingsFormValidation()
 
@@ -34,7 +41,7 @@
   onMounted(() => (isOpen.value = true))
 
   function closeDrawer(): void {
-    router.push('/')
+    closeOverlay()
   }
 
   const handleSave = async (): Promise<void> => {
@@ -55,11 +62,10 @@
 </script>
 
 <template>
-  <n-drawer :show="isOpen" width="40%" placement="right" @update:show="closeDrawer">
-    <div class="backdrop-blur fixed left-0 w-screen h-screen -z-10 opacity-100"></div>
-    <n-drawer-content closable class="p-4 z-50">
+  <n-drawer :show="isOpen" width="min(560px, 94vw)" placement="right" @update:show="closeDrawer">
+    <n-drawer-content closable>
       <template #header>
-        <div class="text-2xl font-bold text-blue">{{ t('settings.title') }}</div>
+        <div class="text-xl font-semibold text-fg">{{ t('settings.title') }}</div>
       </template>
       <n-form
         ref="formRef"
@@ -68,6 +74,14 @@
         label-placement="top"
         require-mark-placement="right-hanging"
       >
+        <n-form-item :label="t('settings.theme')" path="theme">
+          <n-radio-group v-model:value="tempSettings.theme" class="w-full">
+            <n-radio-button value="light">{{ t('settings.themeLight') }}</n-radio-button>
+            <n-radio-button value="dark">{{ t('settings.themeDark') }}</n-radio-button>
+            <n-radio-button value="system">{{ t('settings.themeSystem') }}</n-radio-button>
+          </n-radio-group>
+        </n-form-item>
+
         <n-form-item :label="t('settings.language')" path="languageCode">
           <n-select
             v-model:value="tempSettings.languageCode"
@@ -86,34 +100,32 @@
 
         <n-form-item class="flex items-center">
           <template #label>
-            <div class="flex items-center">
+            <div class="flex items-center gap-2">
               <span>{{ t('settings.tableGroupDefaultState') }}</span>
-              <div class="ms-2">
-                <tooltip :text="t('settings.tableGroupDefaultStateTooltip')" />
-              </div>
+              <tooltip :text="t('settings.tableGroupDefaultStateTooltip')" small />
             </div>
           </template>
           <SelectBool v-model:value="tempSettings.tableGroupDefaultOpen" />
         </n-form-item>
 
-        <n-form-item path="defaultSummaryCard">
+        <n-form-item path="startPage">
           <template #label>
-            <div class="flex items-center">
-              <span>{{ t('settings.summaryCardDefault') }}</span>
-              <div class="ms-2"><tooltip :text="t('settings.summaryCardDefaultTooltip')" /></div>
+            <div class="flex items-center gap-2">
+              <span>{{ t('settings.startPage') }}</span>
+              <tooltip :text="t('settings.startPageTooltip')" small />
             </div>
           </template>
-          <n-select
-            v-model:value="tempSettings.defaultSummaryCard"
-            :options="SUMMARY_CARDS.map((card) => ({ label: t(card.title), value: card.id }))"
-          />
+          <n-radio-group v-model:value="tempSettings.startPage" class="w-full">
+            <n-radio-button value="dashboard">{{ t('nav.dashboard') }}</n-radio-button>
+            <n-radio-button value="spendings">{{ t('nav.spendings') }}</n-radio-button>
+          </n-radio-group>
         </n-form-item>
 
         <n-form-item path="defaultCategoryView">
           <template #label>
-            <div class="flex items-center">
+            <div class="flex items-center gap-2">
               <span>{{ t('settings.categoryViewDefault') }}</span>
-              <div class="ms-2"><tooltip :text="t('settings.categoryViewDefaultTooltip')" /></div>
+              <tooltip :text="t('settings.categoryViewDefaultTooltip')" small />
             </div>
           </template>
           <SelectTextNull
@@ -125,11 +137,9 @@
 
         <n-form-item path="defaultHiddenSpendingColumns">
           <template #label>
-            <div class="flex items-center">
+            <div class="flex items-center gap-2">
               <span>{{ t('settings.hiddenSpendingColumnsDefault') }}</span>
-              <div class="ms-2">
-                <tooltip :text="t('settings.hiddenSpendingColumnsDefaultTooltip')" />
-              </div>
+              <tooltip :text="t('settings.hiddenSpendingColumnsDefaultTooltip')" small />
             </div>
           </template>
           <div class="flex flex-col w-full">
@@ -143,7 +153,7 @@
               clearable
               :status="isDefaultHiddenColumnsValid ? 'success' : 'error'"
             />
-            <div v-if="!isDefaultHiddenColumnsValid" class="text-red-500 text-sm mt-1">
+            <div v-if="!isDefaultHiddenColumnsValid" class="text-danger text-sm mt-1">
               {{ t('settings.hiddenSpendingColumnsValidation') }}
             </div>
           </div>
@@ -163,16 +173,3 @@
     </n-drawer-content>
   </n-drawer>
 </template>
-<style scoped>
-  :deep(.n-base-close.n-base-close--absolute.n-drawer-header__close) {
-    color: #c04141;
-    font-size: larger;
-    padding: 10px;
-  }
-  :deep(.n-base-clear__clear) {
-    color: #c62828 !important;
-  }
-  :deep(.n-base-clear__clear:hover) {
-    color: red !important;
-  }
-</style>

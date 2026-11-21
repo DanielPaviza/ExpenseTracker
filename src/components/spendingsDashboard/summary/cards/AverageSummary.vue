@@ -63,7 +63,7 @@
     {
       label: t('summary.averageExpenses'),
       data: [averagePerDay.value, averagePerWeek.value, averagePerMonth.value],
-      backgroundColor: ['#ef4444', '#f97316', '#eab308'],
+      backgroundColor: ['#93c5fd', '#3b82f6', '#1d4ed8'],
     },
   ])
 </script>
@@ -77,28 +77,28 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div class="w-100 space-y-2">
-      <div class="flex justify-between">
-        <div class="font-bold text-blue">{{ $t('summary.avgDaily') }}:</div>
-        <div class="font-semibold">
+    <div class="w-full">
+      <div class="flex justify-between gap-4 border-b border-line py-2.5 whitespace-nowrap">
+        <div class="font-medium text-fg-muted">{{ $t('summary.avgDaily') }}</div>
+        <div class="text-base font-semibold tabular-nums">
           {{ formatCurrency(averagePerDay) }}
         </div>
       </div>
-      <div class="flex justify-between">
-        <div class="font-bold text-blue">{{ $t('summary.avgWeekly') }}:</div>
-        <div class="font-semibold">
+      <div class="flex justify-between gap-4 border-b border-line py-2.5 whitespace-nowrap">
+        <div class="font-medium text-fg-muted">{{ $t('summary.avgWeekly') }}</div>
+        <div class="text-base font-semibold tabular-nums">
           {{ formatCurrency(averagePerWeek) }}
         </div>
       </div>
-      <div class="flex justify-between">
-        <div class="font-bold text-blue">{{ $t('summary.avgMonthly') }}:</div>
-        <div class="font-semibold">
+      <div class="flex justify-between gap-4 border-b border-line py-2.5 whitespace-nowrap">
+        <div class="font-medium text-fg-muted">{{ $t('summary.avgMonthly') }}</div>
+        <div class="text-base font-semibold tabular-nums">
           {{ formatCurrency(averagePerMonth) }}
         </div>
       </div>
     </div>
     <template #footer>
-      <div class="text-sm text-gray-500">
+      <div class="text-xs text-fg-muted">
         {{ $t('summary.totalFor') }}
         <span class="font-bold">{{ dateStats.totalDays }}</span> {{ $t('summary.days') }},
         <span class="font-bold">{{ dateStats.totalWeeks }}</span> {{ $t('summary.weeks') }},

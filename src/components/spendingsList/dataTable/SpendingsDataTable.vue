@@ -63,58 +63,48 @@
 </script>
 
 <template>
-  <table class="border-collapse w-full">
-    <TableHeader
-      :columns="columns"
-      :sort-state="spendingSortState"
-      @update:sort="updateSpendingSort"
-    />
+  <div class="card overflow-clip">
+    <table class="w-full border-separate border-spacing-0">
+      <TableHeader
+        :columns="columns"
+        :sort-state="spendingSortState"
+        @update:sort="updateSpendingSort"
+      />
 
-    <TableFilterRow
-      :columns="columns"
-      :column-filters="columnFilters"
-      :column-filter-options="columnFilterOptions"
-      @update:filter="updateFilter"
-    />
+      <TableFilterRow
+        :columns="columns"
+        :column-filters="columnFilters"
+        :column-filter-options="columnFilterOptions"
+        @update:filter="updateFilter"
+      />
 
-    <tbody>
-      <template v-if="!showGroupedData">
-        <TableRow
-          v-for="(sortedItem, index) in sortedSpendings"
-          :key="`sorted-${index}`"
-          :row="sortedItem"
-          :row-index="index"
-          :columns="columns"
-        />
-      </template>
-      <template v-else>
-        <template v-for="group in groupedData" :key="`group-${group.tableGroup}`">
-          <SpendingTableGroup
-            :table-group-name="group.tableGroup"
-            :items="group.items"
+      <tbody>
+        <template v-if="!showGroupedData">
+          <TableRow
+            v-for="(sortedItem, index) in sortedSpendings"
+            :key="`sorted-${index}`"
+            :row="sortedItem"
+            :row-index="index"
             :columns="columns"
-            :current-view-key="currentViewKey"
           />
         </template>
-      </template>
-    </tbody>
+        <template v-else>
+          <template v-for="group in groupedData" :key="`group-${group.tableGroup}`">
+            <SpendingTableGroup
+              :table-group-name="group.tableGroup"
+              :items="group.items"
+              :columns="columns"
+              :current-view-key="currentViewKey"
+            />
+          </template>
+        </template>
+      </tbody>
 
-    <TableFooter
-      :total-count="totalCountSpendings"
-      :total-price="totalPrice"
-      :column-count="columns.length"
-    />
-  </table>
+      <TableFooter
+        :total-count="totalCountSpendings"
+        :total-price="totalPrice"
+        :column-count="columns.length"
+      />
+    </table>
+  </div>
 </template>
-
-<style scoped>
-  table {
-    box-shadow:
-      0 4px 6px -1px rgba(59, 130, 246, 0.1),
-      0 2px 4px -1px rgba(59, 130, 246, 0.06);
-  }
-
-  :deep(.hideColumnsSelect .n-base-selection) {
-    border: 1px solid rgba(59, 130, 246, 0.4);
-  }
-</style>

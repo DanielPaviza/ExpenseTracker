@@ -35,7 +35,10 @@
 </script>
 <template>
   <button
-    class="sortIndicator text-primary inline-flex items-center justify-center ml-1 cursor-pointer select-none bg-transparent border-0 p-0.5 focus:outline-none hover:text-white transition-colors"
+    class="sortIndicator inline-flex cursor-pointer items-center justify-center rounded border-0 bg-transparent p-0.5 transition-colors select-none focus:outline-none"
+    :class="
+      active && direction ? 'text-primary' : 'text-fg-subtle opacity-0 group-hover:opacity-100'
+    "
     :aria-pressed="active ? 'true' : 'false'"
     :title="
       direction === 'asc'
@@ -47,12 +50,8 @@
     tabindex="0"
     @click.stop="toggleSort"
   >
-    <svg
-      :class="['w-6 h-6 ', direction === 'asc' || direction === 'desc' ? 'text-white' : '']"
-      fill="none"
-      viewBox="0 0 16 16"
-    >
-      <g stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="size-4" fill="none" viewBox="0 0 16 16">
+      <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline v-for="(line, i) in iconData" :key="i" :points="line.points" />
       </g>
     </svg>

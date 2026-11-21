@@ -53,4 +53,4 @@ app.use(pinia)
 app.mount('#app')
 
 // Set window title with TEST suffix in dev mode
-if (import.meta.env.DEV) document.title = 'expenseTracker TEST'
+if (import.meta.env.DEV) document.title = 'Expense Tracker · TEST'

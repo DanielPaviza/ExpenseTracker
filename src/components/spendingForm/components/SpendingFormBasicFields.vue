@@ -11,6 +11,7 @@
   import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
 
+  import { formatCurrency } from '@/composables/useCurrencyFormat'
   import type { Spending } from '@/types/Spending'
 
   const { categoryOptions, subCategoryOptions, payerOptions, storeOptions } = defineProps<{
@@ -46,7 +47,6 @@
         :placeholder="t('form.selectCategory')"
         filterable
         tag
-        class="shadow"
       />
     </n-form-item>
 
@@ -57,16 +57,15 @@
         filterable
         tag
         placeholder=""
-        class="shadow"
       />
     </n-form-item>
 
     <n-form-item :label="t('form.type')" path="type">
-      <n-input v-model:value="formData.type" placeholder="" class="shadow" />
+      <n-input v-model:value="formData.type" placeholder="" />
     </n-form-item>
 
     <n-form-item :label="t('form.name')" path="name">
-      <n-input v-model:value="formData.name" placeholder="" class="shadow" />
+      <n-input v-model:value="formData.name" placeholder="" />
     </n-form-item>
 
     <n-form-item :label="t('form.creationDate')" path="createdAt">
@@ -74,7 +73,7 @@
         v-model:value="createdAtTimestamp"
         type="datetime"
         placeholder=""
-        class="w-full shadow"
+        class="w-full"
         format="dd.MM.yyyy HH:mm"
       />
     </n-form-item>
@@ -86,7 +85,6 @@
         placeholder=""
         filterable
         tag
-        class="shadow"
       />
     </n-form-item>
 
@@ -98,7 +96,6 @@
         filterable
         tag
         clearable
-        class="shadow"
       />
     </n-form-item>
 
@@ -108,7 +105,7 @@
           v-model:value="formData.quantity"
           :min="0"
           :step="1"
-          class="w-full shadow"
+          class="w-full"
           placeholder="1"
         />
       </n-form-item>
@@ -120,15 +117,18 @@
           :step="100"
           placeholder="0"
           :show-button="false"
-          class="w-full shadow"
+          class="w-full"
         />
       </n-form-item>
     </div>
 
-    <div class="mb-4 p-3 bg-blue-50 rounded flex justify-center">
-      <div class="text-lg font-bold text-blue">
-        {{ t('form.totalPrice') }}: {{ totalPrice.toLocaleString('cs-CZ') }} Kč
-      </div>
+    <div
+      class="mb-4 flex items-center justify-between rounded-xl border border-primary/20 bg-primary-soft px-5 py-3"
+    >
+      <span class="text-sm font-medium text-fg-muted">{{ t('form.totalPrice') }}</span>
+      <span class="text-xl font-semibold tabular-nums text-primary">
+        {{ formatCurrency(totalPrice) }}
+      </span>
     </div>
   </div>
 </template>

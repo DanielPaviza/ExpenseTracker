@@ -36,20 +36,23 @@
 </script>
 
 <template>
-  <thead>
-    <tr class="bg-blue-300 text-[15px]">
+  <thead class="sticky top-0 z-10">
+    <tr class="bg-surface-2">
       <th
         v-for="(column, colIdx) in columns"
         :key="String(column.key)"
-        class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap cursor-pointer hover:bg-blue-500 hover:text-white"
-        :class="{ 'bg-blue-400': sortState.key === column.key }"
+        class="group border-b border-line ps-4 pe-2 py-2.5 text-left text-xs font-semibold tracking-wide whitespace-nowrap uppercase transition-colors select-none"
+        :class="[
+          sortState.key === column.key ? 'text-primary' : 'text-fg-muted',
+          column.sortFn ? 'cursor-pointer hover:text-fg' : '',
+        ]"
         @click="column.sortFn && sortIndicatorRefs[colIdx]?.toggleSort()"
       >
-        <span class="flex justify-between items-center">
-          <div class="flex items-center gap-2">
-            <span class="text-white">{{ column.title }}</span>
-            <Tooltip v-if="!!column.tooltip" :text="column.tooltip" color="white" />
-          </div>
+        <span class="flex items-center justify-between gap-2">
+          <span class="flex items-center gap-1.5">
+            <span>{{ column.title }}</span>
+            <Tooltip v-if="!!column.tooltip" :text="column.tooltip" small />
+          </span>
 
           <SortIndicator
             v-if="column.sortFn"
@@ -62,29 +65,11 @@
       </th>
       <th
         v-if="additionalColumnTitle"
-        class="ps-4 pe-2 py-2 text-left font-semibold whitespace-nowrap text-white"
+        class="border-b border-line ps-4 pe-2 py-2.5 text-left text-xs font-semibold tracking-wide whitespace-nowrap text-fg-muted uppercase"
       >
         {{ additionalColumnTitle }}
       </th>
-      <th v-else />
+      <th v-else class="w-12 border-b border-line" />
     </tr>
   </thead>
 </template>
-
-<style scoped>
-  thead tr:first-child th .sortIndicator {
-    color: #3b82f6;
-  }
-  thead tr:first-child th:hover .sortIndicator {
-    color: white;
-  }
-  thead tr:first-child th:first-child {
-    border-radius: 6px 0 0 0;
-  }
-  thead tr:first-child th:last-child {
-    border-radius: 0 6px 0 0;
-  }
-  th:hover .sortIndicator {
-    stroke: #3b82f6;
-  }
-</style>

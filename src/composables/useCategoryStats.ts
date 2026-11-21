@@ -3,7 +3,9 @@ import { storeToRefs } from 'pinia'
 
 import { type Ref, computed } from 'vue'
 
+import { CHART_PALETTE } from '@/theme/naiveTheme'
 import type { Spending } from '@/types/Spending'
+import { generateColorPalette } from '@/utils/formatUtils'
 
 export interface CategoryStat {
   name: string
@@ -14,23 +16,8 @@ export interface CategoryStat {
   color: string
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  Byt: '#3b82f6',
-  Jídlo: '#22c55e',
-  Auto: '#f59e0b',
-  Oblečení: '#ec4899',
-  Zábava: '#8b5cf6',
-  Zdraví: '#ef4444',
-  Vzdělání: '#06b6d4',
-  Ostatní: '#6b7280',
-}
-
-function getCategoryColor(category: string, index: number): string {
-  if (CATEGORY_COLORS[category]) return CATEGORY_COLORS[category]
-
-  // Generate a color based on index if not predefined
-  const hue = (index * 137.5) % 360 // Golden angle for good distribution
-  return `hsl(${hue}, 70%, 50%)`
+function getCategoryColor(index: number): string {
+  return generateColorPalette(index + 1)[index]
 }
 
 function calculateMonthlyAverage(spendings: Spending[]): number {
@@ -72,7 +59,7 @@ export function useCategoryStats(selectedCategory: Ref<string | null>) {
         count,
         percent,
         monthlyAverage,
-        color: getCategoryColor(category, index),
+        color: getCategoryColor(index),
       }
     })
   })
@@ -91,7 +78,7 @@ export function useCategoryStats(selectedCategory: Ref<string | null>) {
       count,
       percent: 100,
       monthlyAverage,
-      color: '#3b82f6',
+      color: CHART_PALETTE[0],
     }
   })
 

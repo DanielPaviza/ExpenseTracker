@@ -158,15 +158,13 @@
 </script>
 
 <template>
-  <div class="document-card shadow border border-gray-200 rounded-lg">
+  <div class="document-card rounded-xl border border-line bg-surface shadow-card">
     <NCard size="small" :content-style="{ padding: '16px' }">
       <!-- Preview -->
-      <div
-        class="h-[200px] max-w-[320px] mb-2 shadow-sm hover:border hover:rounded border-gray-300"
-      >
+      <div class="h-[200px] max-w-[320px] mb-2 shadow-sm hover:border hover:rounded border-line">
         <div
           v-if="isDocumentError"
-          class="flex flex-col gap-2 h-full items-center justify-center rounded border border-dashed border-red-200 bg-red-50 px-4 text-center"
+          class="flex flex-col gap-2 h-full items-center justify-center rounded border border-dashed border-danger/30 bg-danger/10 px-4 text-center"
         >
           <NIcon size="32" class="me-2" :component="WarningOutline" />
           <NText type="error" class="font-semibold">

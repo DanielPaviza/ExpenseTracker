@@ -33,7 +33,7 @@
     showAll,
   } = useItemsLimit(sortedStats)
 
-  const { chartLabels, chartDatasets } = useSummaryChart({
+  const { chartLabels, chartDatasets, colors } = useSummaryChart({
     stats: sortedStats,
     sortBy,
     labelKey: 'summary.expensesBySubCategories',
@@ -62,22 +62,23 @@
       <SortButtons v-model="sortBy" :options="sortOptions" />
 
       <StatItem
-        v-for="sub in displayedSubCategories"
+        v-for="(sub, idx) in displayedSubCategories"
         :key="sub.name"
         :stat="sub"
+        :color="colors[idx]"
         :show-percent="false"
       />
 
       <div
         v-if="hasMore"
-        class="mt-1 text-blueLight text-xs cursor-pointer"
+        class="mt-1 text-primary text-xs font-medium cursor-pointer hover:underline"
         @click="showAll = !showAll"
       >
         {{ toggleText }}
       </div>
     </template>
     <template v-else>
-      <div class="text-gray-500 text-center py-4">
+      <div class="text-fg-muted text-center py-4">
         {{ $t('summary.noSubCategories') }}
       </div>
     </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { NButton, useMessage } from 'naive-ui'
+  import { ArrowUndoOutline, SaveOutline } from '@vicons/ionicons5'
+  import { NButton, NIcon, NTooltip, useMessage } from 'naive-ui'
 
   import { useI18n } from 'vue-i18n'
 
@@ -21,38 +22,37 @@
     }
   }
 </script>
+
 <template>
-  <div class="flex items-center animate-breathing">
-    <div class="text-orange-600 font-semibold me-4">
-      {{ $t('header.unsavedChanges') }}
-    </div>
-    <div class="flex items-center gap-2 me-10 bg-orange-200 p-2 px-3 shadow rounded-md">
-      <n-button type="success" @click="handleSave">
-        {{ $t('header.saveChanges') }}
-      </n-button>
-      <n-button type="warning" @click="discardChangesDialog()">
-        {{ $t('header.discardChanges') }}
+  <div
+    class="flex items-center gap-3 rounded-xl border border-warning/30 bg-warning/10 py-1 ps-3 pe-1"
+  >
+    <span class="relative flex size-2">
+      <span
+        class="absolute inline-flex size-full animate-ping rounded-full bg-warning opacity-60"
+      />
+      <span class="relative inline-flex size-2 rounded-full bg-warning" />
+    </span>
+    <span class="text-sm font-medium text-warning">{{ t('header.unsavedChanges') }}</span>
+    <div class="flex items-center gap-1">
+      <n-tooltip>
+        <template #trigger>
+          <n-button size="small" quaternary @click="discardChangesDialog()">
+            <template #icon>
+              <n-icon><ArrowUndoOutline /></n-icon>
+            </template>
+            {{ t('header.discardChanges') }}
+          </n-button>
+        </template>
+        {{ t('dialogs.discardChangesTitle') }}
+      </n-tooltip>
+      <n-button size="small" type="primary" @click="handleSave">
+        <template #icon>
+          <n-icon><SaveOutline /></n-icon>
+        </template>
+        {{ t('header.saveChanges') }}
+        <span class="ms-2 rounded bg-white/20 px-1 text-[10px] font-semibold">Ctrl S</span>
       </n-button>
     </div>
   </div>
 </template>
-<style scoped>
-  @keyframes breathing {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.9;
-      transform: scale(0.98);
-    }
-  }
-
-  .animate-breathing {
-    animation: breathing 2s ease-in-out infinite;
-  }
-  .animate-breathing:hover {
-    animation-play-state: paused;
-  }
-</style>

@@ -2,9 +2,10 @@
   import { useMessage } from 'naive-ui'
 
   import { useI18n } from 'vue-i18n'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRoute } from 'vue-router'
 
   import SpendingBulkEditForm from '@/components/spendingForm/SpendingBulkEditForm.vue'
+  import { useAppNavigation } from '@/composables/useAppNavigation'
   import { useBulkEditForm } from '@/composables/useBulkEditForm'
   import { BulkEdit } from '@/constants/bulkEdit'
 
@@ -13,7 +14,7 @@
   }
 
   const route = useRoute()
-  const router = useRouter()
+  const { replaceWithBase } = useAppNavigation()
   const message = useMessage()
   const { t } = useI18n()
   const currentRouteName = route.name
@@ -26,7 +27,7 @@
     typeof routeNameParam !== 'string'
   ) {
     message.error(t('messages.invalidBulkEditRoute'))
-    void router.replace('/')
+    void replaceWithBase()
     throw new Error('BulkEditForm requires valid type and name route parameters')
   }
 

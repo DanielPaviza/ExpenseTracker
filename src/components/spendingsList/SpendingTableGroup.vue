@@ -5,9 +5,9 @@
 
   import { computed, ref, watch } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { useRouter } from 'vue-router'
 
   import BulkEditActionContext from '@/components/shared/BulkEditActionContext.vue'
+  import { useAppNavigation } from '@/composables/useAppNavigation'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
   import { useSettingsStore } from '@/stores/settingsStore'
   import { useSpendingsStore } from '@/stores/spendingsStore'
@@ -16,7 +16,7 @@
   import { calculateTotalPrice } from '@/utils/tableUtils'
 
   const { t } = useI18n()
-  const router = useRouter()
+  const { openBulkEdit } = useAppNavigation()
   const spendingStore = useSpendingsStore()
 
   const {
@@ -78,7 +78,7 @@
     }
 
     if (!canBeEdited.value) return
-    router.push(`/bulkEdit/${getPath()}/${encodeURIComponent(tableGroupName)}`)
+    openBulkEdit(getPath() ?? '', tableGroupName)
   }
 
   watch(
@@ -96,29 +96,35 @@
     @edit="openSpendingBulkEdit"
   />
   <tr
-    class="bg-blue-50 hover:bg-blue-100 cursor-pointer border-b border-blue-200 px-4 py-2"
+    class="cursor-pointer bg-surface-2 text-sm transition-colors hover:bg-primary-soft"
     @click="toggleExpanded"
     @contextmenu="handleContextMenu"
   >
-    <td class="py-2">
+    <td class="border-b border-line py-2.5">
       <div class="flex items-center gap-2 ps-3">
         <n-icon
-          :size="20"
-          class="transition-transform text-blue-500"
-          :class="{ 'rotate-90': isExpanded }"
+          :size="16"
+          class="text-fg-subtle transition-transform duration-200"
+          :class="{ 'rotate-90 text-primary': isExpanded }"
         >
           <ChevronForwardOutline />
         </n-icon>
-        <span class="font-semibold text-blue-500">{{ tableGroupName }}</span>
-        <span class="text-sm text-gray-600">({{ items.length }} {{ $t('table.items') }})</span>
+        <span class="font-semibold whitespace-nowrap text-fg">{{ tableGroupName }}</span>
+        <span
+          class="rounded-md bg-surface-3 px-1.5 py-0.5 text-[11px] font-medium whitespace-nowrap text-fg-muted"
+        >
+          {{ items.length }} {{ $t('table.items') }}
+        </span>
       </div>
     </td>
-    <td v-for="_ in columns.length - 2" :key="_" />
-    <td class="font-bold ps-3" :class="isExpanded ? 'text-blue' : ' text-black'">
-      <template v-if="!isExpanded"> </template>
+    <td v-for="_ in columns.length - 2" :key="_" class="border-b border-line" />
+    <td
+      class="border-b border-line px-4 font-semibold whitespace-nowrap tabular-nums"
+      :class="isExpanded ? 'text-fg-muted' : 'text-fg'"
+    >
       {{ formatCurrency(totalPrice) }}
     </td>
-    <td />
+    <td class="border-b border-line" />
   </tr>
 
   <template v-if="isExpanded">
@@ -132,9 +138,3 @@
     />
   </template>
 </template>
-
-<style scoped>
-  .rotate-90 {
-    transform: rotate(0deg);
-  }
-</style>

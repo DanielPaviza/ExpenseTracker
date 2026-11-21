@@ -32,10 +32,10 @@
       <n-button @click="emit('cancel')">
         {{ t('common.cancel') }}
       </n-button>
-      <n-button v-if="showReset" type="info" secondary @click="emit('reset')">
+      <n-button v-if="showReset" quaternary @click="emit('reset')">
         {{ t('common.reset') }}
       </n-button>
-      <n-button v-if="showDelete" color="#ef4444" @click="emit('delete')">
+      <n-button v-if="showDelete" type="error" secondary @click="emit('delete')">
         <template #icon>
           <n-icon>
             <TrashOutline />
@@ -44,7 +44,7 @@
         {{ t('dialogs.delete') }}
       </n-button>
     </div>
-    <n-button :disabled="!canSave" color="#3b82f6" @click="emit('save')">
+    <n-button :disabled="!canSave" type="primary" @click="emit('save')">
       <template #icon>
         <n-icon>
           <SaveOutline />

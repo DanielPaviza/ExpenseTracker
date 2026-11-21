@@ -6,7 +6,8 @@ export const DEFAULT_SETTINGS: Settings = {
   languageCode: ENGLISH_LANGUAGE.code,
   currencySymbol: CURRENCY_SYMBOL_EURO,
   tableGroupDefaultOpen: false,
-  defaultSummaryCard: 'overviewAndCategories',
+  theme: 'system',
+  startPage: 'dashboard',
   defaultCategoryView: null,
   defaultHiddenSpendingColumns: ['isToBePaid', 'isFree', 'createdAt'],
 }

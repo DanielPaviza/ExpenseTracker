@@ -13,16 +13,17 @@
 
   import { computed, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRoute } from 'vue-router'
 
   import ButtonNavigation from '@/components/shared/ButtonNavigation.vue'
   import FormActions from '@/components/shared/FormActions.vue'
   import Tooltip from '@/components/shared/Tooltip.vue'
+  import { useAppNavigation } from '@/composables/useAppNavigation'
   import { useSpendingsStore } from '@/stores/spendingsStore'
   import { BulkEditProps } from '@/types/BulkEditProps'
 
   const { t } = useI18n()
-  const router = useRouter()
+  const { closeOverlay } = useAppNavigation()
   const message = useMessage()
   const dialog = useDialog()
   const route = useRoute()
@@ -50,7 +51,6 @@
       id: 'all-categories',
       label: t('spendingBulkEditForm.allCategories'),
       selectedColor: 'orange',
-      colorHover: 'orange',
     },
   ])
 
@@ -75,7 +75,7 @@
   onMounted(() => (isOpen.value = true))
 
   function closeDrawer(): void {
-    router.push('/')
+    closeOverlay()
   }
 
   async function handleSave(): Promise<void> {
@@ -100,12 +100,10 @@
 </script>
 
 <template>
-  <n-drawer :show="isOpen" width="40%" placement="right" @update:show="closeDrawer">
-    <div class="backdrop-blur fixed left-0 w-screen h-screen -z-10 opacity-100"></div>
-
-    <n-drawer-content closable class="p-4">
+  <n-drawer :show="isOpen" width="min(560px, 94vw)" placement="right" @update:show="closeDrawer">
+    <n-drawer-content closable>
       <template #header>
-        <div class="text-2xl font-bold text-blue">
+        <div class="text-xl font-semibold text-fg">
           {{ props.title }}
         </div>
       </template>
@@ -134,7 +132,7 @@
           </template>
           <div class="flex flex-col w-full">
             <n-input v-model:value="newName" :placeholder="props.nameLabel" />
-            <div v-if="!isNameValid" class="text-sm text-red-500 mt-1 ms-1">
+            <div v-if="!isNameValid" class="text-sm text-danger mt-1 ms-1">
               {{ $t('messages.nameCannotBeEmpty') }}
             </div>
           </div>
@@ -142,7 +140,7 @@
         <div v-if="isNameEdited && isNameValid">
           <div class="text-lg font-semibold">{{ $t('common.rename') }}</div>
           <div
-            class="text-lg flex justify-center items-center p-3 rounded bg-blue-50 text-blue-800 mt-1"
+            class="text-lg flex justify-center items-center p-3 rounded bg-primary-soft text-primary mt-1"
           >
             {{ name }}
             <n-icon size="20" class="mx-3 mt-0.5">
@@ -166,16 +164,3 @@
     </n-drawer-content>
   </n-drawer>
 </template>
-<style scoped>
-  :deep(.n-base-close.n-base-close--absolute.n-drawer-header__close) {
-    color: #c04141;
-    font-size: larger;
-    padding: 10px;
-  }
-  :deep(.n-base-clear__clear) {
-    color: #c62828 !important;
-  }
-  :deep(.n-base-clear__clear:hover) {
-    color: red !important;
-  }
-</style>

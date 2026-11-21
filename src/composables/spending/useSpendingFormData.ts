@@ -11,7 +11,7 @@ export function useSpendingFormData() {
   const store = useSpendingsStore()
   const route = useRoute()
 
-  const isEditMode = computed(() => route.path.startsWith('/edit/'))
+  const isEditMode = computed(() => typeof route.params.id === 'string')
 
   const currentSpending: ComputedRef<Spending | null> = computed(() => {
     if (isEditMode.value) {

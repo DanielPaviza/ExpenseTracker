@@ -27,34 +27,28 @@
   })
 </script>
 <template>
-  <div class="">
-    <div class="text-[14px] ms-2 font-semibold text-nowrap text-blue">
+  <div>
+    <div class="mb-1 ms-1 text-xs font-medium text-fg-muted">
       {{ $t('table.sorting') }}
     </div>
-    <div class="flex gap-2">
+    <div class="inline-flex gap-0.5 rounded-lg border border-line bg-surface-3 p-0.5">
       <button
-        class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
-        :class="{
-          'border-blueLight ': isNameSort,
-          'border-gray-300 bg-white text-gray-700 hover:border-blue': !isNameSort,
-        }"
+        type="button"
+        class="rounded-md px-3 py-1 text-sm font-medium transition"
+        :class="isNameSort ? 'bg-surface text-primary shadow-card' : 'text-fg-muted hover:text-fg'"
         @click="toggleNameSort"
       >
-        ABC
-        <span v-if="isNameSort && isAscSort"> ↑</span>
-        <span v-if="isNameSort && !isAscSort"> ↓</span>
+        A–Z
+        <span v-if="isNameSort">{{ isAscSort ? '↑' : '↓' }}</span>
       </button>
       <button
-        class="px-4 py-1.5 rounded border-2 transition-colors font-medium"
-        :class="{
-          'border-blueLight ': isPriceSort,
-          'border-gray-300 bg-white text-gray-700 hover:border-blue': !isPriceSort,
-        }"
+        type="button"
+        class="rounded-md px-3 py-1 text-sm font-medium transition"
+        :class="isPriceSort ? 'bg-surface text-primary shadow-card' : 'text-fg-muted hover:text-fg'"
         @click="togglePriceSort"
       >
         {{ $t('table.price') }}
-        <span v-if="isPriceSort && isAscSort"> ↑</span>
-        <span v-if="isPriceSort && !isAscSort"> ↓</span>
+        <span v-if="isPriceSort">{{ isAscSort ? '↑' : '↓' }}</span>
       </button>
     </div>
   </div>

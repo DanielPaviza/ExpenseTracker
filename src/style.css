@@ -1,23 +1,167 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/inter';
 
-body {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(230, 236, 234, 0.28) 0%,
-    rgba(44, 93, 76, 0.08) 50%,
-    rgba(6, 64, 43, 0.08) 100%
-  );
+/* Dark mode is driven by the `.dark` class on <html> (see useTheme) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------
+ * Design tokens
+ * All colors used by the app are defined here as CSS variables so that
+ * Tailwind utilities, Naive UI overrides and Chart.js share one palette.
+ * ------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+
+  --bg: #f3f6fb;
+  --surface: #ffffff;
+  --surface-2: #f8fafd;
+  --surface-3: #eef2f8;
+  --line: #e3e8f0;
+  --line-strong: #cdd5e2;
+
+  --fg: #0f172a;
+  --fg-muted: #5b6678;
+  --fg-subtle: #94a0b4;
+
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-pressed: #1e40af;
+  --primary-light: #60a5fa;
+  --primary-soft: #eef4ff;
+  --primary-soft-strong: #dce8ff;
+  --on-primary: #ffffff;
+
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+
+  --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.06);
+  --shadow-pop: 0 10px 30px -10px rgb(15 23 42 / 0.25);
 }
 
-@theme {
-  --color-black: #1b1c1b;
-  --color-white: #fefefe;
-  --color-whiteTransparent: rgba(254, 254, 254, 0.7);
-  --color-green: #06402b;
-  --color-blue: #3b82f6;
-  --color-blueLight: #60a5fa;
-  --color-blueLightTransparent: rgba(245, 249, 255, 0.7);
-  --color-red: #c62828;
-  --color-pink: #ff4551;
+.dark {
+  color-scheme: dark;
+
+  --bg: #0a0f1c;
+  --surface: #111827;
+  --surface-2: #151e30;
+  --surface-3: #1c2740;
+  --line: #222d42;
+  --line-strong: #33415a;
+
+  --fg: #e6ebf5;
+  --fg-muted: #9aa6ba;
+  --fg-subtle: #64708a;
+
+  --primary: #4f8cff;
+  --primary-hover: #6d9fff;
+  --primary-pressed: #3b7bf0;
+  --primary-light: #93bbff;
+  --primary-soft: rgb(79 140 255 / 0.12);
+  --primary-soft-strong: rgb(79 140 255 / 0.22);
+  --on-primary: #ffffff;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #f87171;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 0 0 1px rgb(255 255 255 / 0.02);
+  --shadow-pop: 0 16px 40px -12px rgb(0 0 0 / 0.6);
+}
+
+@theme inline {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-app: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-strong: var(--primary-soft-strong);
+  --color-on-primary: var(--on-primary);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-pop: var(--shadow-pop);
+}
+
+/* ------------------------------------------------------------------
+ * Base
+ * ------------------------------------------------------------------ */
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  transition: background-color 0.2s ease;
+}
+
+.tabular-nums,
+td,
+.n-statistic-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Thin, theme aware scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+/* ------------------------------------------------------------------
+ * Reusable building blocks
+ * ------------------------------------------------------------------ */
+@utility card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+@utility kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.35rem;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  border-bottom-width: 2px;
+  background: var(--surface-2);
+  color: var(--fg-muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Blurred backdrop behind drawers & modals */
+.n-drawer-mask,
+.n-modal-mask {
+  backdrop-filter: blur(4px);
+  background-color: rgb(15 23 42 / 0.35) !important;
+}
+
+.n-drawer .n-drawer-header__main {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--fg);
 }

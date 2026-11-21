@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Tooltip from '@components/shared/Tooltip.vue'
   import FormUrlInput from '@components/spendingForm/components/SpendingFormUrlInput.vue'
-  import { NCheckbox, NFormItem, NInput, NSelect, type SelectOption } from 'naive-ui'
+  import { NFormItem, NInput, NSelect, NSwitch, type SelectOption } from 'naive-ui'
 
   import { useI18n } from 'vue-i18n'
 
@@ -41,7 +41,7 @@
         filterable
         tag
         clearable
-        class="shadow"
+       
         @update:value="handleSetTableGroup"
       />
     </n-form-item> -->
@@ -55,16 +55,15 @@
         multiple
         tag
         clearable
-        class="shadow"
       />
     </n-form-item>
 
     <n-form-item :label="t('form.storeCode')" path="storeCode">
-      <n-input v-model:value="formData.storeCode" placeholder="" clearable class="shadow" />
+      <n-input v-model:value="formData.storeCode" placeholder="" clearable />
     </n-form-item>
 
     <n-form-item :label="t('form.dimensions')" path="dimensions">
-      <n-input v-model:value="formData.dimensions" placeholder="" clearable class="shadow" />
+      <n-input v-model:value="formData.dimensions" placeholder="" clearable />
     </n-form-item>
 
     <FormUrlInput v-model:url="formData.url!" :label="t('form.url')" />
@@ -78,39 +77,31 @@
       <n-input
         v-model:value="formData.description"
         type="textarea"
-        class="shadow"
         placeholder=""
         :rows="4"
         clearable
       />
     </n-form-item>
 
-    <div class="flex justify-center">
-      <div class="flex gap-20">
-        <n-form-item :label="t('form.toBePaid')">
-          <template #label>
-            <div class="flex items-center gap-1">
-              {{ t('form.toBePaid') }}
-              <Tooltip :text="t('form.toBePaidTooltip')" />
-            </div>
-          </template>
-          <n-checkbox v-model:checked="formData.isToBePaid">
-            {{ formData.isToBePaid ? t('common.yes') : t('common.no') }}
-          </n-checkbox>
-        </n-form-item>
-
-        <n-form-item :label="t('form.free')">
-          <template #label>
-            <div class="flex items-center gap-1">
-              {{ t('form.free') }}
-              <Tooltip :text="t('form.freeTooltip')" />
-            </div>
-          </template>
-          <n-checkbox v-model:checked="formData.isFree">
-            {{ formData.isFree ? t('common.yes') : t('common.no') }}
-          </n-checkbox>
-        </n-form-item>
-      </div>
+    <div class="mb-4 grid grid-cols-2 gap-4">
+      <label
+        class="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-line bg-surface-2 px-4 py-3"
+      >
+        <span class="flex items-center gap-1.5 text-sm font-medium">
+          {{ t('form.toBePaid') }}
+          <Tooltip :text="t('form.toBePaidTooltip')" small />
+        </span>
+        <n-switch v-model:value="formData.isToBePaid" />
+      </label>
+      <label
+        class="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-line bg-surface-2 px-4 py-3"
+      >
+        <span class="flex items-center gap-1.5 text-sm font-medium">
+          {{ t('form.free') }}
+          <Tooltip :text="t('form.freeTooltip')" small />
+        </span>
+        <n-switch v-model:value="formData.isFree" />
+      </label>
     </div>
   </div>
 </template>

@@ -13,23 +13,17 @@
 </script>
 
 <template>
-  <tfoot class="border-blue border-t bg-blue-100 text-blue">
-    <tr class="font-bold text-lg">
-      <td class="px-4 py-2">{{ t('table.total') }} ({{ totalCount }}):</td>
+  <tfoot>
+    <tr class="bg-surface-2 text-sm font-semibold text-fg">
+      <td class="px-4 py-3">
+        {{ t('table.total') }}
+        <span class="ms-1 font-normal text-fg-muted">({{ totalCount }})</span>
+      </td>
       <td v-for="_ in columnCount - 2" :key="_" />
-      <td class="ps-3">
+      <td class="px-4 py-3 text-base whitespace-nowrap tabular-nums">
         {{ formatCurrency(totalPrice) }}
       </td>
       <td />
     </tr>
   </tfoot>
 </template>
-
-<style scoped>
-  tfoot tr:last-child td:first-child {
-    border-radius: 0 0 0 6px;
-  }
-  tfoot tr:last-child td:last-child {
-    border-radius: 0 0 8px 0;
-  }
-</style>

@@ -12,18 +12,21 @@
   "app": {
     "windows": [
       {
-        "title": "expenseTracker",
+        "title": "Expense Tracker",
         "width": 1920,
         "height": 1080,
         "maximized": true,
         "focus": true,
-        "devtools": true
+        "devtools": true,
+        "dragDropEnabled": false,
+        "minWidth": 1100,
+        "minHeight": 700
       }
     ],
     "withGlobalTauri": true,
     "security": {
-      "csp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost; style-src 'self' 'unsafe-inline'",
-      "devCsp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost; style-src 'self' 'unsafe-inline'",
+      "csp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost blob:; frame-src 'self' asset: http://asset.localhost blob:; style-src 'self' 'unsafe-inline'",
+      "devCsp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost blob:; frame-src 'self' asset: http://asset.localhost blob:; style-src 'self' 'unsafe-inline'",
       "assetProtocol": {
         "enable": true,
         "scope": {

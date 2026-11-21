@@ -3,14 +3,14 @@
   import { NIcon } from 'naive-ui'
 
   import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import DonutChart from '@/components/header/components/DonutChart.vue'
   import BulkEditActionContext from '@/components/shared/BulkEditActionContext.vue'
+  import { useAppNavigation } from '@/composables/useAppNavigation'
   import { BulkEdit } from '@/constants/bulkEdit'
 
   const actionContextMouseEvent = ref<MouseEvent | null>(null)
-  const router = useRouter()
+  const { openBulkEdit } = useAppNavigation()
 
   function handleContextMenu(event: MouseEvent): void {
     event.preventDefault()
@@ -48,47 +48,46 @@
   const handleGotoEditCategory = (event: MouseEvent): void => {
     event.stopPropagation()
     if (!canBeEdited) return
-    const encodedTitle = encodeURIComponent(title)
-    router.push({ path: `/bulkEdit/${BulkEdit.category}/${encodedTitle}` })
+    openBulkEdit(BulkEdit.category, title)
   }
 </script>
 
 <template>
   <div
-    class="m-2 relative flex justify-between items-center p-6 bg-white rounded-xl cursor-pointer transition-all duration-200 border-blue hover:shadow-lg hover:-translate-y-0.5"
+    class="group relative flex cursor-pointer items-center justify-between gap-4 rounded-xl border p-5 transition-all duration-150 hover:-translate-y-0.5 hover:shadow-card"
     :class="
       selected
-        ? 'border-2 bg-linear-to-br from-blue-50 to-white shadow-lg'
-        : 'boxShadowCustom border border-transparent hover:border-blue'
+        ? 'border-primary bg-primary-soft ring-1 ring-primary'
+        : 'border-line bg-surface hover:border-primary/40'
     "
     @click="emit('click')"
     @contextmenu="handleContextMenu"
   >
-    <div v-if="canBeEdited" class="absolute bottom-2 left-6" @click="handleGotoEditCategory">
-      <n-icon color="orange" size="16" class="opacity-50 hover:opacity-100">
-        <BuildOutline />
-      </n-icon>
-    </div>
-    <div class="flex-1 min-w-0">
-      <div class="text-xl font-semibold text-blue-800 mb-3 truncate">
-        {{ title }}
+    <div class="min-w-0 flex-1">
+      <div class="mb-2 flex items-center gap-2">
+        <span class="size-2.5 shrink-0 rounded-full" :style="{ backgroundColor: color }" />
+        <div class="truncate font-medium text-fg">{{ title }}</div>
       </div>
-
-      <div class="mb-5">
-        <div class="text-xl font-bold text-slate-800 mb-1">
-          {{ totalPriceText }}
-        </div>
-        <div class="text-xs text-slate-500 flex flex-wrap items-center gap-1">
-          <span>{{ count }}× {{ purchasesLabel }}</span>
-          <span class="text-slate-300">•</span>
-          <span>{{ monthlyAverageText }}/{{ monthLabel }}</span>
-        </div>
+      <div class="text-xl font-semibold tabular-nums text-fg">{{ totalPriceText }}</div>
+      <div class="mt-1 flex flex-wrap items-center gap-1 text-xs text-fg-muted">
+        <span>{{ count }}× {{ purchasesLabel }}</span>
+        <span class="text-fg-subtle">•</span>
+        <span>{{ monthlyAverageText }}/{{ monthLabel }}</span>
       </div>
     </div>
 
-    <div class="w-14 h-14 ml-4 shrink-0">
+    <div class="size-14 shrink-0">
       <DonutChart :percent="percent" :color="color" />
     </div>
+
+    <button
+      v-if="canBeEdited"
+      type="button"
+      class="absolute top-2 right-2 rounded-md p-1 text-fg-subtle opacity-0 transition group-hover:opacity-100 hover:bg-surface-3 hover:text-warning"
+      @click="handleGotoEditCategory"
+    >
+      <n-icon size="15"><BuildOutline /></n-icon>
+    </button>
   </div>
   <BulkEditActionContext
     v-if="canBeEdited"
@@ -96,8 +95,3 @@
     :on-edit="handleGotoEditCategory"
   />
 </template>
-<style lang="css" scoped>
-  .boxShadowCustom {
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  }
-</style>

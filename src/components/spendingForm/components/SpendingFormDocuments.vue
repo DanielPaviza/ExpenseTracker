@@ -15,10 +15,10 @@
   const documents = defineModel<SpendingDocument[]>('documents', { required: true })
 
   const documentsToUpload = defineModel<SpendingDocument[]>('documentsToUpload', {
-    default: [],
+    default: () => [],
   })
   const documentsToDelete = defineModel<SpendingDocument[]>('documentsToDelete', {
-    default: [],
+    default: () => [],
   })
 
   const { t } = useI18n()
@@ -55,15 +55,15 @@
     @change="handleFileSelect"
   />
   <div
-    class="drop-zone p-6 rounded-lg border-dashed border-2 border-gray-300"
+    class="drop-zone rounded-xl border-2 border-dashed border-line bg-surface-2/50 p-6"
     :class="{ 'drop-zone-active': isDragging }"
     @dragover="handleDragOver"
     @dragleave="handleDragLeave"
     @drop="handleDrop"
   >
     <div class="flex items-center justify-between mb-5">
-      <span class="text-lg font-medium text-gray-700">{{ t('form.documents') }}</span>
-      <NButton color="#3b82f6" size="small" type="primary" @click.stop="openFilePicker">
+      <span class="text-base font-semibold text-fg">{{ t('form.documents') }}</span>
+      <NButton size="small" type="primary" secondary @click.stop="openFilePicker">
         <template #icon>
           <NIcon>
             <AddOutline />
@@ -88,11 +88,11 @@
         @delete-document="deleteNewDocument(index)"
       />
       <div
-        class="flex flex-col relative justify-center items-center border border-gray-200 bg-gray-50 hover:bg-blue-50 hover:shadow-lg rounded-lg p-8 shadow cursor-pointer"
+        class="relative flex cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-line-strong bg-surface p-8 transition hover:border-primary hover:bg-primary-soft"
         @click="openFilePicker"
       >
-        <NIcon size="124" :component="DocumentAttachOutline" class="text-gray-400 mb-2" />
-        <div class="text-sm font-semibold text-gray-500">{{ t('form.addDocument') }}</div>
+        <NIcon size="64" :component="DocumentAttachOutline" class="mb-2 text-fg-subtle" />
+        <div class="text-sm font-semibold text-fg-muted">{{ t('form.addDocument') }}</div>
       </div>
     </div>
   </div>
@@ -104,7 +104,7 @@
   }
 
   .drop-zone-active {
-    border-color: #3b82f6;
-    background-color: #eff6ff;
+    border-color: var(--primary);
+    background-color: var(--primary-soft);
   }
 </style>

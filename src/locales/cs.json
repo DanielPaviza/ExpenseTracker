@@ -29,6 +29,7 @@
     "close": "Zavřít",
     "column": "Sloupec",
     "loadingData": "Načítání dat...",
+    "never": "Nikdy",
     "no": "Ne",
     "noRecordsFound": "Nebyly nalezeny žádné záznamy",
     "rename": "Přejmenování",
@@ -81,8 +82,8 @@
     "cancel": "Zrušit",
     "cancelEditDocumentName": "Zrušit úpravu názvu dokumentu",
     "category": "Kategorie",
-    "created": "Vytvořeno",
     "createPurchaseButton": "Vytvořit nákup",
+    "created": "Vytvořeno",
     "creationDate": "Datum vytvoření",
     "deleteDocument": "Smazat dokument",
     "description": "Popis",
@@ -95,8 +96,8 @@
     "documentsDropZone": "Přetáhněte soubory sem nebo klikněte na 'Přidat dokument'",
     "downloadDocument": "Stáhnout dokument",
     "editDocumentName": "Upravit název dokumentu",
-    "edited": "Upraveno",
     "editPurchase": "Upravit nákup",
+    "edited": "Upraveno",
     "free": "Ušetřeno",
     "freeTooltip": "Položka byla získána zdarma",
     "group": "Skupina",
@@ -136,12 +137,25 @@
   },
   "header": {
     "addNewPurchase": "Přidat nový nákup",
+    "allSaved": "Vše uloženo",
+    "category": "Kategorie",
     "discardChanges": "Vrátit změny",
     "saveChanges": "Uložit změny",
     "selectCategory": "Vyberte kategorii",
     "selectedCategory": "Vybraná kategorie",
+    "toggleTheme": "Přepnout světlý / tmavý režim",
     "totalExpenses": "Celkové výdaje",
     "unsavedChanges": "Neuložené změny"
+  },
+  "kpi": {
+    "itemsCount": "{count} položek",
+    "monthlyAverage": "Průměr za měsíc",
+    "ofAll": "{percent} % ze všech kategorií",
+    "purchases": "Počet nákupů",
+    "saved": "Ušetřeno",
+    "sinceDate": "od {date}",
+    "totalPaid": "Zaplaceno",
+    "unpaid": "Nezaplaceno"
   },
   "messages": {
     "allDeletedItemsRestored": "Všechny smazané výdaje byly obnoveny",
@@ -169,6 +183,16 @@
     "purchaseEditedSuccessfully": "Nákup byl úspěšně upraven",
     "settingsSavedSuccessfully": "Nastavení bylo úspěšně uloženo"
   },
+  "nav": {
+    "dashboard": "Přehled",
+    "settings": "Nastavení",
+    "shortcuts": "Klávesové zkratky",
+    "spendings": "Nákupy"
+  },
+  "pages": {
+    "dashboardSubtitle": "Souhrn výdajů pro vybranou kategorii",
+    "spendingsSubtitle": "Všechny záznamy s filtrováním, řazením a seskupováním"
+  },
   "settings": {
     "categoryViewDefault": "Výchozí kategorie",
     "categoryViewDefaultTooltip": "Kategorie, která se zobrazí při otevření aplikace",
@@ -178,11 +202,27 @@
     "hiddenSpendingColumnsDefaultTooltip": "Sloupce, které jsou ve výchozím zobrazování tabulky nákupů skryté",
     "hiddenSpendingColumnsValidation": "Nelze skrýt všechny sloupce. Ponechte alespoň jeden sloupec zobrazený.",
     "language": "Jazyk",
-    "summaryCardDefault": "Výchozí karta přehledu",
-    "summaryCardDefaultTooltip": "Karta, která se zobrazí jako první v přehledu statistik",
+    "startPage": "Úvodní stránka",
+    "startPageTooltip": "Stránka, která se zobrazí po spuštění aplikace",
     "tableGroupDefaultState": "Rozbalené podskupiny ve výchozím stavu",
     "tableGroupDefaultStateTooltip": "Zda jsou podskupiny v tabulkách ve výchozím stavu rozbalené nebo sbalené",
+    "theme": "Vzhled",
+    "themeDark": "Tmavý",
+    "themeLight": "Světlý",
+    "themeSystem": "Podle systému",
     "title": "Nastavení"
+  },
+  "shortcuts": {
+    "categories": "Vybrat kategorii",
+    "close": "Zavřít panel / dialog",
+    "dashboard": "Přejít na přehled",
+    "help": "Zobrazit klávesové zkratky",
+    "newPurchase": "Nový nákup",
+    "save": "Uložit změny",
+    "settings": "Otevřít nastavení",
+    "spendings": "Přejít na nákupy",
+    "title": "Klávesové zkratky",
+    "toggleTheme": "Přepnout světlý / tmavý režim"
   },
   "spendingBulkEditForm": {
     "allCategories": "Napříč všemi kategoriemi",
@@ -274,8 +314,8 @@
     "spending": "Útrata",
     "spendingTrends": "Trendy výdajů",
     "statisticsTitle": "Statistiky nákupů",
-    "stores": "obchodů",
     "storeVisits": "Návštěvy obchodů",
+    "stores": "obchodů",
     "subCategories": "podkategorií",
     "tags": "tagů",
     "total": "Celkem",

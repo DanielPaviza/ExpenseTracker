@@ -12,6 +12,7 @@ export interface ChartDataset {
   borderColor?: string[] | string
   borderWidth?: number
   tension?: number
+  isCount?: boolean
 }
 
 export interface ChartOptions {
@@ -27,6 +28,12 @@ export function useSummaryChart(options: ChartOptions) {
   const { t } = useI18n()
 
   const chartLabels = computed(() => stats.value.map((stat) => `${stat.name} (${stat.percent}%)`))
+
+  const colors = computed(() =>
+    customColors
+      ? generateColorPalette(stats.value.length, customColors)
+      : generateColorPalette(stats.value.length),
+  )
 
   const chartDatasets = computed<ChartDataset[]>(() => {
     const getData = (): number[] => {
@@ -64,9 +71,8 @@ export function useSummaryChart(options: ChartOptions) {
       {
         label: getLabel(),
         data: getData(),
-        backgroundColor: customColors
-          ? generateColorPalette(stats.value.length, customColors)
-          : generateColorPalette(stats.value.length),
+        isCount: sortBy.value === 'count-desc' || sortBy.value === 'visits-desc',
+        backgroundColor: colors.value,
       },
     ]
   })
@@ -74,5 +80,6 @@ export function useSummaryChart(options: ChartOptions) {
   return {
     chartLabels,
     chartDatasets,
+    colors,
   }
 }

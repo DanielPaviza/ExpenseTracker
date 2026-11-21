@@ -9,6 +9,7 @@
   import { useI18n } from 'vue-i18n'
 
   import SortButtons from '@/components/spendingsDashboard/summary/SortButtons.vue'
+  import StatItem from '@/components/spendingsDashboard/summary/StatItem.vue'
   import SummaryCard from '@/components/spendingsDashboard/summary/SummaryCard.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
 
@@ -34,7 +35,7 @@
     showAll,
   } = useItemsLimit(sortedStats)
 
-  const { chartLabels, chartDatasets } = useSummaryChart({
+  const { chartLabels, chartDatasets, colors } = useSummaryChart({
     stats: sortedStats,
     sortBy,
     labelKey: 'summary.expensesByStores',
@@ -58,21 +59,19 @@
   >
     <SortButtons v-model="sortBy" :options="sortOptions" />
 
-    <div v-for="s in displayedStores" :key="s.name" class="flex items-center gap-5 text-base">
-      <div class="font-bold min-w-[100px] text-blue truncate" :title="s.name">{{ s.name }}:</div>
-      <div class="flex w-full justify-end items-center gap-2">
-        <div class="font-semibold whitespace-nowrap">
-          {{ formatCurrency(s.price) }}
-        </div>
-        <div class="text-blue text-xs text-muted-foreground whitespace-nowrap">
-          ({{ s.visits }}×, {{ formatCurrency(s.avgPerVisit || 0) }}/{{ $t('summary.visit') }})
-        </div>
-      </div>
-    </div>
+    <StatItem
+      v-for="(s, idx) in displayedStores"
+      :key="s.name"
+      :stat="s"
+      :color="colors[idx]"
+      :show-percent="false"
+      :show-count="false"
+      :extra-info="`${s.visits}× · ${formatCurrency(s.avgPerVisit || 0)}/${$t('summary.visit')}`"
+    />
 
     <div
       v-if="hasMore"
-      class="mt-1 text-blueLight text-xs cursor-pointer"
+      class="mt-1 text-primary text-xs font-medium cursor-pointer hover:underline"
       @click="showAll = !showAll"
     >
       {{ toggleText }}

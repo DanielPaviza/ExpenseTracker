@@ -4,7 +4,7 @@
 
   const {
     text,
-    color = '#60a5fa', // blueLight
+    color = 'var(--fg-subtle)',
     small,
   } = defineProps<{
     text: string
@@ -16,8 +16,8 @@
   <n-tooltip trigger="hover">
     <template #trigger>
       <div
-        class="flex items-center justify-center border rounded-[50%] p-1"
-        :class="small ? 'w-5 h-5' : 'w-6 h-6'"
+        class="flex cursor-help items-center justify-center rounded-full border p-0.5"
+        :class="small ? 'size-4' : 'size-5'"
         :style="{ borderColor: color }"
       >
         <n-icon :color="color">

@@ -25,7 +25,7 @@
       special: 'summary.free',
     },
     colors: {
-      paid: '#06402b',
+      paid: '#2563eb',
       special: '#10b981',
     },
   })
@@ -46,47 +46,53 @@
     :chart-labels="chartLabels"
     :chart-datasets="chartDatasets"
   >
-    <div v-if="freeSpendings.length === 0" class="text-gray-500 text-center py-4 w-full">
+    <div v-if="freeSpendings.length === 0" class="text-fg-muted text-center py-4 w-full">
       {{ $t('common.noRecordsFound') }}
     </div>
-    <div v-else class="max-w-[90%]">
+    <div v-else class="w-full space-y-1">
       <div class="flex justify-between">
-        <div class="font-bold text-blue me-3">{{ $t('summary.totalPaid') }}:</div>
+        <div class="font-medium text-fg-muted me-3">{{ $t('summary.totalPaid') }}</div>
         <div class="font-semibold">
           {{ formatCurrency(totalPrice) }}
         </div>
       </div>
       <div class="flex justify-between">
-        <div class="font-bold text-blue">{{ $t('summary.saved') }}:</div>
-        <div class="font-semibold text-green-600">
+        <div class="font-medium text-fg-muted">{{ $t('summary.saved') }}</div>
+        <div class="font-semibold text-success">
           {{ formatCurrency(priceFree) }}
         </div>
       </div>
-      <div class="flex justify-between text-sm text-gray-500">
+      <div class="flex justify-between text-sm text-fg-muted">
         <div>({{ $t('summary.totalWithSaved') }})</div>
         <div>{{ formatCurrency(priceTotalWithFree) }}</div>
       </div>
-      <div class="border-t border-blue mt-4">
-        <div class="text-blue mb-2 mt-4">{{ $t('summary.freeItems') }}:</div>
-        <div class="pr-2 text-sm">
+      <div class="mt-4 border-t border-line">
+        <div class="mt-4 mb-2 text-xs font-semibold tracking-wide text-fg-subtle uppercase">
+          {{ $t('summary.freeItems') }}:
+        </div>
+        <div class="divide-y divide-line text-sm">
           <div
             v-for="spending in displayedFreeSpendings"
             :key="spending.id"
-            class="flex space-y-1 items-center gap-4"
+            class="flex items-center gap-3 py-1"
           >
-            <span class="truncate font-semibold" :title="spending.name">{{ spending.name }}</span>
-            <span class="font-semibold whitespace-nowrap">{{
-              formatCurrency(spending.totalPrice)
-            }}</span>
-            <span v-if="spending.store">-> {{ spending.store }}</span>
+            <span class="min-w-0 truncate font-medium" :title="spending.name">
+              {{ spending.name }}
+            </span>
+            <span v-if="spending.store" class="truncate text-xs text-fg-subtle">
+              {{ spending.store }}
+            </span>
+            <span class="ms-auto font-semibold whitespace-nowrap tabular-nums">
+              {{ formatCurrency(spending.totalPrice) }}
+            </span>
           </div>
-          <div v-if="freeSpendings.length === 0" class="text-gray-500">
+          <div v-if="freeSpendings.length === 0" class="text-fg-muted">
             {{ $t('summary.noSavedExpenses') }}
           </div>
         </div>
         <div
           v-if="hasMore"
-          class="mt-1 text-blueLight text-xs cursor-pointer"
+          class="mt-1 text-primary text-xs font-medium cursor-pointer hover:underline"
           @click="showAll = !showAll"
         >
           {{ toggleText }}

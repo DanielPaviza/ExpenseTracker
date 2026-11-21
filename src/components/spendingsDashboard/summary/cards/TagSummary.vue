@@ -29,7 +29,7 @@
 
   const { displayedItems: displayedTags, hasMore, toggleText, showAll } = useItemsLimit(sortedStats)
 
-  const { chartLabels, chartDatasets } = useSummaryChart({
+  const { chartLabels, chartDatasets, colors } = useSummaryChart({
     stats: sortedStats,
     sortBy,
     labelKey: 'summary.expensesByTags',
@@ -55,17 +55,22 @@
     <template v-if="displayedTags.length">
       <SortButtons v-model="sortBy" :options="sortOptions" />
 
-      <StatItem v-for="tag in displayedTags" :key="tag.name" :stat="tag" />
+      <StatItem
+        v-for="(tag, idx) in displayedTags"
+        :key="tag.name"
+        :stat="tag"
+        :color="colors[idx]"
+      />
 
       <div
         v-if="hasMore"
-        class="mt-1 text-blueLight text-xs cursor-pointer"
+        class="mt-1 text-primary text-xs font-medium cursor-pointer hover:underline"
         @click="showAll = !showAll"
       >
         {{ toggleText }}
       </div>
     </template>
-    <div v-else class="text-gray-500 text-center py-4">
+    <div v-else class="text-fg-muted text-center py-4">
       {{ $t('common.noRecordsFound') }}
     </div>
   </SummaryCard>

@@ -89,93 +89,95 @@
     :title="$t('summary.statisticsTitle')"
     :subtitle="`${paidSpendings.length} ${$t('summary.purchases')}`"
   >
-    <div class="grid grid-cols-2 text-base gap-x-10 gap-y-2">
+    <div class="grid grid-cols-1 gap-x-8 gap-y-0 sm:grid-cols-2">
       <!-- Basic Stats -->
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.purchases') }}:</span>
-        <span class="font-semibold">{{ paidSpendings.length }}</span>
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.purchases') }}</span>
+        <span class="font-semibold tabular-nums">{{ paidSpendings.length }}</span>
       </div>
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.items') }}:</span>
-        <span class="font-semibold">{{ totalItems }}</span>
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.items') }}</span>
+        <span class="font-semibold tabular-nums">{{ totalItems }}</span>
       </div>
 
       <!-- Averages -->
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.avgPerPurchase') }}:</span>
-        <span class="font-semibold">{{ formatCurrency(averagePricePerSpending) }}</span>
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.avgPerPurchase') }}</span>
+        <span class="font-semibold tabular-nums">{{
+          formatCurrency(averagePricePerSpending)
+        }}</span>
       </div>
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.avgPerItem') }}:</span>
-        <span class="font-semibold">{{ formatCurrency(averagePricePerItem) }}</span>
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.avgPerItem') }}</span>
+        <span class="font-semibold tabular-nums">{{ formatCurrency(averagePricePerItem) }}</span>
       </div>
 
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.avgItems') }}:</span>
-        <span class="font-semibold">{{ averageItemsPerSpending.toFixed(1) }}</span>
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.avgItems') }}</span>
+        <span class="font-semibold tabular-nums">{{ averageItemsPerSpending.toFixed(1) }}</span>
       </div>
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.medianPrice') }}:</span>
-        <span class="font-semibold">{{ formatCurrency(medianSpendingPrice) }}</span>
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.medianPrice') }}</span>
+        <span class="font-semibold tabular-nums">{{ formatCurrency(medianSpendingPrice) }}</span>
       </div>
 
       <!-- Extremes -->
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.mostExpensive') }}:</span>
-        <span class="font-semibold" :title="mostExpensiveItem?.name">
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.mostExpensive') }}</span>
+        <span class="font-semibold tabular-nums" :title="mostExpensiveItem?.name">
           {{ formatCurrency(mostExpensiveItem?.totalPrice ?? 0) }}
         </span>
       </div>
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.cheapest') }}:</span>
-        <span class="font-semibold" :title="leastExpensiveItem?.name">
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.cheapest') }}</span>
+        <span class="font-semibold tabular-nums" :title="leastExpensiveItem?.name">
           {{ formatCurrency(leastExpensiveItem?.totalPrice ?? 0) }}
         </span>
       </div>
 
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.maxQuantity') }}:</span>
-        <span class="font-semibold" :title="largestQuantityPurchase?.name">
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.maxQuantity') }}</span>
+        <span class="font-semibold tabular-nums" :title="largestQuantityPurchase?.name">
           {{ largestQuantityPurchase?.quantity ?? 0 }}×
         </span>
       </div>
 
       <!-- Unit Prices -->
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.mostExpensivePerUnit') }}:</span>
-        <span class="font-semibold text-sm" :title="mostExpensiveSingleUnit?.name">
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.mostExpensivePerUnit') }}</span>
+        <span class="font-semibold tabular-nums" :title="mostExpensiveSingleUnit?.name">
           {{ formatCurrency(mostExpensiveSingleUnit?.unitPrice ?? 0) }}
         </span>
       </div>
 
       <!-- Unique Counts -->
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.categories') }}:</span>
-        <span class="font-semibold">{{ uniqueCategories }}</span>
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.categories') }}</span>
+        <span class="font-semibold tabular-nums">{{ uniqueCategories }}</span>
       </div>
-      <div class="flex justify-between gap-4">
-        <span class="font-bold text-blue">{{ $t('summary.stores') }}:</span>
-        <span class="font-semibold">{{ uniqueStores }}</span>
+      <div class="flex justify-between gap-4 border-b border-line py-2">
+        <span class="font-medium text-fg-muted">{{ $t('summary.stores') }}</span>
+        <span class="font-semibold tabular-nums">{{ uniqueStores }}</span>
       </div>
     </div>
 
     <!-- Details Section -->
-    <div v-if="mostExpensiveItem" class="mt-4 pt-4 border-t border-gray-200 space-y-1 text-sm">
-      <div class="text-xs text-muted-foreground">
-        <span class="font-bold text-blue">{{ $t('summary.mostExpensivePurchase') }}:</span>
+    <div v-if="mostExpensiveItem" class="mt-4 space-y-1.5 rounded-lg bg-surface-2 p-3 text-sm">
+      <div class="text-xs text-fg-muted">
+        <span class="font-medium text-fg-muted">{{ $t('summary.mostExpensivePurchase') }}</span>
         {{ mostExpensiveItem.name }} ({{ mostExpensiveItem.quantity }}×
         {{ formatCurrency(mostExpensiveItem.unitPrice) }})
       </div>
-      <div class="text-xs text-muted-foreground">
-        <span class="font-bold text-blue">{{ $t('summary.cheapestPurchase') }}:</span>
+      <div class="text-xs text-fg-muted">
+        <span class="font-medium text-fg-muted">{{ $t('summary.cheapestPurchase') }}</span>
         {{ leastExpensiveItem?.name }} ({{ leastExpensiveItem?.quantity }}×
         {{ formatCurrency(leastExpensiveItem?.unitPrice ?? 0) }})
       </div>
       <div
         v-if="largestQuantityPurchase && largestQuantityPurchase.quantity > 1"
-        class="text-xs text-muted-foreground"
+        class="text-xs text-fg-muted"
       >
-        <span class="font-bold text-blue">{{ $t('summary.largestQuantity') }}:</span>
+        <span class="font-medium text-fg-muted">{{ $t('summary.largestQuantity') }}</span>
         {{ largestQuantityPurchase.name }} ({{ largestQuantityPurchase.quantity }}×
         {{ $t('summary.pricePerUnit') }} {{ formatCurrency(largestQuantityPurchase.unitPrice) }})
       </div>

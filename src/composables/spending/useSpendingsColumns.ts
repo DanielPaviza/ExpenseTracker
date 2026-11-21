@@ -77,11 +77,10 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
             ? h(
                 'a',
                 {
-                  class: 'spending-link',
-                  style: { color: '#3b82f6', 'text-decoration': 'underline' },
+                  class:
+                    'spending-link text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary',
                   target: '_blank',
                   rel: 'noopener noreferrer',
-                  color: '#3b82f6',
                   title: t('form.openLink'),
                   href: row.url,
                 },
@@ -145,7 +144,7 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
         render: (row) =>
           h(
             'div',
-            { style: { 'font-size': '14px', color: '#666' } },
+            { class: 'text-sm text-fg-muted' },
             formatDateLocalized(new Date(row.createdAt)),
           ),
       },
@@ -167,14 +166,8 @@ export function useSpendingsColumns(): { columns: Ref<SpendingColumn[]> } {
                   h(
                     'span',
                     {
-                      style: {
-                        padding: '2px 8px',
-                        'border-radius': '12px',
-                        'background-color': '#e0f2fe',
-                        color: '#0369a1',
-                        'font-size': '12px',
-                        'font-weight': '500',
-                      },
+                      class:
+                        'px-2 py-0.5 rounded-md bg-primary-soft text-primary text-xs font-medium whitespace-nowrap',
                     },
                     tag,
                   ),

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ArrowDownOutline, ListOutline } from '@vicons/ionicons5'
+  import { ChevronDownOutline } from '@vicons/ionicons5'
   import { NIcon } from 'naive-ui'
 
   import { formatCurrency } from '@/composables/useCurrencyFormat'
@@ -20,40 +20,20 @@
 </script>
 
 <template>
-  <div
-    class="collapsedRow bg-blue-300 shadow text-white cursor-pointer w-full p-3 flex items-center justify-between rounded hover:bg-blue-500"
+  <button
+    type="button"
+    class="card group flex w-full cursor-pointer items-center justify-between px-5 py-3 text-left transition hover:border-danger/40"
     @click="toggleCollapse"
   >
-    <div class="flex items-center gap-4">
-      <n-icon class="listIcon" size="32">
-        <ListOutline />
+    <div class="flex items-center gap-3">
+      <n-icon size="18" class="text-danger transition-transform group-hover:translate-y-0.5">
+        <ChevronDownOutline />
       </n-icon>
-      <n-icon class="unCollapseIcon" size="32">
-        <ArrowDownOutline />
-      </n-icon>
-      <h2 class="text-xl font-bold text-left">
-        {{ title }}
-        <small class="opacity-80">({{ totalCountSpendings }}x)</small>
-      </h2>
+      <span class="font-semibold text-fg">{{ title }}</span>
+      <span class="rounded-md bg-danger/10 px-1.5 py-0.5 text-xs font-medium text-danger">
+        {{ totalCountSpendings }}×
+      </span>
     </div>
-    <div class="text-xl font-bold text-white">
-      {{ formatCurrency(totalPrice) }}
-    </div>
-  </div>
+    <div class="font-semibold tabular-nums text-fg">{{ formatCurrency(totalPrice) }}</div>
+  </button>
 </template>
-
-<style scoped>
-  .collapsedRow:hover .listIcon {
-    display: none;
-  }
-  .collapsedRow:hover .unCollapseIcon {
-    display: inline;
-  }
-  .unCollapseIcon {
-    display: none;
-  }
-  .collapseRow:hover h2,
-  .collapseRow:hover div {
-    color: #3b82f6 !important;
-  }
-</style>

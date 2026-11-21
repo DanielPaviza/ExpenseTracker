@@ -40,6 +40,17 @@ pnpm tauri build  # produkční desktopový balíček
 
 Zdrojový kód frontendu je v `src/`, backend (Rust/Tauri) v `src-tauri/`.
 
+### Produkční build
+
+Potřebujete Node.js, pnpm a Rust ([předpoklady Tauri](https://v2.tauri.app/start/prerequisites/)). Pak spusťte:
+
+```bash
+pnpm install
+pnpm tauri build
+```
+
+Instalátory najdete v `src-tauri/target/release/bundle/` (`msi/` a `nsis/`), samotné `expenseTracker.exe` v `src-tauri/target/release/`.
+
 ---
 
 ## Rychlý start (Uživatelé)
@@ -88,12 +99,26 @@ Zdrojový kód frontendu je v `src/`, backend (Rust/Tauri) v `src-tauri/`.
 > ![Záhlaví](docs/screenshots/cs/header.png) _Záhlaví s lištou kategorií,
 > celkovými výdaji a indikátorem neuložených změn_
 
-- **Přidat nový nákup** otevře formulář nákupu.
-- **Celkové výdaje** zobrazuje aktuální zaplacený součet pro aktivní rozsah.
-- **Nastavení** otevře panel nastavení.
+- **Boční panel** obsahuje tlačítko **Přidat nový nákup**, navigaci mezi
+  stránkami **Přehled** (dashboard) a **Nákupy** (tabulka), **Nastavení**,
+  přehled klávesových zkratek a přepínač světlého / tmavého režimu.
+- **Horní lišta** obsahuje přepínač vybrané kategorie (mění celoaplikační
+  rozsah), stav ukládání a **Celkové výdaje** pro aktivní rozsah.
 - **Neuložené změny** se zobrazí, pokud se stav v paměti liší od disku; nabízí
-  akce **Uložit** a **Zahodit**.
-- **Lišta kategorií** otevře výběr kategorií a změní celoapplikační rozsah.
+  akce **Uložit změny** a **Vrátit změny**.
+
+### Klávesové zkratky
+
+| Zkratka            | Akce                           |
+| ------------------ | ------------------------------ |
+| `Ctrl + N`         | Nový nákup                     |
+| `Ctrl + S`         | Uložit změny                   |
+| `Ctrl + K`         | Vybrat kategorii               |
+| `Ctrl + 1` / `2`   | Přejít na přehled / nákupy     |
+| `Ctrl + ,`         | Otevřít nastavení              |
+| `Ctrl + Shift + L` | Přepnout světlý / tmavý režim  |
+| `?`                | Zobrazit klávesové zkratky     |
+| `Esc`              | Zavřít panel / dialog          |
 
 ### Zobrazení kategorií
 
@@ -203,11 +228,13 @@ Karty dashboardu:
 
 Dostupné možnosti:
 
+- Vzhled (světlý / tmavý / podle systému)
 - Jazyk (čeština / angličtina)
 - Symbol měny
 - Podtabulky otevřené ve výchozím stavu
-- Výchozí karta dashboardu
+- Úvodní stránka (přehled / nákupy)
 - Výchozí startup kategorie
+- Výchozí skryté sloupce tabulky
 
 ### Dokumenty a přílohy
 

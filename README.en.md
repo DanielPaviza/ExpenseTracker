@@ -44,6 +44,20 @@ pnpm tauri build  # production desktop bundle
 
 See `src/` (Vue frontend) and `src-tauri/` (Rust/Tauri backend).
 
+### Production Build
+
+You need Node.js, pnpm and Rust
+([Tauri prerequisites](https://v2.tauri.app/start/prerequisites/)). Then run:
+
+```bash
+pnpm install
+pnpm tauri build
+```
+
+Installers are written to `src-tauri/target/release/bundle/` (`msi/` and
+`nsis/`), and the standalone `expenseTracker.exe` to
+`src-tauri/target/release/`.
+
 ---
 
 ## Quick Start (Users)
@@ -90,12 +104,26 @@ See `src/` (Vue frontend) and `src-tauri/` (Rust/Tauri backend).
 > ![Header screenshot](docs/screenshots/en/header.png) _Header with category
 > bar, total expenses, and pending-changes indicator_
 
-- **Add New Purchase** opens the purchase form.
-- **Total Expenses** shows the current paid total for the active scope.
-- **Settings** opens the settings drawer.
+- **Sidebar** holds the **Add New Purchase** button, navigation between the
+  **Dashboard** and **Purchases** (table) pages, **Settings**, the keyboard
+  shortcut overview and the light / dark mode toggle.
+- **Top bar** holds the selected category switcher (changes the app-wide scope),
+  the save state and **Total Expenses** for the active scope.
 - **Unsaved Changes** appears when in-memory state differs from disk; provides
-  **Save** and **Discard** actions.
-- **Category bar** opens category selection and changes the app-wide scope.
+  **Save changes** and **Discard changes** actions.
+
+### Keyboard Shortcuts
+
+| Shortcut           | Action                      |
+| ------------------ | --------------------------- |
+| `Ctrl + N`         | New purchase                |
+| `Ctrl + S`         | Save changes                |
+| `Ctrl + K`         | Select category             |
+| `Ctrl + 1` / `2`   | Go to dashboard / purchases |
+| `Ctrl + ,`         | Open settings               |
+| `Ctrl + Shift + L` | Toggle light / dark mode    |
+| `?`                | Show keyboard shortcuts     |
+| `Esc`              | Close panel / dialog        |
 
 ### Category View
 
@@ -203,11 +231,13 @@ Dashboard cards:
 
 Available settings:
 
+- Appearance (light / dark / system)
 - Language (English / Czech)
 - Currency symbol
 - Subtables opened by default
-- Default dashboard card
+- Start page (dashboard / purchases)
 - Default startup category
+- Default hidden table columns
 
 ### Documents & Attachments
 

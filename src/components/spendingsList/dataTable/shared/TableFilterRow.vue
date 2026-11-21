@@ -23,9 +23,13 @@
 </script>
 
 <template>
-  <tr class="bg-white">
-    <th v-for="column in columns" :key="`filter-${String(column.key)}`">
-      <div v-if="column.filterEnabled" class="px-2 py-1">
+  <tr class="bg-surface">
+    <th
+      v-for="column in columns"
+      :key="`filter-${String(column.key)}`"
+      class="border-b border-line font-normal"
+    >
+      <div v-if="column.filterEnabled" class="px-2 py-2">
         <n-select
           v-if="column.selectFilterEnabled"
           :value="columnFilters[String(column.key)] || null"
@@ -34,7 +38,8 @@
           filterable
           tag
           clearable
-          :class="{ 'border border-blue-300': columnFilters[String(column.key)] }"
+          size="small"
+          :class="{ 'active-filter': columnFilters[String(column.key)] }"
           @update:value="(val) => updateFilter(String(column.key), val || '')"
         />
         <n-input
@@ -42,11 +47,20 @@
           :value="columnFilters[String(column.key)] || ''"
           :placeholder="t('table.filterPlaceholder')"
           clearable
-          :class="{ 'border border-blue-300': columnFilters[String(column.key)] }"
+          size="small"
+          :class="{ 'active-filter': columnFilters[String(column.key)] }"
           @update:value="(val) => updateFilter(String(column.key), val || '')"
         />
       </div>
     </th>
-    <th class="mx-2" />
+    <th class="border-b border-line" />
   </tr>
 </template>
+
+<style scoped>
+  .active-filter :deep(.n-base-selection),
+  .active-filter:deep(.n-input) {
+    --n-border: 1px solid var(--primary) !important;
+    background-color: var(--primary-soft);
+  }
+</style>

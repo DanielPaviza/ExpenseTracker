@@ -3,12 +3,7 @@ import { type ComputedRef, type Ref, computed } from 'vue'
 import type { Spending } from '@/types/Spending'
 
 export type SortType =
-  | 'alphabetical'
-  | 'price-desc'
-  | 'price-asc'
-  | 'count-desc'
-  | 'visits-desc'
-  | 'avg-desc'
+  'alphabetical' | 'price-desc' | 'price-asc' | 'count-desc' | 'visits-desc' | 'avg-desc'
 
 export interface EntityStat {
   name: string

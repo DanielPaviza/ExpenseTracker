@@ -15,22 +15,26 @@
 </script>
 
 <template>
-  <div class="flex flex-col items-center">
-    <svg viewBox="0 0 36 36" class="w-full h-full">
-      <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e5e7eb" stroke-width="3" />
+  <div class="relative size-full">
+    <svg viewBox="0 0 36 36" class="size-full">
+      <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--surface-3)" stroke-width="3.2" />
       <circle
         cx="18"
         cy="18"
         r="15.9"
         fill="none"
         :stroke="color"
-        stroke-width="3"
+        stroke-width="3.2"
         :stroke-dasharray="dashArray"
         stroke-linecap="round"
         transform="rotate(-90 18 18)"
         class="transition-all duration-300"
       />
     </svg>
-    <div class="mt-2 ms-2 text-sm font-medium text-gray-700">{{ clampedPercent }}%</div>
+    <div
+      class="absolute inset-0 flex items-center justify-center text-[11px] font-semibold tabular-nums text-fg-muted"
+    >
+      {{ clampedPercent }}%
+    </div>
   </div>
 </template>

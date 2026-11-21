@@ -4,7 +4,6 @@
 
   import { computed, onMounted, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
-  import { useRouter } from 'vue-router'
 
   import FormActions from '@/components/shared/FormActions.vue'
   import FormAdditionalFields from '@/components/spendingForm/components/SpendingFormAdditionalFields.vue'
@@ -14,6 +13,7 @@
   import { useSpendingFormData } from '@/composables/spending/useSpendingFormData'
   import { useSpendingFormOptions } from '@/composables/spending/useSpendingFormOptions'
   import { useSpendingFormValidation } from '@/composables/spending/useSpendingFormValidation'
+  import { useAppNavigation } from '@/composables/useAppNavigation'
   import { formatDateLocalized } from '@/composables/useDateFormat'
   import { useFileHandler } from '@/composables/useFileHandler'
   import { SpendingDocument } from '@/types/SpendingDocument'
@@ -22,7 +22,7 @@
   const { t } = useI18n()
   const store = useSpendingsStore()
   const formRef = ref<FormInst | null>(null)
-  const router = useRouter()
+  const { closeOverlay } = useAppNavigation()
   const message = useMessage()
 
   // File upload functionality
@@ -50,7 +50,7 @@
   onMounted(() => (isOpen.value = true))
 
   function closeDrawer(): void {
-    router.push('/')
+    closeOverlay()
   }
 
   const uploadAllPendingDocuments = async (): Promise<void> => {
@@ -124,11 +124,10 @@
 </script>
 
 <template>
-  <n-drawer :show="isOpen" width="80%" placement="right" @update:show="closeDrawer">
-    <div class="backdrop-blur fixed left-0 w-screen h-screen -z-10 opacity-100"></div>
-    <n-drawer-content :title="drawerTitle" closable class="p-4">
+  <n-drawer :show="isOpen" width="min(1240px, 94vw)" placement="right" @update:show="closeDrawer">
+    <n-drawer-content :title="drawerTitle" closable>
       <template #header>
-        <div class="text-2xl font-bold text-blue">
+        <div class="text-xl font-semibold text-fg">
           {{ drawerTitle }}
         </div>
       </template>
@@ -139,16 +138,18 @@
         label-placement="top"
         require-mark-placement="right-hanging"
       >
-        <div v-if="currentSpending" class="w-full flex justify-end items-center">
-          <span class="font-semibold text-gray-700">{{ t('form.edited') }}:</span>
-          <span class="ml-1 text-gray-600">{{
-            currentSpending.editedAt
-              ? formatDateLocalized(currentSpending.editedAt, 'long')
-              : 'Nikdy'
-          }}</span>
+        <div v-if="currentSpending" class="-mt-2 mb-4 flex justify-end text-xs text-fg-subtle">
+          {{ t('form.edited') }}:
+          <span class="ms-1 text-fg-muted">
+            {{
+              currentSpending.editedAt
+                ? formatDateLocalized(currentSpending.editedAt, 'long')
+                : t('common.never')
+            }}
+          </span>
         </div>
 
-        <div class="flex gap-10">
+        <div class="flex flex-col gap-x-10 lg:flex-row">
           <FormBasicFields
             v-model:form-data="formData"
             :category-options="categoryOptions"
@@ -183,16 +184,3 @@
     </n-drawer-content>
   </n-drawer>
 </template>
-<style scoped>
-  :deep(.n-base-close.n-base-close--absolute.n-drawer-header__close) {
-    color: #c04141;
-    font-size: larger;
-    padding: 10px;
-  }
-  :deep(.n-base-clear__clear) {
-    color: #c62828 !important;
-  }
-  :deep(.n-base-clear__clear:hover) {
-    color: red !important;
-  }
-</style>

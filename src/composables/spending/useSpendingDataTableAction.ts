@@ -1,9 +1,9 @@
 import { BuildOutline, Copy, RemoveCircleOutline } from '@vicons/ionicons5'
 
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
 
 import { useSpendingDialogAction } from '@/composables/spending/useSpendingDialogAction'
+import { useAppNavigation } from '@/composables/useAppNavigation'
 import { type ActionContextItem } from '@/types/ActionContextItem'
 import { Spending } from '@/types/Spending'
 import { renderIcon } from '@/utils/iconUtils'
@@ -11,7 +11,7 @@ import { renderIcon } from '@/utils/iconUtils'
 export function useSpendingDataTableAction() {
   const { t } = useI18n()
   const { deleteDialog } = useSpendingDialogAction()
-  const router = useRouter()
+  const { openEditSpending, openNewSpending } = useAppNavigation()
 
   const actionOptions: ActionContextItem[] = [
     {
@@ -41,15 +41,19 @@ export function useSpendingDataTableAction() {
   }
 
   function handleGotoEditSpending(spending: Spending): void {
-    router.push(`/edit/${spending.id}`)
+    openEditSpending(spending.id)
   }
 
   function handleGotoCopyNewSpending(spending: Spending): void {
-    router.push({ path: '/new', query: { template: spending.id } })
+    openNewSpending(spending.id)
   }
+
+  // Plain options for NDropdown (keeps template type inference shallow)
+  const dropdownOptions = actionOptions.map(({ key, label, icon }) => ({ key, label, icon }))
 
   return {
     actionOptions,
+    dropdownOptions,
     handleActionSelect,
   }
 }

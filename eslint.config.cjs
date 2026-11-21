@@ -4,6 +4,7 @@ const vueParser = require('vue-eslint-parser')
 const _import = require('eslint-plugin-import')
 const vue = require('eslint-plugin-vue')
 const prettier = require('eslint-plugin-prettier')
+const prettierConfig = require('eslint-config-prettier')
 
 const { fixupPluginRules } = require('@eslint/compat')
 
@@ -79,17 +80,6 @@ module.exports = tseslint.config(
       'vue/singleline-html-element-content-newline': 'off',
       'vue/multi-word-component-names': 'off',
       'vue/require-default-prop': 'off',
-      'vue/max-attributes-per-line': [
-        'error',
-        {
-          singleline: {
-            max: 4,
-          },
-          multiline: {
-            max: 1,
-          },
-        },
-      ],
     },
 
     settings: {
@@ -100,4 +90,8 @@ module.exports = tseslint.config(
       },
     },
   },
+  // Must stay last – turns off stylistic rules that conflict with Prettier
+  prettierConfig,
+  // Project convention: omit braces around single-statement blocks
+  { rules: { curly: ['error', 'multi'] } },
 )

@@ -3,7 +3,7 @@
   import { NButton, NIcon } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
-  import { computed, onBeforeUnmount, onMounted } from 'vue'
+  import { computed } from 'vue'
   import { useI18n } from 'vue-i18n'
 
   import CategoryStatCard from '@/components/header/components/CategoryStatCard.vue'
@@ -73,41 +73,23 @@
   const handleSelectCategory = (category: string | null) => {
     emit('select', category)
   }
-
-  // Listen for Escape key to emit 'close'
-  const handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') emit('close')
-  }
-
-  onMounted(() => {
-    window.addEventListener('keydown', handleKeydown)
-  })
-  onBeforeUnmount(() => {
-    window.removeEventListener('keydown', handleKeydown)
-  })
 </script>
 
 <template>
-  <div class="category-selection-panel-root flex h-full flex-col">
-    <div
-      class="sticky top-0 z-10 backdrop-blur-sm pt-8 pb-3 mb-4 border-b border-blue flex justify-between items-center"
-    >
-      <h2 class="text-2xl font-bold text-blue">
-        {{ t('header.selectCategory') }}
-      </h2>
-      <n-button tertiary color="#3b82f6" @click="emit('close')">
-        <n-icon size="32">
-          <CloseOutline />
-        </n-icon>
-        <div class="font-bold">
-          {{ $t('common.close') }}
-        </div>
+  <div class="flex min-h-0 flex-col">
+    <div class="flex items-center justify-between border-b border-line px-6 py-4">
+      <div>
+        <h2 class="text-lg font-semibold text-fg">{{ t('header.selectCategory') }}</h2>
+        <p class="text-sm text-fg-muted">{{ cards.length - 1 }} {{ t('summary.categories') }}</p>
+      </div>
+      <n-button quaternary circle @click="emit('close')">
+        <template #icon>
+          <n-icon><CloseOutline /></n-icon>
+        </template>
       </n-button>
     </div>
 
-    <div
-      class="grid min-h-0 overflow-y-auto grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-    >
+    <div class="grid min-h-0 grid-cols-1 gap-3 overflow-y-auto p-6 sm:grid-cols-2 lg:grid-cols-3">
       <CategoryStatCard
         v-for="card in cards"
         :key="card.key"
@@ -126,9 +108,3 @@
     </div>
   </div>
 </template>
-
-<style scoped>
-  .category-selection-panel-root {
-    min-height: 0;
-  }
-</style>

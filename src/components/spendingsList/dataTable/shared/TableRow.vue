@@ -2,11 +2,11 @@
   import SpendingStatusIndicator from '@components/spendingsList/SpendingStatusIndicator.vue'
 
   import { type VNode, ref } from 'vue'
-  import { useRouter } from 'vue-router'
 
   import SpendingsDataTableAction from '@/components/spendingsList/SpendingsDataTableAction.vue'
   import SpendingsDataTableActionContext from '@/components/spendingsList/SpendingsDataTableActionContext.vue'
   import { useSpendingStatus } from '@/composables/spending/useSpendingStatus'
+  import { useAppNavigation } from '@/composables/useAppNavigation'
   import type { Spending } from '@/types/Spending'
   import type { SpendingColumn } from '@/types/SpendingColumn'
   import { getCellContent } from '@/utils/tableUtils'
@@ -31,7 +31,7 @@
     (e: 'row-click', row: Spending, event?: MouseEvent): void
   }>()
 
-  const router = useRouter()
+  const { openEditSpending } = useAppNavigation()
   const { getSpendingStatus } = useSpendingStatus()
 
   function handleRowClick(event?: MouseEvent): void {
@@ -39,7 +39,7 @@
     if (event && (event.target as HTMLElement).closest('.delete-button, .spending-link')) return
 
     emit('row-click', row, event)
-    router.push(`/edit/${row.id}`)
+    openEditSpending(row.id)
   }
 
   function handleContextMenu(event: MouseEvent): void {
@@ -50,16 +50,19 @@
 
 <template>
   <tr
-    class="hover:bg-blue-50 cursor-pointer row"
-    style="position: relative"
-    :class="isTableGroup ? 'border-l-2 border-blue-300 bg-[#fcfdff]' : 'bg-white'"
+    class="row relative cursor-pointer text-sm transition-colors hover:bg-primary-soft/60"
+    :class="isTableGroup ? 'bg-surface shadow-[inset_3px_0_0_var(--primary-light)]' : 'bg-surface'"
     @click="handleRowClick($event)"
     @contextmenu="handleContextMenu"
   >
     <td
       v-for="column in columns"
       :key="`${row.id}-${String(column.key)}`"
-      class="border-b border-blue-200 px-4 py-2"
+      class="border-b border-line px-4 py-2.5 text-fg"
+      :class="{
+        'font-semibold tabular-nums': column.key === 'totalPrice',
+        'whitespace-nowrap': column.key !== 'tags',
+      }"
     >
       <template v-if="typeof getCellContent(column, row, rowIndex) === 'object'">
         <component :is="getCellContent(column, row, rowIndex) as VNode" />
@@ -69,20 +72,19 @@
       </template>
       <SpendingStatusIndicator class="me-2" :status="getSpendingStatus(row.id)" />
     </td>
-    <td v-if="showActions" class="px-2 border-b border-blue-200">
-      <div class="opacity-75 hover:opacity-100 mb-1">
-        <SpendingsDataTableAction :spending="row" />
-      </div>
+    <td v-if="showActions" class="w-12 border-b border-line px-2">
+      <SpendingsDataTableAction :spending="row" />
     </td>
   </tr>
   <SpendingsDataTableActionContext :spending="row" :mouse-event="actionContextMouseEvent" />
 </template>
+
 <style scoped>
   .row {
     opacity: 1;
     animation-name: myAnimation;
-    animation-duration: 0.5s;
-    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation-duration: 0.25s;
+    animation-timing-function: ease-out;
   }
 
   @keyframes myAnimation {

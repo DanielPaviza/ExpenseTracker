@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { useSpendingsStore } from '@stores/spendingsStore'
-  import { NButton, NButtonGroup, NCard } from 'naive-ui'
   import { storeToRefs } from 'pinia'
 
   import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
 
   import Chart from '@/components/spendingsDashboard/summary/Chart.vue'
   import { formatCurrency } from '@/composables/useCurrencyFormat'
@@ -29,9 +29,10 @@
       borderColor?: string[] | string
       borderWidth?: number
       tension?: number
+      isCount?: boolean
     }[],
     chartTypeChangeEnabled: Boolean,
-    showFooter: Boolean,
+    showFooter: { type: Boolean, default: true },
     showTotalPrice: Boolean,
   })
 
@@ -42,100 +43,71 @@
     chartType !== 'None' ? (chartType as 'Doughnut' | 'Bar' | 'Line') : 'Doughnut',
   )
 
+  const { t } = useI18n()
+  const chartTypeOptions = computed(() => [
+    { value: 'Doughnut' as const, label: t('summary.donut') },
+    { value: 'Bar' as const, label: t('summary.bar') },
+    { value: 'Line' as const, label: t('summary.line') },
+  ])
+
   const showContent = computed(() => {
     return spendings.value.length > 0
   })
 </script>
 
 <template>
-  <div class="flex h-full">
-    <n-card class="w-full pb-5">
-      <div class="flex justify-between items-center mb-2">
-        <div>
-          <div class="text-2xl font-bold text-blue">
-            {{ title }}
-          </div>
-          <div v-if="subtitle" class="text-sm text-gray-600 mt-1">
-            {{ subtitle }}
-          </div>
-        </div>
-        <n-button-group v-if="chartTypeChangeEnabled && chartType != 'None'" size="small">
-          <div class="flex flex-col">
-            <div class="flex justify-end mb-1">
-              {{ $t('summary.chartType') }}
-            </div>
-            <div>
-              <n-button
-                :type="selectedChartType === 'Doughnut' ? 'primary' : 'default'"
-                @click="selectedChartType = 'Doughnut'"
-              >
-                {{ $t('summary.donut') }}
-              </n-button>
-              <n-button
-                :type="selectedChartType === 'Bar' ? 'primary' : 'default'"
-                @click="selectedChartType = 'Bar'"
-              >
-                {{ $t('summary.bar') }}
-              </n-button>
-              <n-button
-                :type="selectedChartType === 'Line' ? 'primary' : 'default'"
-                @click="selectedChartType = 'Line'"
-              >
-                {{ $t('summary.line') }}
-              </n-button>
-            </div>
-          </div>
-        </n-button-group>
+  <div class="card flex h-full flex-col p-6">
+    <div class="mb-5 flex items-start justify-between gap-4">
+      <div class="min-w-0">
+        <h3 class="text-base font-semibold text-fg">{{ title }}</h3>
+        <p v-if="subtitle" class="mt-0.5 text-sm text-fg-muted">{{ subtitle }}</p>
       </div>
-      <hr class="mt-4 mb-6 text-blue" />
-      <div class="flex flex-col md:flex-row xl:flex-col 2xl:flex-row justify-around">
-        <div
-          class="mb-6 md:mb-0 xl:mb-6 2xl:mb-0 flex flex-col text-lg gap-1 whitespace-nowrap justify-center"
+      <div
+        v-if="chartTypeChangeEnabled && chartType != 'None' && showContent"
+        class="flex shrink-0 rounded-lg bg-surface-3 p-0.5"
+        :title="$t('summary.chartType')"
+      >
+        <button
+          v-for="option in chartTypeOptions"
+          :key="option.value"
+          type="button"
+          class="rounded-md px-2.5 py-1 text-xs font-medium transition"
+          :class="
+            selectedChartType === option.value
+              ? 'bg-surface text-fg shadow-sm'
+              : 'text-fg-muted hover:text-fg'
+          "
+          @click="selectedChartType = option.value"
         >
-          <slot v-if="showContent" />
-          <div v-else class="text-gray-500">
-            {{ $t('common.noRecordsFound') }}
-          </div>
-        </div>
-        <div
-          v-if="chartType != 'None' && chartLabels && chartDatasets && showContent"
-          class="flex justify-center items-center"
-        >
-          <Chart :type="selectedChartType" :labels="chartLabels" :datasets="chartDatasets" />
+          {{ option.label }}
+        </button>
+      </div>
+    </div>
+
+    <div class="flex flex-1 flex-col items-stretch gap-8 md:flex-row xl:flex-col 2xl:flex-row">
+      <div class="flex min-w-0 flex-1 flex-col gap-1 text-sm">
+        <slot v-if="showContent" />
+        <div v-else class="py-6 text-center text-fg-subtle">
+          {{ $t('common.noRecordsFound') }}
         </div>
       </div>
-      <div v-if="showFooter && $slots.footer" class="mt-4">
-        <hr class="mb-4 text-gray-300" />
-        <slot name="footer" />
+      <div
+        v-if="chartType != 'None' && chartLabels && chartDatasets && showContent"
+        class="flex shrink-0 items-center justify-center self-center"
+      >
+        <Chart :type="selectedChartType" :labels="chartLabels" :datasets="chartDatasets" />
       </div>
-      <template v-if="showTotalPrice">
-        <hr class="mt-6 mb-3 border-blue-300" />
-        <div class="flex font-bold w-full justify-between opacity-75">
-          <div class="text-blue">{{ $t('summary.total') }}:</div>
-          <div>{{ formatCurrency(totalPrice) }}</div>
-        </div>
-      </template>
-    </n-card>
+    </div>
+
+    <div v-if="showFooter && $slots.footer" class="mt-5 border-t border-line pt-4">
+      <slot name="footer" />
+    </div>
+    <div
+      v-if="showTotalPrice"
+      class="mt-5 flex justify-between border-t border-line pt-3 text-sm font-semibold"
+    >
+      <span class="text-fg-muted">{{ $t('summary.total') }}</span>
+      <span class="tabular-nums">{{ formatCurrency(totalPrice) }}</span>
+    </div>
   </div>
 </template>
-<style scoped>
-  .n-button--primary {
-    --n-button-color: #3b82f6;
-    --n-button-text-color: #ffffff;
-  }
-  :deep(.n-button--primary-type) {
-    background-color: #3b82f6;
-    color: white;
-  }
-  :deep(.n-button--primary-type:hover) {
-    background-color: #3b82f6;
-    color: white;
-  }
-  :deep(.n-button--default-type:hover) {
-    background-color: #d0e5ff;
-    color: black;
-  }
-  :deep(.n-button--default-type) {
-    background-color: #e7f2ff;
-  }
-</style>
